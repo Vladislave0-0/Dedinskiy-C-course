@@ -11,6 +11,7 @@ struct Stack{
 
 const elem_t POISON = 1488;
 const size_t STACK_POP_RESIZE = 4;
+const size_t RESIZE_FACTOR = 2;
 
 void stack_push(Stack* stk, elem_t elem);
 
@@ -25,3 +26,7 @@ void stack_print(Stack* stk);
 void open_stack_logs();
 
 void close_stack_logs();
+
+void stack_resize(Stack* stk, size_t new_capacity);
+
+void fill_with_NAN(Stack* stk, size_t start, size_t finish);

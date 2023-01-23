@@ -15,10 +15,7 @@ void stack_ctor(Stack* stk, size_t capacity)
 
     stk->data = (elem_t*)calloc(capacity, sizeof(elem_t));
 
-    for(size_t i = 0; i < capacity; i++)
-    {
-        stk->data[i] = NAN;
-    }
+    fill_with_NAN(stk, 0, capacity);
 
     stk->capacity = capacity;
 }
@@ -39,7 +36,7 @@ void stack_push(Stack* stk, elem_t elem)
 
     else
     {
-        //realloc
+        stack_resize(stk, stk->capacity * RESIZE_FACTOR);
     }
 }
 
@@ -58,7 +55,7 @@ void stack_pop(Stack* stk, elem_t* result)
 
     if(stk->size * STACK_POP_RESIZE <= stk->capacity)
     {
-        //resize down x2
+        stack_resize(stk, (int)(stk->capacity / RESIZE_FACTOR));
     }
 }
 
@@ -112,4 +109,23 @@ void open_stack_logs()
 void close_stack_logs()
 {
     fclose(LOG_FILE);
+}
+
+void stack_resize(Stack* stk, size_t new_capacity)
+{
+    assert(new_capacity >= 0);
+
+    stk->data = (elem_t*)realloc(stk->data, new_capacity * sizeof(elem_t));
+
+    fill_with_NAN(stk, stk->capacity, new_capacity);
+
+    stk->capacity = new_capacity;
+}
+
+void fill_with_NAN(Stack* stk, size_t start, size_t finish)
+{
+    for(size_t i = start; i < finish; i++)
+    {
+        stk->data[i] = NAN;
+    }
 }

@@ -4,18 +4,21 @@
 
 int main()
 {
+    open_stack_logs();
     Stack stk1 = {};
 
     double result = 0;
 
-    stack_ctor(&stk1, 10);
-    stack_push(&stk1, 1);
-    stack_push(&stk1, 4);
-    stack_push(&stk1, 88);
-    stack_pop(&stk1, &result);
+    size_t capacity = 10;
 
-    open_stack_logs();
-    stack_print(&stk1);
+    stack_ctor(&stk1, capacity);
+
+    for(size_t i = 0; i < capacity*5; i++)
+    {
+        stack_push(&stk1, i);
+        stack_print(&stk1);   
+    }
+
     close_stack_logs();
 
     stack_dtor(&stk1);
