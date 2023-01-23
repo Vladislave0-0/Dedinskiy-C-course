@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-typedef int elem_t;
+typedef double elem_t;
 
 struct Stack{
     size_t capacity = 0;
@@ -19,3 +19,9 @@ void stack_pop(Stack* stk, elem_t* elem);
 void stack_ctor(Stack* stk, size_t capacity);
 
 void stack_dtor(Stack* stk);
+
+void stack_print(Stack* stk);
+
+void open_stack_logs();
+
+void close_stack_logs();
