@@ -1,4 +1,9 @@
+#ifndef STACK_H
+#define STACK_H
+
 #include <stdio.h>
+
+#define STACK_DUMP(stack_ptr) stack_dump(stack_ptr, __FILE__, __LINE__, __PRETTY_FUNCTION__)
 
 typedef double elem_t;
 
@@ -21,12 +26,10 @@ void stack_ctor(Stack* stk, size_t capacity);
 
 void stack_dtor(Stack* stk);
 
-void stack_print(Stack* stk);
-
-void open_stack_logs();
-
-void close_stack_logs();
-
 void stack_resize(Stack* stk, size_t new_capacity);
 
 void fill_with_NAN(Stack* stk, size_t start, size_t finish);
+
+void stack_print(Stack* stk);
+
+#endif

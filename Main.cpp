@@ -1,10 +1,11 @@
 #include <stdio.h>
-#include "Stack.h"
 #include <stdlib.h>
+
+#include "Stack.h"
 
 int main()
 {
-    open_stack_logs();
+    
     Stack stk1 = {};
 
     double result = 0;
@@ -13,13 +14,13 @@ int main()
 
     stack_ctor(&stk1, capacity);
 
-    for(size_t i = 0; i < capacity*5; i++)
+    for(size_t i = 0; i < capacity*2.5; i++)
     {
         stack_push(&stk1, i);
-        stack_print(&stk1);   
+        // stack_print(&stk1);   
     }
 
-    close_stack_logs();
+    stack_pop(&stk1, &result);    
 
     stack_dtor(&stk1);
 }
