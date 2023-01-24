@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "Stack.h"
+#include "StackDebug.h"
+
+//============================================================
 
 int main()
 {
@@ -14,10 +14,10 @@ int main()
 
     stack_ctor(&stk1, capacity);
 
-    for(size_t i = 0; i < capacity*2.5; i++)
+    for(size_t i = 0; i < capacity*2; i++)
     {
         stack_push(&stk1, i);
-        // stack_print(&stk1);   
+        stack_print_log(&stk1);   
     }
 
     stack_pop(&stk1, &result);    
