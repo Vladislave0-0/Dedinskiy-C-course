@@ -11,6 +11,8 @@ FILE* LOG_FILE = nullptr;
 
 void stack_dump(Stack* stk, const char* file_name, size_t line, const char* function_name)
 {
+    assert(stk != nullptr);
+
     PRINT_LOG("in %s at %s(%lu):\n", function_name, file_name, line);
 
     PRINT_LOG("Stack[%p]", stk->data);
@@ -24,6 +26,8 @@ void stack_dump(Stack* stk, const char* file_name, size_t line, const char* func
 
 int stack_verify(Stack* stk)
 {
+    assert(stk != nullptr);
+
     stk->error_code = (stk->data == nullptr) * STACK_ERROR_DATA_NULL   +
     (stk->size < 0) * STACK_ERROR_SIZE_BELOW_NULL                      + 
     (stk->size > stk->capacity) * STACK_ERROR_SIZE_BIGGER_THAN_CAPACITY;
@@ -35,6 +39,8 @@ int stack_verify(Stack* stk)
 
 void stack_error_decoder(Stack* stk)
 {
+    assert(stk != nullptr);
+
     if(stk->error_code == 0)
     {
         PRINT_LOG("(OK)\n");
@@ -70,6 +76,7 @@ void open_stack_logs()
 
 void stack_print_log(Stack* stk)
 {
+    assert(stk != nullptr);
 
     PRINT_LOG("{\n");
 

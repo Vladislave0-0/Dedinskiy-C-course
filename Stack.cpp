@@ -14,14 +14,19 @@ Stack* stack_ctor(size_t capacity)
     open_stack_logs();
 
     Stack* stk = (Stack*)calloc(1, sizeof(Stack));
-    assert(stk != nullptr);    
+    assert(stk != nullptr); 
 
-    stk->data = (elem_t*)calloc(capacity, sizeof(elem_t));
-    assert(stk->data != nullptr);    
+    stk->capacity = capacity;   
 
-    stk->capacity = capacity;
+    stk->stack_ptr = calloc(1, sizeof(elem_t) * stk->capacity + 2 * sizeof(size_t));
+    assert(stk->stack_ptr != nullptr);
 
-    fill_with_NAN(stk, 0, capacity);
+    stk->left_canary  = (size_t*)stk->stack_ptr;
+    stk->data         = (elem_t*)(stk->left_canary + 1);
+    stk->right_canary = (size_t*)(stk->data + stk->capacity);
+    assert((stk->left_canary != nullptr) && (stk->data != nullptr) && (stk->right_canary != nullptr));
+
+    fill_with_NAN(stk, 0, stk->capacity);
 
     return stk;
 }
@@ -78,9 +83,18 @@ void stack_dtor(Stack* stk)
         stk->data[i] = POISON;
     }
 
-    free(stk->data);
+    stk->capacity     = 0;
+    stk->size         = 0;
+    stk->error_code   = 0;
+    stk->data         = NULL;
+    stk->left_canary  = NULL;
+    stk->right_canary = NULL;
+
+    free(stk->stack_ptr);
+    stk->stack_ptr = nullptr;
 
     free(stk);
+    stk = nullptr;
 
     close_stack_logs();
 }

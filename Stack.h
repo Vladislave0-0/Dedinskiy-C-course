@@ -17,17 +17,20 @@
 typedef double elem_t;
 
 struct Stack{
-    size_t capacity = 0;
-    size_t size     = 0;
-    elem_t* data    = nullptr;
-    int error_code  = 0;
+    size_t capacity      = 0;
+    size_t size          = 0;
+    elem_t* data         = nullptr;
+    void* stack_ptr      = nullptr;
+    size_t* left_canary  = nullptr;
+    size_t* right_canary = nullptr;
+    int error_code       = 0;
 };
 
 //=========================================================================================================
 
-const elem_t POISON = 1488;
+const elem_t POISON           = 1488;
 const size_t STACK_POP_RESIZE = 4;
-const size_t RESIZE_FACTOR = 2;
+const size_t RESIZE_FACTOR    = 2;
 
 //=========================================================================================================
 
