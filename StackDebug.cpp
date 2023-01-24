@@ -24,8 +24,7 @@ void stack_dump(Stack* stk, const char* file_name, size_t line, const char* func
 
 int stack_verify(Stack* stk)
 {
-    stk->error_code = (stk == nullptr) * STACK_ERROR_STK_NULL          + 
-    (stk->data == nullptr) * STACK_ERROR_DATA_NULL                     +
+    stk->error_code = (stk->data == nullptr) * STACK_ERROR_DATA_NULL   +
     (stk->size < 0) * STACK_ERROR_SIZE_BELOW_NULL                      + 
     (stk->size > stk->capacity) * STACK_ERROR_SIZE_BIGGER_THAN_CAPACITY;
 
@@ -43,11 +42,6 @@ void stack_error_decoder(Stack* stk)
 
     else
     {
-        if(stk->error_code & STACK_ERROR_STK_NULL)
-        {
-            PRINT_LOG("STACK_ERROR_STK_NULL\n");
-        }
-
         if(stk->error_code & STACK_ERROR_DATA_NULL)
         {
             PRINT_LOG("STACK_ERROR_DATA_NULL\n");

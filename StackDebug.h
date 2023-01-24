@@ -21,10 +21,9 @@
 
 enum StackErrors
 {
-    STACK_ERROR_STK_NULL                  = 1 << 0,     // 2^0 or 0001
-    STACK_ERROR_DATA_NULL                 = 1 << 1,     // 2^1 or 0010
-    STACK_ERROR_SIZE_BELOW_NULL           = 1 << 2,     // 2^2 or 0100
-    STACK_ERROR_SIZE_BIGGER_THAN_CAPACITY = 1 << 3,     // 2^3 or 1000
+    STACK_ERROR_DATA_NULL                 = 1 << 0,     // 2^1 or 001
+    STACK_ERROR_SIZE_BELOW_NULL           = 1 << 1,     // 2^2 or 010
+    STACK_ERROR_SIZE_BIGGER_THAN_CAPACITY = 1 << 2,     // 2^3 or 100
 };
 
 //=========================================================================================================
