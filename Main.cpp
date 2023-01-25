@@ -9,12 +9,7 @@ int main()
 
     Stack* stk1 = stack_ctor(capacity);
     assert(stk1 != nullptr);  
-
-    // for(size_t i = 0; i <= capacity/2; i++)
-    // {
-    //     stack_push(stk1, i);
-    //     stack_print_log(stk1);   
-    // }
+    
     stack_push(stk1, 0);
     stack_print_log(stk1);
 

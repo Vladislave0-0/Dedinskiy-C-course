@@ -5,6 +5,8 @@
 
 #include "StackDebug.h"
 
+//=========================================================================================================
+
 FILE* LOG_FILE = nullptr;
 
 //=========================================================================================================
@@ -18,8 +20,6 @@ void stack_dump(Stack* stk, const char* file_name, size_t line, const char* func
     PRINT_LOG("Stack[%p]", stk->data);
 
     stack_error_decoder(stk);
-
-    stack_print_log(stk);
 }
 
 //=========================================================================================================
@@ -28,9 +28,14 @@ int stack_verify(Stack* stk)
 {
     assert(stk != nullptr);
 
-    stk->error_code = (stk->data == nullptr) * STACK_ERROR_DATA_NULL   +
-    (stk->size < 0) * STACK_ERROR_SIZE_BELOW_NULL                      + 
-    (stk->size > stk->capacity) * STACK_ERROR_SIZE_BIGGER_THAN_CAPACITY;
+    stk->error_code = (stk->data == nullptr) * ERROR_DATA_NULLPTR   +
+    (stk->stack_ptr == nullptr) * ERROR_STACK_PTR                   +
+    (stk->size < 0) * ERROR_SIZE_BELOW_NULL                         + 
+    (stk->size > stk->capacity) * ERROR_SIZE_BIGGER_THAN_CAPACITY   +
+    (stk->left_canary[0] != CANARY) * ERROR_LEFT_CANARY_DEAD        +
+    (stk->left_canary == nullptr) * ERROR_LEFT_CANARY_NULLPTR       +
+    (stk->right_canary[0] != CANARY) * ERROR_RIGHT_CANARY_DEAD      +
+    (stk->right_canary == nullptr) * ERROR_RIGHT_CANARY_NULLPTR;
 
     return stk->error_code;
 }
@@ -43,26 +48,78 @@ void stack_error_decoder(Stack* stk)
 
     if(stk->error_code == 0)
     {
-        PRINT_LOG("(OK)\n");
+        PRINT_LOG(" -> (OK)\n");
     }
 
     else
     {
-        if(stk->error_code & STACK_ERROR_DATA_NULL)
+        if(stk->error_code & ERROR_DATA_NULLPTR)
         {
-            PRINT_LOG("STACK_ERROR_DATA_NULL\n");
+            PRINT_LOG("STACK_ERROR_DATA_NULL.\n");
         }
 
-        if(stk->error_code & STACK_ERROR_SIZE_BELOW_NULL)
+        if(stk->error_code & ERROR_STACK_PTR)
         {
-            PRINT_LOG("STACK_ERROR_SIZE_BELOW_NULL\n");
+            PRINT_LOG("ERROR_STACK_PTR.\n");
         }
 
-        if(stk->error_code & STACK_ERROR_SIZE_BIGGER_THAN_CAPACITY)
+        if(stk->error_code & ERROR_SIZE_BELOW_NULL)
         {
-            PRINT_LOG("STACK_ERROR_SIZE_BIGGER_THAN_CAPACITY\n");
+            PRINT_LOG("STACK_ERROR_SIZE_BELOW_NULL.\n");
         }
+
+        if(stk->error_code & ERROR_SIZE_BIGGER_THAN_CAPACITY)
+        {
+            PRINT_LOG("STACK_ERROR_SIZE_BIGGER_THAN_CAPACITY.\n");
+        }
+
+        if(stk->error_code & ERROR_LEFT_CANARY_DEAD)
+        {
+            PRINT_LOG("ERROR_LEFT_CANARY_DEAD.\n");
+        }
+
+        if(stk->error_code & ERROR_LEFT_CANARY_NULLPTR)
+        {
+            PRINT_LOG("ERROR_LEFT_CANARY_NULLPTR.\n");
+        }   
+
+        if(stk->error_code & ERROR_RIGHT_CANARY_DEAD)
+        {
+            PRINT_LOG("ERROR_RIGHT_CANARY_DEAD.\n");
+        }
+
+        if(stk->error_code & ERROR_RIGHT_CANARY_NULLPTR)
+        {
+            PRINT_LOG("ERROR_RIGHT_CANARY_NULLPTR.\n");
+        }                     
     }
+
+    printf("\n\n");
+}
+
+//=========================================================================================================э
+
+void assert_dtor(Stack* stk)
+{
+    for(size_t i = 0; i < stk->capacity; i++)
+    {
+        stk->data[i] = POISON;
+    }
+
+
+    stk->capacity     = 0;
+    stk->size         = 0;
+    stk->error_code   = 0;
+    stk->data         = nullptr;
+    stk->left_canary  = nullptr;
+    stk->right_canary = nullptr;
+
+
+    free(stk->stack_ptr);
+    stk->stack_ptr = nullptr;
+
+    free(stk);
+    stk = nullptr;  
 }
 
 //=========================================================================================================
@@ -103,7 +160,7 @@ void stack_print_log(Stack* stk)
         }
     }
 
-    PRINT_LOG("\t*[CANARY] = %lu\n",stk->right_canary[0]);
+    PRINT_LOG("\t*[CANARY] = %ld\n", stk->right_canary[0]);
 
     PRINT_LOG("\t}\n");
 
