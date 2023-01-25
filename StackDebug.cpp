@@ -88,6 +88,8 @@ void stack_print_log(Stack* stk)
 
     PRINT_LOG("\t{\n");
 
+    PRINT_LOG("\t*[CANARY] = %lu\n", stk->left_canary[0]);
+
     for(size_t i = 0; i < stk->capacity; i++)
     {
         if(!isnan(stk->data[i]))
@@ -100,6 +102,8 @@ void stack_print_log(Stack* stk)
             PRINT_LOG("\t [%lu] = NAN\n", i);
         }
     }
+
+    PRINT_LOG("\t*[CANARY] = %lu\n",stk->right_canary[0]);
 
     PRINT_LOG("\t}\n");
 

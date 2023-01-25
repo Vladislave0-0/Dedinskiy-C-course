@@ -28,7 +28,9 @@ struct Stack{
 
 //=========================================================================================================
 
-const elem_t POISON           = 1488;
+const elem_t POISON = 1488;
+const size_t CANARY = 0xDEAD;
+
 const size_t STACK_POP_RESIZE = 4;
 const size_t RESIZE_FACTOR    = 2;
 
@@ -40,7 +42,7 @@ void stack_dtor(Stack* stk);
 
 void stack_push(Stack* stk, elem_t elem);
 
-void stack_pop(Stack* stk, elem_t* elem);
+void stack_pop(Stack* stk);
 
 void stack_resize(Stack* stk, size_t new_capacity);
 
