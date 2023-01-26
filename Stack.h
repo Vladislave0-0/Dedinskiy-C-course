@@ -37,17 +37,55 @@ const size_t STACK_POP_RESIZE = 4;
 const size_t RESIZE_FACTOR    = 2;
 
 //=========================================================================================================
+/**
+ * @brief Creates and initializes stack.
+ * 
+ * @return Stack* 
+ */
+Stack* stack_ctor();
 
-Stack* stack_ctor(size_t capacity);
-
+//=========================================================================================================
+/**
+ * @brief Pushes the value in the stack.
+ * 
+ * @param stk the stack pointer
+ * @param elem the value to push onto the stack
+ */
 void stack_push(Stack* stk, elem_t elem);
 
+//=========================================================================================================
+/**
+ * @brief Deletes the value of the stack.
+ * 
+ * @param stk the stack pointer
+ */
 void stack_pop(Stack* stk);
 
+//=========================================================================================================
+/**
+ * @brief Recreates the stack taking into account the degree of fullness.
+ * 
+ * @param stk the stack pointer
+ * @param new_capacity new stack capacity
+ */
 void stack_resize(Stack* stk, size_t new_capacity);
 
+//=========================================================================================================
+/**
+ * @brief Fills the fields of the stack with NAN value after its creation and after resize in some range.
+ * 
+ * @param stk the stack pointer
+ * @param start the start of filling stack with NAN value
+ * @param finish the end of filling stack with NAN value
+ */
 void fill_with_NAN(Stack* stk, size_t start, size_t finish);
 
+//=========================================================================================================
+/**
+ * @brief Removes the stack, fills stack fields with POISON value, frees memory.
+ * 
+ * @param stk the stack pointer
+ */
 void stack_dtor(Stack* stk);
 
 //=========================================================================================================

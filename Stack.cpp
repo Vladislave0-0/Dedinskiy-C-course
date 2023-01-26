@@ -7,9 +7,11 @@
 
 //=========================================================================================================
 
-Stack* stack_ctor(size_t capacity)
+Stack* stack_ctor()
 {
-    assert(capacity > 0);
+    size_t capacity = 0;
+    printf("Please, enter the capacity of stack: ");
+    scanf("%lu", &capacity);
 
     open_stack_logs();
 

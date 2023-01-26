@@ -19,7 +19,10 @@
     } while(0)                                           \
 
 //=========================================================================================================
-
+/**
+ * @brief Notes the type of error.
+ * 
+ */
 enum StackErrors
 {
     ERROR_DATA_NULLPTR              = 1 << 0,     // stk->data == nullptr
@@ -33,19 +36,70 @@ enum StackErrors
 };
 
 //=========================================================================================================
-
+/**
+ * @brief Prints the error data to the file stack_log.txt.
+ * 
+ * @param stk the stack pointer
+ * @param file_name the name of the file that contains the function
+ * @param line line number where the error was found
+ * @param function_name the name of the function in which the error was found
+ */
 void stack_dump(Stack* stk, const char* file_name, size_t line, const char* function_name);
 
+//=========================================================================================================
+/**
+ * @brief Сonsiders the error code as the sum of errors in binary code.
+ * 
+ * @param stk the stack pointer
+ * @return int 
+ */
 int stack_verify(Stack* stk);
 
+//=========================================================================================================
+/**
+ * @brief Decodes the error and prints the name of the error to the file.
+ * 
+ * @param stk the stack pointer
+ */
 void stack_error_decoder(Stack* stk);
 
+//=========================================================================================================
+/**
+ * @brief If an error was found in the middle of running the program, this function
+ *        removes the stack, fills stack fields with POISON value, frees memory.
+ * 
+ * @param stk the stack pointer
+ */
 void assert_dtor(Stack* stk);
 
+//=========================================================================================================
+/**
+ * @brief Calculates the hash of the stack
+ * 
+ * @param stk the stack pointer
+ */
+void stack_hash(Stack* stk);
+
+//=========================================================================================================
+/**
+ * @brief Opens the file stack_log.txt in mode "w".
+ * 
+ */
 void open_stack_logs();
 
+//=========================================================================================================
+/**
+ * @brief Prints all information about the stack at the moment to a file stack_log.txt.
+ * 
+ * @param stk the stack pointer
+ */
 void stack_print_log(Stack* stk);
 
+//=========================================================================================================
+/**
+ * @brief Closes the file stack_log.txt.
+ * 
+ */
 void close_stack_logs();
 
 //=========================================================================================================

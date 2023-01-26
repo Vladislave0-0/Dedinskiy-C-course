@@ -5,9 +5,7 @@
 
 int main()
 {
-    size_t capacity = 2;
-
-    Stack* stk1 = stack_ctor(capacity);
+    Stack* stk1 = stack_ctor();
     assert(stk1 != nullptr);  
     
     stack_push(stk1, 0);
