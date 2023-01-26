@@ -20,7 +20,7 @@
 
 //=========================================================================================================
 /**
- * @brief Notes the type of error.
+ * @brief Notes the type of error in stack.
  * 
  */
 enum StackErrors
@@ -33,6 +33,7 @@ enum StackErrors
     ERROR_LEFT_CANARY_NULLPTR       = 1 << 5,     // stk->left_canary == nullptr
     ERROR_RIGHT_CANARY_DEAD         = 1 << 6,     // stk->right_canary[0] != CANARY
     ERROR_RIGHT_CANARY_NULLPTR      = 1 << 7,     // stk->right_canary == nullptr
+    ERROR_DATA_HASH                 = 1 << 8,     // stk->data_hash != stack_data_hash(stk)
 };
 
 //=========================================================================================================
@@ -74,11 +75,22 @@ void assert_dtor(Stack* stk);
 
 //=========================================================================================================
 /**
- * @brief Calculates the hash of the stack
+ * @brief Calculates hash given pointer and size.
+ * 
+ * @param pointer pointer to part of the stack
+ * @param size the number of elements over which the hash will be calculated
+ * @return long long 
+ */
+long long calculate_hash(elem_t* pointer, size_t size);
+
+//=========================================================================================================
+/**
+ * @brief Counts the hash of data as a structure field
  * 
  * @param stk the stack pointer
+ * @return long long 
  */
-void stack_hash(Stack* stk);
+long long stack_data_hash(Stack* stk);
 
 //=========================================================================================================
 /**

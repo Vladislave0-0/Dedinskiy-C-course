@@ -35,7 +35,8 @@ int stack_verify(Stack* stk)
     (stk->left_canary[0] != CANARY) * ERROR_LEFT_CANARY_DEAD        +
     (stk->left_canary == nullptr) * ERROR_LEFT_CANARY_NULLPTR       +
     (stk->right_canary[0] != CANARY) * ERROR_RIGHT_CANARY_DEAD      +
-    (stk->right_canary == nullptr) * ERROR_RIGHT_CANARY_NULLPTR;
+    (stk->right_canary == nullptr) * ERROR_RIGHT_CANARY_NULLPTR     +
+    (stk->data_hash != calculate_hash(stk->data, stk->capacity * sizeof(elem_t))) * ERROR_DATA_HASH;
 
     return stk->error_code;
 }
@@ -55,7 +56,7 @@ void stack_error_decoder(Stack* stk)
     {
         if(stk->error_code & ERROR_DATA_NULLPTR)
         {
-            PRINT_LOG("STACK_ERROR_DATA_NULL.\n");
+            PRINT_LOG("ERROR_DATA_NULLPTR.\n");
         }
 
         if(stk->error_code & ERROR_STACK_PTR)
@@ -65,12 +66,12 @@ void stack_error_decoder(Stack* stk)
 
         if(stk->error_code & ERROR_SIZE_BELOW_NULL)
         {
-            PRINT_LOG("STACK_ERROR_SIZE_BELOW_NULL.\n");
+            PRINT_LOG("ERROR_SIZE_BELOW_NULL.\n");
         }
 
         if(stk->error_code & ERROR_SIZE_BIGGER_THAN_CAPACITY)
         {
-            PRINT_LOG("STACK_ERROR_SIZE_BIGGER_THAN_CAPACITY.\n");
+            PRINT_LOG("ERROR_SIZE_BIGGER_THAN_CAPACITY.\n");
         }
 
         if(stk->error_code & ERROR_LEFT_CANARY_DEAD)
@@ -91,7 +92,12 @@ void stack_error_decoder(Stack* stk)
         if(stk->error_code & ERROR_RIGHT_CANARY_NULLPTR)
         {
             PRINT_LOG("ERROR_RIGHT_CANARY_NULLPTR.\n");
-        }                     
+        }     
+
+        if(stk->error_code & ERROR_DATA_HASH)     
+        {
+            PRINT_LOG("ERROR_DATA_HASH.\n");
+        }    
     }
 
     printf("\n\n");
@@ -110,6 +116,7 @@ void assert_dtor(Stack* stk)
     stk->capacity     = 0;
     stk->size         = 0;
     stk->error_code   = 0;
+    stk->data_hash    = 0;
     stk->data         = nullptr;
     stk->left_canary  = nullptr;
     stk->right_canary = nullptr;
@@ -124,9 +131,23 @@ void assert_dtor(Stack* stk)
 
 //=========================================================================================================
 
-void stack_hash(Stack* stk)
+long long calculate_hash(elem_t* pointer, size_t size)
 {
-    
+    long long hash = 0;
+
+    for(size_t i = 0; i < size; i++)
+    {
+        hash = ((hash << 2) + hash) + pointer[i];
+    }
+
+    return hash;
+}
+
+//=========================================================================================================
+
+long long stack_data_hash(Stack* stk)
+{
+    return calculate_hash(stk->data, stk->capacity * sizeof(elem_t));
 }
 
 //=========================================================================================================
@@ -144,11 +165,13 @@ void stack_print_log(Stack* stk)
 
     PRINT_LOG("{\n");
 
-    PRINT_LOG("size     = %lu\n", stk->size);
+    PRINT_LOG("size      = %lu\n", stk->size);
 
-    PRINT_LOG("capacity = %lu\n", stk->capacity);
+    PRINT_LOG("capacity  = %lu\n", stk->capacity);
 
-    PRINT_LOG("data     = [%p]\n", stk->data);
+    PRINT_LOG("data      = [%p]\n", stk->data);
+
+    PRINT_LOG("data_hash = [%lld]\n", stk->data_hash);
 
     PRINT_LOG("\t{\n");
 

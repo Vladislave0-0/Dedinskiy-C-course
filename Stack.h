@@ -19,11 +19,13 @@ typedef double elem_t;
 struct Stack{
     size_t* left_canary = nullptr;
 
-    void* stack_ptr = nullptr;
-    elem_t* data    = nullptr;
-    size_t capacity = 0;
-    size_t size     = 0;
-    int error_code  = 0;
+    void* stack_ptr  = nullptr;
+    elem_t* data     = nullptr;
+    size_t capacity  = 0;
+    size_t size      = 0;
+    int error_code   = 0;
+
+    long long data_hash = 0;
 
     size_t* right_canary = nullptr;
 };
