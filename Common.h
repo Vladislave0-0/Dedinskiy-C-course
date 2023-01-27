@@ -3,9 +3,6 @@
 
 //=============================================================================================================
 
-
-//=============================================================================================================
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -31,19 +28,36 @@ typedef struct Onegin{
 
 
 //=============================================================================================================
-
+/**
+ * @brief Counts the number of lines in a source file.
+ * 
+ * @param Onegin_struct structure pointer
+ */
 void num_of_strings(Onegin* Onegin_struct);
 
 //=============================================================================================================
-
+/**
+ * @brief Creates a buffer to store an array of structures.
+ * 
+ * @param Onegin_struct structure pointer
+ */
 void structs_ptr_calloc(Onegin* Onegin_struct);
 
 //=============================================================================================================
-
+/**
+ * @brief Fills 2 fields of each structure (pointer to buffer part and string length) 
+ *        from an array of structures.
+ * 
+ * @param Onegin_struct structure pointer
+ */
 void fill_in_structs(Onegin* Onegin_struct);
 
 //=============================================================================================================
-
+/**
+ * @brief Frees memory.
+ * 
+ * @param Onegin_struct structure pointer
+ */
 void destructor(Onegin* Onegin_struct);
 
 //=============================================================================================================

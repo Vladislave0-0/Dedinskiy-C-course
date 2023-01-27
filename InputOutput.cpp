@@ -42,6 +42,19 @@ void chars_buffer(Onegin* Onegin_struct, FILE* stream)
 
 //=============================================================================================================
 
+void input_processing(Onegin* Onegin_struct)
+{
+    FILE* mainfile = file_open();
+
+    num_of_chars(Onegin_struct, mainfile);
+
+    chars_buffer(Onegin_struct, mainfile);
+
+    fclose(mainfile);
+}
+
+//=============================================================================================================
+
 void left_sort_output(Onegin* Onegin_struct)
 {
     FILE* left_comparator = fopen("sorted text from left.txt", "w");
@@ -96,17 +109,4 @@ void right_sort_output (Onegin* Onegin_struct)
     fprintf(right_comparator, "%s", Onegin_struct->chars_buffer_ptr);
 
     fclose(right_comparator);
-}
-
-//=============================================================================================================
-
-void input_processing(Onegin* Onegin_struct)
-{
-    FILE* mainfile = file_open();
-
-    num_of_chars(Onegin_struct, mainfile);
-
-    chars_buffer(Onegin_struct, mainfile);
-
-    fclose(mainfile);
 }
