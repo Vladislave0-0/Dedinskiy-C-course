@@ -31,5 +31,7 @@
 *.out
 *.app
 
-Stack
+stack
 Logs/*
+*.gitignore
+*.vscode

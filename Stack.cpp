@@ -32,7 +32,9 @@ Stack* stack_ctor()
 
     fill_with_NAN(stk, 0, stk->capacity);
 
-    stk->data_hash = stack_data_hash(stk);
+    stk->data_hash = data_hash(stk);
+
+    stack_print_log(stk);
 
     return stk;
 }
@@ -48,17 +50,12 @@ void stack_push(Stack* stk, elem_t elem)
     {
         stack_resize(stk, stk->capacity * RESIZE_FACTOR);
     }
-
-    if(stk->size * STACK_POP_RESIZE <= stk->capacity)
-    {
-        stack_resize(stk, (int)(stk->capacity / RESIZE_FACTOR));
-    }
-
+    
     stk->data[stk->size] = elem;
 
     stk->size++;
 
-    stk->data_hash = stack_data_hash(stk);
+    stk->data_hash = data_hash(stk);
 }
 
 //=========================================================================================================
@@ -66,6 +63,7 @@ void stack_push(Stack* stk, elem_t elem)
 void stack_pop(Stack* stk)
 {
     assert(stk != nullptr);
+    assert(stk->size > 0);
     ASSERT_OK(stk);
 
     stk->size--;
@@ -77,7 +75,7 @@ void stack_pop(Stack* stk)
         stack_resize(stk, (int)(stk->capacity / RESIZE_FACTOR));
     }
 
-    stk->data_hash = stack_data_hash(stk);
+    stk->data_hash = data_hash(stk);
 }
 
 //=========================================================================================================

@@ -85,12 +85,12 @@ long long calculate_hash(elem_t* pointer, size_t size);
 
 //=========================================================================================================
 /**
- * @brief Counts the hash of data as a structure field
+ * @brief Applies function calculate_hash(...) for calculate hash of stack data.
  * 
  * @param stk the stack pointer
  * @return long long 
  */
-long long stack_data_hash(Stack* stk);
+long long data_hash(Stack* stk);
 
 //=========================================================================================================
 /**

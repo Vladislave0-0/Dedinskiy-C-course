@@ -28,15 +28,15 @@ int stack_verify(Stack* stk)
 {
     assert(stk != nullptr);
 
-    stk->error_code = (stk->data == nullptr) * ERROR_DATA_NULLPTR   +
-    (stk->stack_ptr == nullptr) * ERROR_STACK_PTR                   +
-    (stk->size < 0) * ERROR_SIZE_BELOW_NULL                         + 
-    (stk->size > stk->capacity) * ERROR_SIZE_BIGGER_THAN_CAPACITY   +
-    (stk->left_canary[0] != CANARY) * ERROR_LEFT_CANARY_DEAD        +
-    (stk->left_canary == nullptr) * ERROR_LEFT_CANARY_NULLPTR       +
-    (stk->right_canary[0] != CANARY) * ERROR_RIGHT_CANARY_DEAD      +
-    (stk->right_canary == nullptr) * ERROR_RIGHT_CANARY_NULLPTR     +
-    (stk->data_hash != calculate_hash(stk->data, stk->capacity * sizeof(elem_t))) * ERROR_DATA_HASH;
+    stk->error_code = (stk->data == nullptr) * ERROR_DATA_NULLPTR    +
+    (stk->stack_ptr == nullptr) * ERROR_STACK_PTR                    +
+    (stk->size < 0) * ERROR_SIZE_BELOW_NULL                          + 
+    (stk->size > stk->capacity) * ERROR_SIZE_BIGGER_THAN_CAPACITY    +
+    (stk->left_canary[0] != CANARY) * ERROR_LEFT_CANARY_DEAD         +
+    (stk->left_canary == nullptr) * ERROR_LEFT_CANARY_NULLPTR        +
+    (stk->right_canary[0] != CANARY) * ERROR_RIGHT_CANARY_DEAD       +
+    (stk->right_canary == nullptr) * ERROR_RIGHT_CANARY_NULLPTR      +
+    (stk->data_hash != data_hash(stk)) * ERROR_DATA_HASH;
 
     return stk->error_code;
 }
@@ -56,54 +56,54 @@ void stack_error_decoder(Stack* stk)
     {
         if(stk->error_code & ERROR_DATA_NULLPTR)
         {
-            PRINT_LOG("ERROR_DATA_NULLPTR.\n");
+            PRINT_LOG(" ERROR_DATA_NULLPTR.\n");
         }
 
         if(stk->error_code & ERROR_STACK_PTR)
         {
-            PRINT_LOG("ERROR_STACK_PTR.\n");
+            PRINT_LOG(" ERROR_STACK_PTR.\n");
         }
 
         if(stk->error_code & ERROR_SIZE_BELOW_NULL)
         {
-            PRINT_LOG("ERROR_SIZE_BELOW_NULL.\n");
+            PRINT_LOG(" ERROR_SIZE_BELOW_NULL.\n");
         }
 
         if(stk->error_code & ERROR_SIZE_BIGGER_THAN_CAPACITY)
         {
-            PRINT_LOG("ERROR_SIZE_BIGGER_THAN_CAPACITY.\n");
+            PRINT_LOG(" ERROR_SIZE_BIGGER_THAN_CAPACITY.\n");
         }
 
         if(stk->error_code & ERROR_LEFT_CANARY_DEAD)
         {
-            PRINT_LOG("ERROR_LEFT_CANARY_DEAD.\n");
+            PRINT_LOG(" ERROR_LEFT_CANARY_DEAD.\n");
         }
 
         if(stk->error_code & ERROR_LEFT_CANARY_NULLPTR)
         {
-            PRINT_LOG("ERROR_LEFT_CANARY_NULLPTR.\n");
+            PRINT_LOG(" ERROR_LEFT_CANARY_NULLPTR.\n");
         }   
 
         if(stk->error_code & ERROR_RIGHT_CANARY_DEAD)
         {
-            PRINT_LOG("ERROR_RIGHT_CANARY_DEAD.\n");
+            PRINT_LOG(" ERROR_RIGHT_CANARY_DEAD.\n");
         }
 
         if(stk->error_code & ERROR_RIGHT_CANARY_NULLPTR)
         {
-            PRINT_LOG("ERROR_RIGHT_CANARY_NULLPTR.\n");
+            PRINT_LOG(" ERROR_RIGHT_CANARY_NULLPTR.\n");
         }     
 
         if(stk->error_code & ERROR_DATA_HASH)     
         {
-            PRINT_LOG("ERROR_DATA_HASH.\n");
+            PRINT_LOG(" ERROR_DATA_HASH.\n");
         }    
     }
 
     printf("\n\n");
 }
 
-//=========================================================================================================э
+//=========================================================================================================
 
 void assert_dtor(Stack* stk)
 {
@@ -137,7 +137,7 @@ long long calculate_hash(elem_t* pointer, size_t size)
 
     for(size_t i = 0; i < size; i++)
     {
-        hash = ((hash << 2) + hash) + pointer[i];
+        hash = ((hash << 5) + hash) + pointer[i];
     }
 
     return hash;
@@ -145,9 +145,9 @@ long long calculate_hash(elem_t* pointer, size_t size)
 
 //=========================================================================================================
 
-long long stack_data_hash(Stack* stk)
+long long data_hash(Stack* stk)
 {
-    return calculate_hash(stk->data, stk->capacity * sizeof(elem_t));
+    return calculate_hash(stk->data, stk->capacity);
 }
 
 //=========================================================================================================
