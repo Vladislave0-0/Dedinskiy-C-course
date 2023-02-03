@@ -6,28 +6,20 @@
 #include "InputOutput.h"
 #include "Common.h"
 
-//=============================================================================================================
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
 #include <string.h>
 #include <ctype.h>
 
 //=============================================================================================================
 /**
- * @brief Outputs text to the terminal that allows you to select the type of sorting.
- * 
- * @param Onegin_struct structure pointer
- */
-void sorting_selection(Onegin* Onegin_struct);
-
-//=============================================================================================================
-/**
  * @brief Comparator for left sorting based on qsort.
  * 
- * @param first_struct 
- * @param second_struct 
+ * @param first_struct pointer to a first structure from an array of structures that store a pointer 
+ *                     to a part of the buffer and the length of the string
+ * @param second_struct pointer to a second structure from an array of structures that store a pointer 
+ *                      to a part of the buffer and the length of the string
  * @return int 
  */
 int left_comparator(const void* first_struct, const void* second_struct);
@@ -36,8 +28,10 @@ int left_comparator(const void* first_struct, const void* second_struct);
 /**
  * @brief Comparator for right sorting based on qsort.
  * 
- * @param first_struct 
- * @param second_struct 
+ * @param first_struct pointer to a first structure from an array of structures that store a pointer 
+ *                     to a part of the buffer and the length of the string
+ * @param second_struct pointer to a second structure from an array of structures that store a pointer 
+ *                      to a part of the buffer and the length of the string
  * @return int 
  */
 int right_comparator(const void* first_struct, const void* second_struct);

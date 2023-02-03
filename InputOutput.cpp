@@ -2,31 +2,26 @@
 
 //=============================================================================================================
 
-FILE* file_open()
+FILE* file_open(const char* filename)
 {
-    FILE* file_input = fopen("input.txt", "r");
+    FILE* file_input = fopen(filename, "r");
 
-    if(errno)
-    {
-        perror("File open error.\n");
-        exit(1);
-    }
+    assert(file_input != nullptr);
 
     return file_input;
 }
 
 //=============================================================================================================
 
-void num_of_chars(Onegin* Onegin_struct, FILE* stream)
+void num_of_chars(Onegin* Onegin_struct, const char* filename)
 {
-    rewind(stream);
-    
-    fseek(stream, 0, SEEK_END);
-    size_t chars_number = ftell(stream);
+    struct stat buf = {};
 
-    rewind(stream);
+    stat(filename, &buf);
 
-    Onegin_struct->chars_number = chars_number + 1;
+    Onegin_struct->chars_number = buf.st_size + 1;
+
+    return;
 }
 
 //=============================================================================================================
@@ -38,19 +33,26 @@ void chars_buffer(Onegin* Onegin_struct, FILE* stream)
     fread(Onegin_struct->chars_buffer_ptr, 1, Onegin_struct->chars_number - 1, stream);
 
     Onegin_struct->chars_buffer_ptr[Onegin_struct->chars_number - 1] = '\0';
+
+    return;
 }
 
 //=============================================================================================================
 
-void input_processing(Onegin* Onegin_struct)
+void input_processing(Onegin* Onegin_struct, const char* filename)
 {
-    FILE* mainfile = file_open();
+    FILE* mainfile = file_open(filename);
+    assert(mainfile != nullptr);
 
-    num_of_chars(Onegin_struct, mainfile);
+    num_of_chars(Onegin_struct, filename);
 
     chars_buffer(Onegin_struct, mainfile);
 
+    num_of_strings(Onegin_struct);
+
     fclose(mainfile);
+
+    return;
 }
 
 //=============================================================================================================
@@ -64,22 +66,14 @@ void left_sort_output(Onegin* Onegin_struct)
                              "//======================================================================//\n"
                              "\n\n");
 
-    for(size_t j = 0; j < Onegin_struct->strings_number; j++)
+    for(size_t i = 0; i < Onegin_struct->strings_number; i++)
     {
-        for(size_t i = 0; i < Onegin_struct->structs_arr[j].string_lenght; i++)
-        {
-            fprintf(left_comparator, "%c", Onegin_struct->structs_arr[j].string_pointer[i]);
-        }
+        fprintf(left_comparator, "%s\n", Onegin_struct->structs_arr[i].string_pointer);
     }
 
-    fprintf(left_comparator, "//=======================================================================//\n"
-                             "//                              source text                              //\n"
-                             "//=======================================================================//\n"
-                             "\n\n");
-
-    fprintf(left_comparator, "%s", Onegin_struct->chars_buffer_ptr);
-
     fclose(left_comparator);
+
+    return;
 }
 
 //=============================================================================================================
@@ -93,20 +87,42 @@ void right_sort_output (Onegin* Onegin_struct)
                               "//======================================================================//\n"
                               "\n\n");
 
-    for(size_t j = 0; j < Onegin_struct->strings_number; j++)
+    for(size_t i = 0; i < Onegin_struct->strings_number; i++)
     {
-        for(size_t i = 0; i < Onegin_struct->structs_arr[j].string_lenght; i++)
-        {
-            fprintf(right_comparator, "%c", Onegin_struct->structs_arr[j].string_pointer[i]);
-        }
+        fprintf(right_comparator, "%s\n", Onegin_struct->structs_arr[i].string_pointer);
     }
 
-    fprintf(right_comparator, "//=======================================================================//\n"
-                              "//                              source text                              //\n"
-                              "//=======================================================================//\n"
-                              "\n\n");
-
-    fprintf(right_comparator, "%s", Onegin_struct->chars_buffer_ptr);
-
     fclose(right_comparator);
+
+    return;
+}
+
+//=============================================================================================================
+
+void sorting_selection(Onegin* Onegin_struct)
+{
+    int type_sorting = 0;
+
+    printf("Select a sorting type:\n"
+           "— write 1 to sort from the left side;\n"
+           "— write 0 for both sorts;\n"
+           "— write -1 to sort from the right side.\n\n"
+           "Sorting: ");
+
+    scanf("%d", &type_sorting);
+
+    switch(type_sorting)
+    {
+    case -1: right_sorting(Onegin_struct);
+        break;
+
+    case  0: right_sorting(Onegin_struct); left_sorting(Onegin_struct); 
+        break;
+
+    case  1: left_sorting(Onegin_struct);
+        break;
+
+    default: printf("Error sorting type. Please, try again.\n");
+        break; 
+    }
 }

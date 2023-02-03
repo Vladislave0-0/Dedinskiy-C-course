@@ -5,7 +5,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -34,14 +33,6 @@ typedef struct Onegin{
  * @param Onegin_struct structure pointer
  */
 void num_of_strings(Onegin* Onegin_struct);
-
-//=============================================================================================================
-/**
- * @brief Creates a buffer to store an array of structures.
- * 
- * @param Onegin_struct structure pointer
- */
-void structs_ptr_calloc(Onegin* Onegin_struct);
 
 //=============================================================================================================
 /**

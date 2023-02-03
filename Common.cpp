@@ -1,4 +1,3 @@
-
 #include "InputOutput.h"
 #include "TextSorting.h"
 
@@ -13,20 +12,17 @@ void num_of_strings(Onegin* Onegin_struct)
 
         if(Onegin_struct->chars_buffer_ptr[chars_number] == '\n')
         {
+            Onegin_struct->chars_buffer_ptr[chars_number] = '\0';
+
             Onegin_struct->strings_number++;
         }
 
         chars_number++;
     }
-}
+    
+    Onegin_struct->strings_number++;
 
-//=============================================================================================================
-
-void structs_ptr_calloc(Onegin* Onegin_struct)
-{
-    num_of_strings(Onegin_struct); 
-
-    Onegin_struct->structs_arr = (String*)calloc(Onegin_struct->strings_number, sizeof(String));
+    return;
 }
 
 //=============================================================================================================
@@ -38,30 +34,26 @@ void structs_ptr_calloc(Onegin* Onegin_struct)
 
 void fill_in_structs(Onegin* Onegin_struct)
 {
-    size_t number_of_char = 0;
-    size_t chars_in_string = 0;
+    Onegin_struct->structs_arr = (String*)calloc(Onegin_struct->strings_number, sizeof(String));
+    assert(Onegin_struct->structs_arr != nullptr);
 
-    STR_ARR[0].string_pointer = CH_BUF;
+    size_t ptr_counter = 0;
 
-    for(size_t string = 1; string < STR_NUM; string++)
+    for(size_t string = 0; string < STR_NUM; string++)
     {
-        while(CH_BUF[number_of_char] != '\n')
+        STR_ARR[string].string_pointer = CH_BUF + ptr_counter;
+
+        STR_ARR[string].string_lenght = strlen(CH_BUF + ptr_counter) + 1;
+
+        while(CH_BUF[ptr_counter] != '\0')
         {
-            chars_in_string++;
-            number_of_char++;
+            ptr_counter++;
         }
 
-        number_of_char++;
-
-        STR_ARR[string].string_pointer = CH_BUF + number_of_char;
-
-        STR_ARR[string - 1].string_lenght = chars_in_string + 1;
-
-        chars_in_string = 0;
+        ptr_counter++;
     }
 
-
-    STR_ARR[STR_NUM - 1].string_lenght = (CH_BUF + CH_NUM) - STR_ARR[STR_NUM - 1].string_pointer;
+    return;
 }
 
 //=============================================================================================================
@@ -69,6 +61,10 @@ void fill_in_structs(Onegin* Onegin_struct)
 void destructor(Onegin* Onegin_struct)
 {
     free(Onegin_struct->chars_buffer_ptr);
+    Onegin_struct->chars_buffer_ptr = nullptr;
 
     free(Onegin_struct->structs_arr);
+    Onegin_struct->structs_arr = nullptr;
+
+    return;
 }

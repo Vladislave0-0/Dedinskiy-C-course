@@ -8,9 +8,7 @@ int main()
 {
     Onegin Onegin_struct = {};
 
-    input_processing(&Onegin_struct);
-
-    structs_ptr_calloc(&Onegin_struct);
+    input_processing(&Onegin_struct, "input.txt");
 
     fill_in_structs(&Onegin_struct);
 
