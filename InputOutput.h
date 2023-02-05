@@ -68,6 +68,15 @@ void right_sort_output(Onegin* Onegin_struct);
 
 //=============================================================================================================
 /**
+ * @brief After the sorted text outputs the original text to the same file.
+ * 
+ * @param Onegin_struct structure pointer
+ * @param stream file pointer
+ */
+void output_source_text(Onegin* Onegin_struct, FILE* stream);
+
+//=============================================================================================================
+/**
  * @brief Outputs text to the terminal that allows you to select the type of sorting.
  * 
  * @param Onegin_struct structure pointer

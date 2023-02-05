@@ -21,8 +21,6 @@ void num_of_strings(Onegin* Onegin_struct)
     }
     
     Onegin_struct->strings_number++;
-
-    return;
 }
 
 //=============================================================================================================
@@ -52,8 +50,6 @@ void fill_in_structs(Onegin* Onegin_struct)
 
         ptr_counter++;
     }
-
-    return;
 }
 
 //=============================================================================================================
@@ -65,6 +61,4 @@ void destructor(Onegin* Onegin_struct)
 
     free(Onegin_struct->structs_arr);
     Onegin_struct->structs_arr = nullptr;
-
-    return;
 }

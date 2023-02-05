@@ -30,7 +30,7 @@ void chars_buffer(Onegin* Onegin_struct, FILE* stream)
 {
     Onegin_struct->chars_buffer_ptr = (char*)calloc(Onegin_struct->chars_number, sizeof(char));
 
-    fread(Onegin_struct->chars_buffer_ptr, 1, Onegin_struct->chars_number - 1, stream);
+    fread(Onegin_struct->chars_buffer_ptr, sizeof(char), Onegin_struct->chars_number - 1, stream);
 
     Onegin_struct->chars_buffer_ptr[Onegin_struct->chars_number - 1] = '\0';
 
@@ -68,9 +68,18 @@ void left_sort_output(Onegin* Onegin_struct)
 
     for(size_t i = 0; i < Onegin_struct->strings_number; i++)
     {
-        fprintf(left_comparator, "%s\n", Onegin_struct->structs_arr[i].string_pointer);
+        fputs(Onegin_struct->structs_arr[i].string_pointer, left_comparator);
+        fputc('\n', left_comparator);
     }
 
+
+    fprintf(left_comparator, "//=======================================================================//\n"
+                             "//                              source text                              //\n"
+                             "//=======================================================================//\n"
+                             "\n\n");
+
+    output_source_text(Onegin_struct, left_comparator);
+    
     fclose(left_comparator);
 
     return;
@@ -89,12 +98,33 @@ void right_sort_output (Onegin* Onegin_struct)
 
     for(size_t i = 0; i < Onegin_struct->strings_number; i++)
     {
-        fprintf(right_comparator, "%s\n", Onegin_struct->structs_arr[i].string_pointer);
+        fputs(Onegin_struct->structs_arr[i].string_pointer, right_comparator);
+        fputc('\n', right_comparator);
     }
+
+    output_source_text(Onegin_struct, right_comparator);
 
     fclose(right_comparator);
 
     return;
+}
+
+//=============================================================================================================
+
+void output_source_text(Onegin* Onegin_struct, FILE* stream)
+{
+    for(size_t i = 0; i < Onegin_struct->chars_number; i++)
+    {
+        if(Onegin_struct->chars_buffer_ptr[i] != '\0')
+        {
+            fputc(Onegin_struct->chars_buffer_ptr[i], stream);
+        }
+
+        else
+        {
+            fputc('\n', stream);
+        }
+    }
 }
 
 //=============================================================================================================
