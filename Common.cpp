@@ -1,5 +1,45 @@
-#include "InputOutput.h"
-#include "TextSorting.h"
+#include "Common.h"
+
+//=============================================================================================================
+
+void constructor(Onegin* Onegin_struct, const char* filename)
+{
+    open_file(Onegin_struct, filename);
+
+    num_of_chars(Onegin_struct, filename);
+
+    chars_buffer(Onegin_struct, Onegin_struct->mainfile);
+
+    num_of_strings(Onegin_struct);
+
+    fill_in_structs(Onegin_struct);
+
+    open_errors_file();
+    
+    ASSERT_OK(Onegin_struct);
+}
+
+//=============================================================================================================
+
+void num_of_chars(Onegin* Onegin_struct, const char* filename)
+{
+    struct stat buf = {};
+
+    stat(filename, &buf);
+
+    Onegin_struct->chars_number = buf.st_size + 1;
+}
+
+//=============================================================================================================
+
+void chars_buffer(Onegin* Onegin_struct, FILE* stream)
+{
+    Onegin_struct->chars_buffer_ptr = (char*)calloc(Onegin_struct->chars_number, sizeof(char));
+
+    fread(Onegin_struct->chars_buffer_ptr, sizeof(char), Onegin_struct->chars_number - 1, stream);
+
+    Onegin_struct->chars_buffer_ptr[Onegin_struct->chars_number - 1] = '\0';
+}
 
 //=============================================================================================================
 
@@ -33,7 +73,6 @@ void num_of_strings(Onegin* Onegin_struct)
 void fill_in_structs(Onegin* Onegin_struct)
 {
     Onegin_struct->structs_arr = (String*)calloc(Onegin_struct->strings_number, sizeof(String));
-    assert(Onegin_struct->structs_arr != nullptr);
 
     size_t ptr_counter = 0;
 
@@ -56,8 +95,21 @@ void fill_in_structs(Onegin* Onegin_struct)
 
 void destructor(Onegin* Onegin_struct)
 {
+    for(size_t i = 0; i < Onegin_struct->strings_number; i++)
+    {
+        Onegin_struct->structs_arr[i].string_lenght = 0;
+        Onegin_struct->structs_arr[i].string_pointer = nullptr;
+    }
+
+    Onegin_struct->chars_number         = 0;
+    Onegin_struct->strings_number       = 0;
+    Onegin_struct->error_code           = 0;
+    Onegin_struct->number_of_the_string = 0;
+
+    Onegin_struct->mainfile         = nullptr;
+
     free(Onegin_struct->chars_buffer_ptr);
-    Onegin_struct->chars_buffer_ptr = nullptr;
+    Onegin_struct->chars_buffer_ptr = nullptr;  
 
     free(Onegin_struct->structs_arr);
     Onegin_struct->structs_arr = nullptr;

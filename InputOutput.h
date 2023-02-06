@@ -5,6 +5,7 @@
 
 #include "Common.h"
 #include "TextSorting.h"
+#include "OneginDebug.h"
 
 
 #include <stdio.h>
@@ -20,35 +21,7 @@
  * 
  * @return FILE* 
  */
-FILE* file_open(const char* filename);
-
-//=============================================================================================================
-/**
- * @brief Reads the number of characters in the source text from the file input.txt 
- *        using the library <sys/stat.h>.
- * 
- * @param Onegin_struct structure pointer
- * @param filename the name of the input file as a parameter
- */
-void num_of_chars(Onegin* Onegin_struct, const char* filename);
-
-//=============================================================================================================
-/**
- * @brief Creates a buffer that fills with characters from a file input.txt.
- * 
- * @param Onegin_struct structure pointer
- * @param stream file pointer
- */
-void chars_buffer(Onegin* Onegin_struct, FILE* stream);
-
-//=============================================================================================================
-/**
- * @brief Integrates the entire process of processing input data.
- * 
- * @param Onegin_struct structure pointer
- * @param filename the name of the input file as a parameter
- */
-void input_processing(Onegin* Onegin_struct, const char* filename);
+void open_file(Onegin* Onegin_struct, const char* filename);
 
 //=============================================================================================================
 /**

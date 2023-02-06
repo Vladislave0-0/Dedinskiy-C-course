@@ -2,57 +2,13 @@
 
 //=============================================================================================================
 
-FILE* file_open(const char* filename)
+void open_file(Onegin* Onegin_struct, const char* filename)
 {
     FILE* file_input = fopen(filename, "r");
 
     assert(file_input != nullptr);
 
-    return file_input;
-}
-
-//=============================================================================================================
-
-void num_of_chars(Onegin* Onegin_struct, const char* filename)
-{
-    struct stat buf = {};
-
-    stat(filename, &buf);
-
-    Onegin_struct->chars_number = buf.st_size + 1;
-
-    return;
-}
-
-//=============================================================================================================
-
-void chars_buffer(Onegin* Onegin_struct, FILE* stream)
-{
-    Onegin_struct->chars_buffer_ptr = (char*)calloc(Onegin_struct->chars_number, sizeof(char));
-
-    fread(Onegin_struct->chars_buffer_ptr, sizeof(char), Onegin_struct->chars_number - 1, stream);
-
-    Onegin_struct->chars_buffer_ptr[Onegin_struct->chars_number - 1] = '\0';
-
-    return;
-}
-
-//=============================================================================================================
-
-void input_processing(Onegin* Onegin_struct, const char* filename)
-{
-    FILE* mainfile = file_open(filename);
-    assert(mainfile != nullptr);
-
-    num_of_chars(Onegin_struct, filename);
-
-    chars_buffer(Onegin_struct, mainfile);
-
-    num_of_strings(Onegin_struct);
-
-    fclose(mainfile);
-
-    return;
+    Onegin_struct->mainfile = file_input;
 }
 
 //=============================================================================================================
@@ -61,22 +17,16 @@ void left_sort_output(Onegin* Onegin_struct)
 {
     FILE* left_comparator = fopen("sorted text from left.txt", "w");
 
-    fprintf(left_comparator, "//======================================================================//\n"
-                             "//                    sorted text from left to right                    //\n"
-                             "//======================================================================//\n"
-                             "\n\n");
+    fputs("//======================================================================//\n"
+          "//                    sorted text from left to right                    //\n"
+          "//======================================================================//\n"
+          "\n\n", left_comparator);
 
     for(size_t i = 0; i < Onegin_struct->strings_number; i++)
     {
         fputs(Onegin_struct->structs_arr[i].string_pointer, left_comparator);
         fputc('\n', left_comparator);
     }
-
-
-    fprintf(left_comparator, "//=======================================================================//\n"
-                             "//                              source text                              //\n"
-                             "//=======================================================================//\n"
-                             "\n\n");
 
     output_source_text(Onegin_struct, left_comparator);
     
@@ -91,10 +41,10 @@ void right_sort_output (Onegin* Onegin_struct)
 {
     FILE* right_comparator = fopen("sorted text from right.txt", "w");
 
-    fprintf(right_comparator, "//======================================================================//\n"
-                              "//                    sorted text from right to left                    //\n"
-                              "//======================================================================//\n"
-                              "\n\n");
+    fputs("//======================================================================//\n"
+          "//                    sorted text from right to left                    //\n"
+          "//======================================================================//\n"
+          "\n\n", right_comparator);
 
     for(size_t i = 0; i < Onegin_struct->strings_number; i++)
     {
@@ -113,6 +63,11 @@ void right_sort_output (Onegin* Onegin_struct)
 
 void output_source_text(Onegin* Onegin_struct, FILE* stream)
 {
+    fputs("//=======================================================================//\n"
+          "//                              source text                              //\n"
+          "//=======================================================================//\n"
+          "\n\n", stream);
+
     for(size_t i = 0; i < Onegin_struct->chars_number; i++)
     {
         if(Onegin_struct->chars_buffer_ptr[i] != '\0')
