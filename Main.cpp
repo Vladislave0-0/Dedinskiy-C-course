@@ -1,8 +1,5 @@
 #include "StringFunctions.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
 //=======================================================================================================================================================
 
 int main(){
@@ -50,10 +47,10 @@ int main(){
 
     char dest6[128] = {};
 
-    FILE* file1 = fopen("test_strdup.txt", "w");
+    FILE* file1 = fopen("test_fgets.txt", "w");
     fprintf(file1, "Perfectly imperfect");
     fclose(file1);
-    file1 = fopen("test_strdup.txt", "r");
+    file1 = fopen("test_fgets.txt", "r");
 
     printf("Result of FGETS: %s.\n\n", my_fgets(file1, 128, dest6));
     fclose(file1);
@@ -68,13 +65,27 @@ int main(){
 //=====================================================================GETLINE===========================================================================
 
     FILE* file2 = fopen("test_getline.txt", "w");
-    fprintf(file2, "Ebanyt'sya");
+    fprintf(file2, "PIZDEC");
     fclose(file2);
     file2 = fopen("test_getline.txt", "r");
 
     size_t n = 15;
     char* dest8 = (char*)calloc(n, sizeof(char));
-    printf("Result of GETLINE: %lu.\n\n", my_getline(dest8, &n, file2));
+    char* dest666 = dest8;
+    
+    if((dest8 == nullptr) || (n == 0))
+    {
+        printf("Result of GETLINE: %lu.\n", my_getline(&dest8, &n, file2));
+        printf("Result of GETLINE: %s.\n\n", dest8);
+
+        free(dest666);
+    }
+
+    else
+    {
+        printf("Result of GETLINE: %lu.\n", my_getline(&dest8, &n, file2));
+        printf("Result of GETLINE: %s.\n\n", dest8);    
+    }
 
     free(dest8);
     fclose(file2);

@@ -38,7 +38,7 @@ size_t my_puts(const char* str);
  * 
  * @return size_t 
  */
-size_t my_getline(char* lineptr, size_t* n, FILE* stream);
+size_t my_getline(char** lineptr, size_t* n, FILE* stream);
 
 //==============================================================================
 /**

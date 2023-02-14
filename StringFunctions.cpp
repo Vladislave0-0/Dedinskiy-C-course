@@ -1,7 +1,5 @@
 #include "StringFunctions.h"
 
-#include <stdlib.h>
-
 //==============================================================================
 
 size_t my_strlen(const char* str)
@@ -163,64 +161,87 @@ char* my_strdup(char* src)
 
 //==============================================================================
 
-size_t my_getline(char* lineptr, size_t* n, FILE* stream)
+size_t my_getline(char** lineptr, size_t* n, FILE* stream)
 {
-    
     rewind(stream); 
 
-    if (lineptr == NULL)
+    if ((*lineptr == nullptr) || (*n == 0))
     {
-        size_t characters_number = 0;
-
+        size_t chars_num = 0;
+        
         int ch = fgetc(stream);
 
-        for(; (ch != '\n') && (ch != EOF); characters_number++)
+        for(; (ch != '\n') && (ch != EOF); chars_num++)
+        {
             ch = fgetc(stream);
+        }
 
-        char* dest = (char*)calloc(characters_number + 1, sizeof(char));
+        rewind(stream);
 
-        for(size_t i = 0; i < characters_number; i++)
-            dest[i] = (char)getc(stream);
+        if(*n == 0)
+        {
+            *n = chars_num + 1;
+        }
 
-        dest[characters_number] = '\0';
+        char* new_lineptr = (char*)calloc(*n, sizeof(char));
 
-        return ++characters_number;
+        for(size_t i = 0; i < chars_num + 1; i++)
+        {
+            new_lineptr[i] = (char)getc(stream);
+        }
+
+        rewind(stream);
+
+        new_lineptr[chars_num] = '\0';
+
+        *lineptr = new_lineptr;
+
+        return ++chars_num;
     }
 
     else 
     {
-        rewind(stream); 
-
         size_t buffer_size = *n;
 
-        size_t characters_number  = 0;
+        size_t chars_num  = 0;
 
         int ch = fgetc(stream);
 
-        for(; (ch != '\n') && (ch != EOF); characters_number++)
-            ch = fgetc(stream);
-
-        if (buffer_size >= characters_number + 1)
+        for(; (ch != '\n') && (ch != EOF); chars_num++)
         {
-            for(size_t i = 0; i < characters_number; i++)
-                lineptr[i] = (char)getc(stream);
+            ch = fgetc(stream);
+        }
+        
+        rewind(stream);
 
-            lineptr[characters_number] = '\0';
+        if (buffer_size >= chars_num + 1)
+        {
+            for(size_t i = 0; i < chars_num; i++)
+            {
+                (*lineptr)[i] = (char)getc(stream);
+            }
 
-            return ++characters_number;
+            rewind(stream);
 
+            (*lineptr)[chars_num] = '\0';
+
+            return ++chars_num;
         }
 
         else
         {
-            lineptr = (char*)realloc(lineptr, (characters_number + 1)*sizeof(char));
+            *lineptr = (char*)realloc(*lineptr, (chars_num + 1)*sizeof(char));
 
-            for(size_t i = 0; i < characters_number; i++)
-                lineptr[i] = (char)getc(stream);
+            for(size_t i = 0; i < chars_num; i++)
+            {
+                (*lineptr)[i] = (char)getc(stream);
+            }
 
-            lineptr[characters_number] = '\0';
+            rewind(stream);
 
-            return ++characters_number;
+            (*lineptr)[chars_num] = '\0';
+
+            return ++chars_num;
         }
     }
 }
