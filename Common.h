@@ -5,10 +5,9 @@
 
 #include "InputOutput.h"
 
+
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include <sys/stat.h>
 
 //=============================================================================================================
 
@@ -18,7 +17,7 @@ typedef struct String{
 } String;
 
 typedef struct Onegin{
-    char* chars_buffer_ptr = nullptr;
+    char* chars_buffer_ptr = nullptr; 
     String* structs_arr    = nullptr;
     FILE* mainfile         = nullptr;
 
@@ -36,7 +35,7 @@ typedef struct Onegin{
  * @param Onegin_struct structure pointer
  * @param filename the name of the input file as a parameter
  */
-void constructor(Onegin* Onegin_struct, const char* filename);
+int constructor(Onegin* Onegin_struct, const char* filename);
 
 //=============================================================================================================
 /**
@@ -46,7 +45,7 @@ void constructor(Onegin* Onegin_struct, const char* filename);
  * @param Onegin_struct structure pointer
  * @param filename the name of the input file as a parameter
  */
-void num_of_chars(Onegin* Onegin_struct, const char* filename);
+int num_of_chars(Onegin* Onegin_struct, const char* filename);
 
 //=============================================================================================================
 /**
@@ -55,7 +54,7 @@ void num_of_chars(Onegin* Onegin_struct, const char* filename);
  * @param Onegin_struct structure pointer
  * @param stream file pointer
  */
-void chars_buffer(Onegin* Onegin_struct, FILE* stream);
+int chars_buffer(Onegin* Onegin_struct, FILE* stream);
 
 //=============================================================================================================
 /**
@@ -63,7 +62,7 @@ void chars_buffer(Onegin* Onegin_struct, FILE* stream);
  * 
  * @param Onegin_struct structure pointer
  */
-void num_of_strings(Onegin* Onegin_struct);
+int num_of_strings(Onegin* Onegin_struct);
 
 //=============================================================================================================
 /**
@@ -72,7 +71,7 @@ void num_of_strings(Onegin* Onegin_struct);
  * 
  * @param Onegin_struct structure pointer
  */
-void fill_in_structs(Onegin* Onegin_struct);
+int fill_in_structs(Onegin* Onegin_struct);
 
 //=============================================================================================================
 /**

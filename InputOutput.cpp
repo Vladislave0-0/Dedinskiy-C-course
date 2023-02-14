@@ -2,20 +2,30 @@
 
 //=============================================================================================================
 
-void open_file(Onegin* Onegin_struct, const char* filename)
+int open_file(Onegin* Onegin_struct, const char* filename)
 {
     FILE* file_input = fopen(filename, "r");
 
-    assert(file_input != nullptr);
+    if(file_input == nullptr)
+    {
+        return ERROR_OPEN_MAINFILE;
+    }
 
     Onegin_struct->mainfile = file_input;
+
+    return 0;
 }
 
 //=============================================================================================================
 
-void left_sort_output(Onegin* Onegin_struct)
+int left_sort_output(Onegin* Onegin_struct)
 {
     FILE* left_comparator = fopen("sorted text from left.txt", "w");
+
+    if(left_comparator == nullptr)
+    {
+        return ERROR_LEFT_COMPARATOR_NULLPTR;
+    }
 
     fputs("//======================================================================//\n"
           "//                    sorted text from left to right                    //\n"
@@ -32,14 +42,19 @@ void left_sort_output(Onegin* Onegin_struct)
     
     fclose(left_comparator);
 
-    return;
+    return 0;
 }
 
 //=============================================================================================================
 
-void right_sort_output (Onegin* Onegin_struct)
+int right_sort_output (Onegin* Onegin_struct)
 {
     FILE* right_comparator = fopen("sorted text from right.txt", "w");
+
+    if(right_comparator == nullptr)
+    {
+        return ERROR_RIGHT_COMPARATOR_NULLPTR;
+    }
 
     fputs("//======================================================================//\n"
           "//                    sorted text from right to left                    //\n"
@@ -56,7 +71,7 @@ void right_sort_output (Onegin* Onegin_struct)
 
     fclose(right_comparator);
 
-    return;
+    return 0;
 }
 
 //=============================================================================================================
@@ -84,7 +99,7 @@ void output_source_text(Onegin* Onegin_struct, FILE* stream)
 
 //=============================================================================================================
 
-void sorting_selection(Onegin* Onegin_struct)
+int sorting_selection(Onegin* Onegin_struct)
 {
     int type_sorting = 0;
 
@@ -98,16 +113,42 @@ void sorting_selection(Onegin* Onegin_struct)
 
     switch(type_sorting)
     {
-    case -1: right_sorting(Onegin_struct);
+    case -1: 
+        if(right_sorting(Onegin_struct))
+        {
+            printf("Error code: %d.\n", ERROR_RIGHT_COMPARATOR_NULLPTR);
+            return ERROR_RIGHT_COMPARATOR_NULLPTR;
+        }
+
         break;
 
-    case  0: right_sorting(Onegin_struct); left_sorting(Onegin_struct); 
+    case  0: 
+        if(right_sorting(Onegin_struct))
+        {
+            printf("Error code: %d.\n", ERROR_RIGHT_COMPARATOR_NULLPTR);
+            return ERROR_RIGHT_COMPARATOR_NULLPTR;
+        }
+
+        if(left_sorting(Onegin_struct))
+        {
+            printf("Error code: %d.\n", ERROR_LEFT_COMPARATOR_NULLPTR);
+            return ERROR_LEFT_COMPARATOR_NULLPTR;
+        }
+
         break;
 
-    case  1: left_sorting(Onegin_struct);
+    case  1: 
+        if(left_sorting(Onegin_struct))
+        {
+            printf("Error code: %d.\n", ERROR_LEFT_COMPARATOR_NULLPTR);
+            return ERROR_LEFT_COMPARATOR_NULLPTR;
+        }
+
         break;
 
     default: printf("Error sorting type. Please, try again.\n");
         break; 
     }
+
+    return 0;
 }

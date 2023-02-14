@@ -4,4 +4,4 @@ CFLAGS = -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-equ
          -Wmissing-field-initializers -Wnon-virtual-dtor -Woverloaded-virtual -Wpointer-arith -Wsign-promo -Wstack-usage=8192           \
          -Wstrict-aliasing -Wstrict-null-sentinel -Wtype-limits -Wwrite-strings -D_DEBUG -D_EJUDGE_CLIENT_SIDE	 -fsanitize=address -g	
 all:
-	g++ $(CFLAGS) Main.cpp InputOutput.cpp Common.cpp TextSorting.cpp OneginDebug.cpp -o onegin
+	g++ $(CFLAGS) Main.cpp InputOutput.cpp Common.cpp TextSorting.cpp -o onegin

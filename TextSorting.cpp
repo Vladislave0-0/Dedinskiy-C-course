@@ -53,8 +53,8 @@ int right_comparator(const void* first_struct, const void* second_struct)
     char* first_string  = ((const String*)first_struct)->string_pointer;
     char* second_string = ((const String*)second_struct)->string_pointer;
 
-    size_t i = ((const String*)first_struct)->string_lenght - 2;
-    size_t j = ((const String*)second_struct)->string_lenght - 2;
+    size_t i = ((const String*)first_struct)->string_lenght - 1;
+    size_t j = ((const String*)second_struct)->string_lenght - 1;
 
     while(1)
     {
@@ -94,22 +94,28 @@ int right_comparator(const void* first_struct, const void* second_struct)
 
 //=============================================================================================================
 
-void left_sorting(Onegin* Onegin_struct)
+int left_sorting(Onegin* Onegin_struct)
 {
     qsort(Onegin_struct->structs_arr, Onegin_struct->strings_number, sizeof(String), left_comparator);
 
-    left_sort_output(Onegin_struct);
+    if(left_sort_output(Onegin_struct))
+    {
+        return ERROR_LEFT_COMPARATOR_NULLPTR;
+    }
 
-    return;
+    return 0;
 }
 
 //=============================================================================================================
 
-void right_sorting(Onegin* Onegin_struct)
+int right_sorting(Onegin* Onegin_struct)
 {
     qsort(Onegin_struct->structs_arr, Onegin_struct->strings_number, sizeof(String), right_comparator);
 
-    right_sort_output(Onegin_struct);
+    if(right_sort_output(Onegin_struct))
+    {
+        return ERROR_RIGHT_COMPARATOR_NULLPTR;
+    }
 
-    return;
+    return 0;
 }

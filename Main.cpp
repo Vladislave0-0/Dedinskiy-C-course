@@ -1,18 +1,21 @@
 #include "InputOutput.h"
 #include "Common.h"
 
-//=============================================================================================================
+//=========================================================
 
 int main()
 {
     Onegin Onegin_struct = {};
 
-    constructor(&Onegin_struct, "input.txt");
-
-    if(Onegin_struct.error_code == 0)
+    if(constructor(&Onegin_struct, "input.txt") == 0)
     {
-    sorting_selection(&Onegin_struct);
+        sorting_selection(&Onegin_struct);
+
+        destructor(&Onegin_struct);
+
+        return 0;
+    }
 
     destructor(&Onegin_struct);
-    }
+    printf("Unknown error!\n");
 }

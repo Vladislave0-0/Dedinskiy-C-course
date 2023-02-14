@@ -41,7 +41,7 @@ int right_comparator(const void* first_struct, const void* second_struct);
  * 
  * @param Onegin_struct structure pointer
  */
-void left_sorting(struct Onegin* Onegin_struct);
+int left_sorting(struct Onegin* Onegin_struct);
 
 //=============================================================================================================
 /**
@@ -49,7 +49,7 @@ void left_sorting(struct Onegin* Onegin_struct);
  * 
  * @param Onegin_struct structure pointer
  */
-void right_sorting(struct Onegin* Onegin_struct);
+int right_sorting(struct Onegin* Onegin_struct);
 
 //=============================================================================================================
 

@@ -5,15 +5,23 @@
 
 #include "Common.h"
 #include "TextSorting.h"
-#include "OneginDebug.h"
 
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
-#include <string.h>
-#include <ctype.h>
-#include <sys/stat.h>
+
+//=============================================================================================================
+
+enum OneginErrors
+{
+    ERROR_OPEN_MAINFILE            = 1,      //| File creation error.
+    ERROR_CHARS_NUM_BELOW_NULL     = 2,      //| Error counting characters from file.
+    ERROR_BUFFER_NULLPTR           = 3,      //| Buffer creation error.
+    ERROR_STRINGS_NUM_BELOW_NULL   = 4,      //| Error counting strings from buffer.
+    ERROR_STRUCTS_ARR_NULLPTR      = 5,      //| Structs array creation error.
+    ERROR_LEFT_COMPARATOR_NULLPTR  = 6,      //| File for left sotring creation error.
+    ERROR_RIGHT_COMPARATOR_NULLPTR = 7,      //| File for right sotring creation error.
+};
 
 //=============================================================================================================
 /**
@@ -21,7 +29,7 @@
  * 
  * @return FILE* 
  */
-void open_file(Onegin* Onegin_struct, const char* filename);
+int open_file(Onegin* Onegin_struct, const char* filename);
 
 //=============================================================================================================
 /**
@@ -29,7 +37,7 @@ void open_file(Onegin* Onegin_struct, const char* filename);
  * 
  * @param Onegin_struct structure pointer
  */
-void left_sort_output(Onegin* Onegin_struct);
+int left_sort_output(Onegin* Onegin_struct);
 
 //=============================================================================================================
 /**
@@ -37,7 +45,7 @@ void left_sort_output(Onegin* Onegin_struct);
  * 
  * @param Onegin_struct structure pointer
  */
-void right_sort_output(Onegin* Onegin_struct);
+int right_sort_output(Onegin* Onegin_struct);
 
 //=============================================================================================================
 /**
@@ -54,7 +62,7 @@ void output_source_text(Onegin* Onegin_struct, FILE* stream);
  * 
  * @param Onegin_struct structure pointer
  */
-void sorting_selection(Onegin* Onegin_struct);
+int sorting_selection(Onegin* Onegin_struct);
 
 //=============================================================================================================
 
