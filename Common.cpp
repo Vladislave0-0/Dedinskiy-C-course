@@ -6,31 +6,31 @@ int constructor(Onegin* Onegin_struct, const char* filename)
 {
     if(open_file(Onegin_struct, filename))
     {
-        printf("Error code: %d.\n", ERROR_OPEN_MAINFILE);
+        printf("Error code: %d. Check file \"Common.h\" to decipher the error code.\n", ERROR_OPEN_MAINFILE);
         return ERROR_OPEN_MAINFILE;
     }
 
     if(num_of_chars(Onegin_struct, filename))
     {
-        printf("Error code: %d.\n", ERROR_CHARS_NUM_BELOW_NULL);
+        printf("Error code: %d. Check file \"Common.h\" to decipher the error code.\n", ERROR_CHARS_NUM_BELOW_NULL);
         return ERROR_CHARS_NUM_BELOW_NULL;
     }
 
     if(chars_buffer(Onegin_struct, Onegin_struct->mainfile))
     {
-        printf("Error code: %d.\n", ERROR_BUFFER_NULLPTR);
+        printf("Error code: %d. Check file \"Common.h\" to decipher the error code.\n", ERROR_BUFFER_NULLPTR);
         return ERROR_BUFFER_NULLPTR;
     }
 
     if(num_of_strings(Onegin_struct))
     {
-        printf("Error code: %d.\n", ERROR_STRINGS_NUM_BELOW_NULL);
+        printf("Error code: %d. Check file \"Common.h\" to decipher the error code.\n", ERROR_STRINGS_NUM_BELOW_NULL);
         return ERROR_STRINGS_NUM_BELOW_NULL;
     }
 
     if(fill_in_structs(Onegin_struct))
     {
-        printf("Error code: %d.\n", ERROR_STRUCTS_ARR_NULLPTR);
+        printf("Error code: %d. Check file \"Common.h\" to decipher the error code.\n", ERROR_STRUCTS_ARR_NULLPTR);
         return ERROR_STRUCTS_ARR_NULLPTR;
     }
 
@@ -63,7 +63,16 @@ int chars_buffer(Onegin* Onegin_struct, FILE* stream)
 
     if(Onegin_struct->chars_buffer_ptr == nullptr)
     {
+        Onegin_struct->chars_number         = 0;
+        Onegin_struct->strings_number       = 0;
+        Onegin_struct->error_code           = 0;
+        Onegin_struct->number_of_the_string = 0;
+
+        Onegin_struct->mainfile = nullptr;
+
         free(Onegin_struct->chars_buffer_ptr);
+        Onegin_struct->chars_buffer_ptr = nullptr;
+        
         return ERROR_BUFFER_NULLPTR;
     }
 
@@ -106,8 +115,8 @@ int num_of_strings(Onegin* Onegin_struct)
 
 #define STRUCTS_ARR Onegin_struct->structs_arr
 #define STRINGS_NUM Onegin_struct->strings_number
-#define CHARS_BUF  Onegin_struct->chars_buffer_ptr
-#define CHARS_NUM  Onegin_struct->chars_number
+#define CHARS_BUF   Onegin_struct->chars_buffer_ptr
+#define CHARS_NUM   Onegin_struct->chars_number
 
 int fill_in_structs(Onegin* Onegin_struct)
 {
@@ -115,7 +124,19 @@ int fill_in_structs(Onegin* Onegin_struct)
 
     if(Onegin_struct->structs_arr == nullptr)
     {
+        Onegin_struct->chars_number         = 0;
+        Onegin_struct->strings_number       = 0;
+        Onegin_struct->error_code           = 0;
+        Onegin_struct->number_of_the_string = 0;
+
+        Onegin_struct->mainfile = nullptr;
+
+        free(Onegin_struct->chars_buffer_ptr);
+        Onegin_struct->chars_buffer_ptr = nullptr;  
+
         free(Onegin_struct->structs_arr);
+        Onegin_struct->structs_arr = nullptr;
+        
         return ERROR_STRUCTS_ARR_NULLPTR;
     }
 
@@ -148,7 +169,7 @@ void destructor(Onegin* Onegin_struct)
     Onegin_struct->error_code           = 0;
     Onegin_struct->number_of_the_string = 0;
 
-    Onegin_struct->mainfile         = nullptr;
+    Onegin_struct->mainfile = nullptr;
 
     free(Onegin_struct->chars_buffer_ptr);
     Onegin_struct->chars_buffer_ptr = nullptr;  

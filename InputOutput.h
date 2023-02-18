@@ -11,8 +11,11 @@
 #include <stdlib.h>
 
 //=============================================================================================================
-
-enum OneginErrors
+/**
+ * @brief Notes the code of error in stack.
+ * 
+ */
+enum ErrorCodes
 {
     ERROR_OPEN_MAINFILE            = 1,      //| File creation error.
     ERROR_CHARS_NUM_BELOW_NULL     = 2,      //| Error counting characters from file.
@@ -27,7 +30,9 @@ enum OneginErrors
 /**
  * @brief Opens the source file input.txt.
  * 
- * @return FILE* 
+ * @param Onegin_struct structure pointer
+ * @param filename the name of the input file
+ * @return int 
  */
 int open_file(Onegin* Onegin_struct, const char* filename);
 
@@ -36,6 +41,7 @@ int open_file(Onegin* Onegin_struct, const char* filename);
  * @brief Outputs the sorted text from the left edge to the file "sorted text from left.txt".
  * 
  * @param Onegin_struct structure pointer
+ * @return int 
  */
 int left_sort_output(Onegin* Onegin_struct);
 
@@ -44,6 +50,7 @@ int left_sort_output(Onegin* Onegin_struct);
  * @brief Outputs the sorted text from the right edge to the file "sorted text from right.txt".
  * 
  * @param Onegin_struct structure pointer
+ * @return int 
  */
 int right_sort_output(Onegin* Onegin_struct);
 
@@ -61,6 +68,7 @@ void output_source_text(Onegin* Onegin_struct, FILE* stream);
  * @brief Outputs text to the terminal that allows you to select the type of sorting.
  * 
  * @param Onegin_struct structure pointer
+ * @return int 
  */
 int sorting_selection(Onegin* Onegin_struct);
 

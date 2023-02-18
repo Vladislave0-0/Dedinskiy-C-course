@@ -30,10 +30,11 @@ typedef struct Onegin{
 
 //=============================================================================================================
 /**
- * @brief creates and initializes the Onegin_struct.
+ * @brief Creates and initializes the Onegin_struct.
  * 
  * @param Onegin_struct structure pointer
- * @param filename the name of the input file as a parameter
+ * @param filename the name of the input file
+ * @return int 
  */
 int constructor(Onegin* Onegin_struct, const char* filename);
 
@@ -43,7 +44,8 @@ int constructor(Onegin* Onegin_struct, const char* filename);
  *        using the library <sys/stat.h>.
  * 
  * @param Onegin_struct structure pointer
- * @param filename the name of the input file as a parameter
+ * @param filename the name of the input file as a parameter 
+ * @return int 
  */
 int num_of_chars(Onegin* Onegin_struct, const char* filename);
 
@@ -53,6 +55,7 @@ int num_of_chars(Onegin* Onegin_struct, const char* filename);
  * 
  * @param Onegin_struct structure pointer
  * @param stream file pointer
+ * @return int 
  */
 int chars_buffer(Onegin* Onegin_struct, FILE* stream);
 
@@ -61,6 +64,7 @@ int chars_buffer(Onegin* Onegin_struct, FILE* stream);
  * @brief Counts the number of lines in a source file.
  * 
  * @param Onegin_struct structure pointer
+ * @return int 
  */
 int num_of_strings(Onegin* Onegin_struct);
 
@@ -70,6 +74,7 @@ int num_of_strings(Onegin* Onegin_struct);
  *        from an array of structures.
  * 
  * @param Onegin_struct structure pointer
+ * @return int 
  */
 int fill_in_structs(Onegin* Onegin_struct);
 

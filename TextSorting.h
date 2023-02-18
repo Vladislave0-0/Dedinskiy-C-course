@@ -6,8 +6,6 @@
 #include "InputOutput.h"
 
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -40,6 +38,7 @@ int right_comparator(const void* first_struct, const void* second_struct);
  * @brief Сalls qsort and prints the sorted text to a file "sorted text from left.txt".
  * 
  * @param Onegin_struct structure pointer
+ * @return int 
  */
 int left_sorting(struct Onegin* Onegin_struct);
 
@@ -48,6 +47,7 @@ int left_sorting(struct Onegin* Onegin_struct);
  * @brief Сalls qsort and prints the sorted text to a file "sorted text from right.txt".
  * 
  * @param Onegin_struct structure pointer
+ * @return int 
  */
 int right_sorting(struct Onegin* Onegin_struct);
 

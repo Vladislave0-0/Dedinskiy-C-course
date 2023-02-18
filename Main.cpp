@@ -15,7 +15,4 @@ int main()
 
         return 0;
     }
-
-    destructor(&Onegin_struct);
-    printf("Unknown error!\n");
 }
