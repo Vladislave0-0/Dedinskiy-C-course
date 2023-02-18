@@ -16,6 +16,8 @@
 
 typedef double elem_t;
 
+//=========================================================================================================
+
 struct Stack{
     size_t* left_canary = nullptr;
 
@@ -40,11 +42,34 @@ const size_t RESIZE_FACTOR    = 2;
 
 //=========================================================================================================
 /**
+ * @brief Notes the code of error in stack.
+ * 
+ */
+enum ErrorCodes
+{
+    STACK_NULLPTR             = 1,    //| Stack nullptr error.
+    STACK_CAPACITY_BELOW_NULL = 2,    //| Incorrect value of stack capacity.
+    STACK_LOGS_NULLPTR        = 3,    //| File open error.
+    STACK_DATA_NULLPTR        = 4,    //| Stack data creation error.
+};
+
+//=========================================================================================================
+/**
  * @brief Creates and initializes stack.
  * 
- * @return Stack* 
+ * @param stk the stack pointer
+ * @return int
  */
-Stack* stack_ctor();
+int stack_ctor(Stack* stk);
+
+//=========================================================================================================
+/**
+ * @brief Reads from console stack capacity.
+ * 
+ * @param capacity 
+ * @return int 
+ */
+int stack_size(int* capacity);
 
 //=========================================================================================================
 /**

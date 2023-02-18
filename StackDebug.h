@@ -26,14 +26,13 @@
 enum StackErrors
 {
     ERROR_DATA_NULLPTR              = 1 << 0,     // stk->data == nullptr
-    ERROR_STACK_PTR                 = 1 << 1,     // stk->stack_ptr == nullptr
-    ERROR_SIZE_BELOW_NULL           = 1 << 2,     // stk->size < 0
-    ERROR_SIZE_BIGGER_THAN_CAPACITY = 1 << 3,     // stk->size > stk->capacity
-    ERROR_LEFT_CANARY_DEAD          = 1 << 4,     // stk->left_canary[0] != CANARY
-    ERROR_LEFT_CANARY_NULLPTR       = 1 << 5,     // stk->left_canary == nullptr
-    ERROR_RIGHT_CANARY_DEAD         = 1 << 6,     // stk->right_canary[0] != CANARY
-    ERROR_RIGHT_CANARY_NULLPTR      = 1 << 7,     // stk->right_canary == nullptr
-    ERROR_DATA_HASH                 = 1 << 8,     // stk->data_hash != stack_data_hash(stk)
+    ERROR_STACK_NULLPTR             = 1 << 1,     // stk->stack_ptr == nullptr
+    ERROR_SIZE_BIGGER_THAN_CAPACITY = 1 << 2,     // stk->size > stk->capacity
+    ERROR_LEFT_CANARY_DEAD          = 1 << 3,     // stk->left_canary[0] != CANARY
+    ERROR_LEFT_CANARY_NULLPTR       = 1 << 4,     // stk->left_canary == nullptr
+    ERROR_RIGHT_CANARY_DEAD         = 1 << 5,     // stk->right_canary[0] != CANARY
+    ERROR_RIGHT_CANARY_NULLPTR      = 1 << 6,     // stk->right_canary == nullptr
+    ERROR_DATA_HASH                 = 1 << 7,     // stk->data_hash != stack_data_hash(stk)
 };
 
 //=========================================================================================================
@@ -97,7 +96,7 @@ long long data_hash(Stack* stk);
  * @brief Opens the file stack_log.txt in mode "w".
  * 
  */
-void open_stack_logs();
+int open_stack_logs();
 
 //=========================================================================================================
 /**

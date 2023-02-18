@@ -13,8 +13,6 @@ FILE* LOG_FILE = nullptr;
 
 void stack_dump(Stack* stk, const char* file_name, size_t line, const char* function_name)
 {
-    assert(stk != nullptr);
-
     PRINT_LOG("in %s at %s(%lu):\n", function_name, file_name, line);
 
     PRINT_LOG("Stack[%p]", stk->data);
@@ -26,11 +24,8 @@ void stack_dump(Stack* stk, const char* file_name, size_t line, const char* func
 
 int stack_verify(Stack* stk)
 {
-    assert(stk != nullptr);
-
     stk->error_code = (stk->data == nullptr) * ERROR_DATA_NULLPTR    +
-    (stk->stack_ptr == nullptr) * ERROR_STACK_PTR                    +
-    (stk->size < 0) * ERROR_SIZE_BELOW_NULL                          + 
+    (stk->stack_ptr == nullptr) * ERROR_STACK_NULLPTR                +
     (stk->size > stk->capacity) * ERROR_SIZE_BIGGER_THAN_CAPACITY    +
     (stk->left_canary[0] != CANARY) * ERROR_LEFT_CANARY_DEAD         +
     (stk->left_canary == nullptr) * ERROR_LEFT_CANARY_NULLPTR        +
@@ -45,8 +40,6 @@ int stack_verify(Stack* stk)
 
 void stack_error_decoder(Stack* stk)
 {
-    assert(stk != nullptr);
-
     if(stk->error_code == 0)
     {
         PRINT_LOG(" -> (OK)\n");
@@ -59,14 +52,9 @@ void stack_error_decoder(Stack* stk)
             PRINT_LOG(" ERROR_DATA_NULLPTR.\n");
         }
 
-        if(stk->error_code & ERROR_STACK_PTR)
+        if(stk->error_code & ERROR_STACK_NULLPTR)
         {
-            PRINT_LOG(" ERROR_STACK_PTR.\n");
-        }
-
-        if(stk->error_code & ERROR_SIZE_BELOW_NULL)
-        {
-            PRINT_LOG(" ERROR_SIZE_BELOW_NULL.\n");
+            PRINT_LOG(" ERROR_STACK_NULLPTR.\n");
         }
 
         if(stk->error_code & ERROR_SIZE_BIGGER_THAN_CAPACITY)
@@ -125,8 +113,7 @@ void assert_dtor(Stack* stk)
     free(stk->stack_ptr);
     stk->stack_ptr = nullptr;
 
-    free(stk);
-    stk = nullptr;  
+    close_stack_logs();
 }
 
 //=========================================================================================================
@@ -152,17 +139,22 @@ long long data_hash(Stack* stk)
 
 //=========================================================================================================
 
-void open_stack_logs()
+int open_stack_logs()
 {
     LOG_FILE = fopen("./Logs/stack_log.txt", "w");
+
+    if(LOG_FILE == nullptr)
+    {
+        return STACK_LOGS_NULLPTR;
+    }
+
+    return 0;
 }
 
 //=========================================================================================================
 
 void stack_print_log(Stack* stk)
 {
-    assert(stk != nullptr);
-
     PRINT_LOG("{\n");
 
     PRINT_LOG("size      = %lu\n", stk->size);

@@ -7,21 +7,40 @@
 
 //=========================================================================================================
 
-Stack* stack_ctor()
+int stack_ctor(Stack* stk)
 {
-    size_t capacity = 0;
-    printf("Please, enter the capacity of stack: ");
-    scanf("%lu", &capacity);
+    if(stk == nullptr)
+    {
+        printf("Error code: %d. Check file \"Stack.h\" to decipher the error code.\n", STACK_NULLPTR);
+        return STACK_NULLPTR;
+    }
 
-    open_stack_logs();
+    int capacity = 0;
+    if(stack_size(&capacity))
+    {
+        printf("Error code: %d. Check file \"Stack.h\" to decipher the error code.\n", STACK_CAPACITY_BELOW_NULL);
+        return STACK_CAPACITY_BELOW_NULL;
+    }
 
-    Stack* stk = (Stack*)calloc(1, sizeof(Stack));
-    assert(stk != nullptr);
+    stk->capacity = capacity;
 
-    stk->capacity = capacity;   
+    if(open_stack_logs())
+    {
+        close_stack_logs();
+        printf("Error code: %d. Check file \"Stack.h\" to decipher the error code.\n", STACK_LOGS_NULLPTR);
+        return STACK_LOGS_NULLPTR;
+    }
 
-    stk->stack_ptr = calloc(1, sizeof(elem_t) * stk->capacity + 2 * sizeof(size_t));
-    assert(stk->stack_ptr != nullptr);
+    void* stack_ptr = calloc(1, sizeof(elem_t) * stk->capacity + 2 * sizeof(size_t));
+    if(stack_ptr == nullptr)
+    {
+        free(stack_ptr);
+        close_stack_logs();
+        printf("Error code: %d. Check file \"Stack.h\" to decipher the error code.\n", STACK_DATA_NULLPTR);
+        return STACK_DATA_NULLPTR;
+    }
+
+    stk->stack_ptr = stack_ptr;
 
     stk->left_canary  = (size_t*)stk->stack_ptr;
     stk->data         = (elem_t*)(stk->left_canary + 1);
@@ -36,14 +55,28 @@ Stack* stack_ctor()
 
     stack_print_log(stk);
 
-    return stk;
+    return 0;
+}
+
+//=========================================================================================================
+
+int stack_size(int* capacity)
+{
+    printf("Please, enter the capacity of stack: ");
+    scanf("%d", capacity);
+
+    if((*capacity) <= 0)
+    {
+        return STACK_CAPACITY_BELOW_NULL;
+    }
+
+    return 0;
 }
 
 //=========================================================================================================
 
 void stack_push(Stack* stk, elem_t elem)
 {
-    assert(stk != nullptr);
     ASSERT_OK(stk);
 
     if(stk->size == stk->capacity - 1)
@@ -62,8 +95,6 @@ void stack_push(Stack* stk, elem_t elem)
 
 void stack_pop(Stack* stk)
 {
-    assert(stk != nullptr);
-    assert(stk->size > 0);
     ASSERT_OK(stk);
 
     stk->size--;
@@ -81,9 +112,7 @@ void stack_pop(Stack* stk)
 //=========================================================================================================
 
 void stack_resize(Stack* stk, size_t new_capacity)
-{
-    assert(stk != nullptr);
-    assert(new_capacity > 0);   
+{  
     ASSERT_OK(stk);
 
     size_t old_capacity = stk->capacity;
@@ -97,6 +126,7 @@ void stack_resize(Stack* stk, size_t new_capacity)
     
     stk->left_canary[0]  = CANARY;
     stk->right_canary[0] = CANARY;
+
     ASSERT_OK(stk);
 
     fill_with_NAN(stk, old_capacity, stk->capacity); 
@@ -106,7 +136,6 @@ void stack_resize(Stack* stk, size_t new_capacity)
 
 void fill_with_NAN(Stack* stk, size_t start, size_t finish)
 {
-    assert(stk != nullptr); 
     ASSERT_OK(stk);
 
     for(size_t i = start; i < finish; i++)
@@ -118,8 +147,7 @@ void fill_with_NAN(Stack* stk, size_t start, size_t finish)
 //=========================================================================================================
 
 void stack_dtor(Stack* stk)
-{    
-    assert(stk != nullptr);  
+{ 
     ASSERT_OK(stk);
 
     for(size_t i = 0; i < stk->capacity; i++)
@@ -137,9 +165,6 @@ void stack_dtor(Stack* stk)
 
     free(stk->stack_ptr);
     stk->stack_ptr = nullptr;
-
-    free(stk);
-    stk = nullptr;
 
     close_stack_logs();
 }

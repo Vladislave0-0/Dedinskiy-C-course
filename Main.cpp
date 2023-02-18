@@ -5,22 +5,18 @@
 
 int main()
 {
-    Stack* stk1 = stack_ctor();
+    Stack stk = {};
 
-    stack_push(stk1, 0);
-    stack_print_log(stk1);
+    if(stack_ctor(&stk) == 0)
+    {
+        // write here...
 
-    stack_push(stk1, 2);
-    stack_print_log(stk1);
-
-    stack_pop(stk1);
-    stack_print_log(stk1);
-    
-    // for push write stack_push(stk1, value);
-    // and then write stack_print_log(stk1); to see stack changes in file stack_log.txt
-
-    // for pop write stack_pop(stk1);
-    // and then write stack_print_log(stk1); to see stack changes in file stack_log.txt
-
-    stack_dtor(stk1);
+        stack_dtor(&stk);
+    }
 }
+
+// for push write stack_push(&stk, value);
+// and then write stack_print_log(&stk); to see stack changes in file stack_log.txt
+
+// for pop write stack_pop(&stk);
+// and then write stack_print_log(&stk); to see stack changes in file stack_log.txt
