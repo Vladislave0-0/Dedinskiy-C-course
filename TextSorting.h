@@ -35,21 +35,30 @@ int right_comparator(const void* first_struct, const void* second_struct);
 
 //=============================================================================================================
 /**
+ * @brief Counts spaces in string
+ * 
+ * @param string pointer to the string
+ * @return size_t 
+ */
+size_t space_count(char* string);
+
+//=============================================================================================================
+/**
  * @brief Сalls qsort and prints the sorted text to a file "sorted text from left.txt".
  * 
- * @param Onegin_struct structure pointer
+ * @param onegin structure pointer
  * @return int 
  */
-int left_sorting(struct Onegin* Onegin_struct);
+int left_sorting(struct Onegin* onegin);
 
 //=============================================================================================================
 /**
  * @brief Сalls qsort and prints the sorted text to a file "sorted text from right.txt".
  * 
- * @param Onegin_struct structure pointer
+ * @param onegin structure pointer
  * @return int 
  */
-int right_sorting(struct Onegin* Onegin_struct);
+int right_sorting(struct Onegin* onegin);
 
 //=============================================================================================================
 
