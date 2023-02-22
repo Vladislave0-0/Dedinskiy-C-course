@@ -15,9 +15,9 @@ int main(){
     char append[4] = "you";
 
 //====================================================================STRLEN=============================================================================
-
+  
+    printf("============================================================================\n");
     printf("\nResult of STRLEN without \"\\0\" for string \"World hello\": %lu.\n", my_strlen(string));
-    printf("Result of STRLEN with \"\\0\" for string \"World hello\": %lu.\n\n", my_null_strlen(string));
 
 //=====================================================================PUTS==============================================================================
 
@@ -61,7 +61,7 @@ int main(){
     char* result = my_strdup(dest7);
     printf("Result of STRDUP: %s.\n\n", result);
     free(result);
-
+    
 //=====================================================================GETLINE===========================================================================
 
     FILE* file2 = fopen("test_getline.txt", "w");
@@ -69,23 +69,13 @@ int main(){
     fclose(file2);
     file2 = fopen("test_getline.txt", "r");
 
+    char* dest8 = nullptr;
     size_t n = 15;
-    char* dest8 = (char*)calloc(n, sizeof(char));
-    char* dest666 = dest8;
-    
-    if((dest8 == nullptr) || (n == 0))
-    {
-        printf("Result of GETLINE: %lu.\n", my_getline(&dest8, &n, file2));
-        printf("Result of GETLINE: %s.\n\n", dest8);
 
-        free(dest666);
-    }
+    printf("Result of GETLINE: %lu.\n", my_getline(&dest8, &n, file2));
 
-    else
-    {
-        printf("Result of GETLINE: %lu.\n", my_getline(&dest8, &n, file2));
-        printf("Result of GETLINE: %s.\n\n", dest8);    
-    }
+    printf("GETLINE's line: %s.\n\n", dest8);
+    printf("============================================================================\n");
 
     free(dest8);
     fclose(file2);

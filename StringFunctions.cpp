@@ -1,6 +1,6 @@
 #include "StringFunctions.h"
 
-//==============================================================================
+//============================================================================================
 
 size_t my_strlen(const char* str)
 {
@@ -12,19 +12,7 @@ size_t my_strlen(const char* str)
     return sum;
 }
 
-//==============================================================================
-
-size_t my_null_strlen(const char* str)
-{
-    size_t sum = 0;
-
-    while (str[sum] != '\0')
-        sum++;
-
-    return sum + 1;
-}
-
-//==============================================================================
+//============================================================================================
 
 size_t my_puts(const char* str)
 {
@@ -39,7 +27,7 @@ size_t my_puts(const char* str)
     return i;
 }
 
-//==============================================================================
+//============================================================================================
 
 char* my_strchr(char* str, char chr)
 {
@@ -49,10 +37,10 @@ char* my_strchr(char* str, char chr)
             return str + i + 1;
     }
 
-    return NULL;
+    return nullptr;
 }
 
-//==============================================================================
+//============================================================================================
 
 char* my_strcpy(char* dest, const char* src)
 {
@@ -68,7 +56,7 @@ char* my_strcpy(char* dest, const char* src)
     return dest;
 }
 
-//==============================================================================
+//============================================================================================
 
 char* my_strncpy(char* dest, const char* src, size_t n)
 {
@@ -86,7 +74,7 @@ char* my_strncpy(char* dest, const char* src, size_t n)
     return dest;
 }
 
-//==============================================================================
+//============================================================================================
 
 char* my_strcat(char* dest, const char* append)
 {
@@ -100,7 +88,7 @@ char* my_strcat(char* dest, const char* append)
     return dest;
 }
 
-//==============================================================================
+//============================================================================================
 
 char* my_strncat(char* dest, const char* append, size_t n)
 {
@@ -118,7 +106,7 @@ char* my_strncat(char* dest, const char* append, size_t n)
     return dest;
 }
 
-//==============================================================================
+//============================================================================================
 
 const char* my_fgets(FILE* stream, size_t size_of_dest, char* dest)
 {
@@ -146,11 +134,11 @@ const char* my_fgets(FILE* stream, size_t size_of_dest, char* dest)
     }
 }
 
-//==============================================================================
+//============================================================================================
 
 char* my_strdup(char* src)
 {
-    size_t length = my_null_strlen(src);
+    size_t length = my_strlen(src) + 1; // +1 because of '\0' at the end
 
     char* dest = (char*)calloc(length, sizeof(char));
 
@@ -159,89 +147,82 @@ char* my_strdup(char* src)
     return dest;
 }
 
-//==============================================================================
+//============================================================================================
 
-size_t my_getline(char** lineptr, size_t* n, FILE* stream)
+ssize_t my_getdelim(char **lineptr, size_t *n, int delim, FILE* stream)
 {
-    rewind(stream); 
+    char* new_lineptr = nullptr;
+    char* cur_pos     = nullptr;
 
-    if ((*lineptr == nullptr) || (*n == 0))
+    size_t new_lineptr_len = 0;
+    int ch                 = 0;
+
+    if (lineptr == nullptr || n == NULL || stream == nullptr) 
     {
-        size_t chars_num = 0;
-        
-        int ch = fgetc(stream);
-
-        for(; (ch != '\n') && (ch != EOF); chars_num++)
-        {
-            ch = fgetc(stream);
-        }
-
-        rewind(stream);
-
-        if(*n == 0)
-        {
-            *n = chars_num + 1;
-        }
-
-        char* new_lineptr = (char*)calloc(*n, sizeof(char));
-
-        for(size_t i = 0; i < chars_num + 1; i++)
-        {
-            new_lineptr[i] = (char)getc(stream);
-        }
-
-        rewind(stream);
-
-        new_lineptr[chars_num] = '\0';
-
-        *lineptr = new_lineptr;
-
-        return ++chars_num;
+        errno = EINVAL; // Invalid argument.
+        return -1;
     }
 
-    else 
+    if (*lineptr == nullptr)
     {
-        size_t buffer_size = *n;
+        *n = 128;
 
-        size_t chars_num  = 0;
-
-        int ch = fgetc(stream);
-
-        for(; (ch != '\n') && (ch != EOF); chars_num++)
+        if ((*lineptr = (char *)calloc(*n, sizeof(char))) == nullptr) 
         {
-            ch = fgetc(stream);
-        }
-        
-        rewind(stream);
-
-        if (buffer_size >= chars_num + 1)
-        {
-            for(size_t i = 0; i < chars_num; i++)
-            {
-                (*lineptr)[i] = (char)getc(stream);
-            }
-
-            rewind(stream);
-
-            (*lineptr)[chars_num] = '\0';
-
-            return ++chars_num;
-        }
-
-        else
-        {
-            *lineptr = (char*)realloc(*lineptr, (chars_num + 1)*sizeof(char));
-
-            for(size_t i = 0; i < chars_num; i++)
-            {
-                (*lineptr)[i] = (char)getc(stream);
-            }
-
-            rewind(stream);
-
-            (*lineptr)[chars_num] = '\0';
-
-            return ++chars_num;
+            errno = ENOMEM; // There is not enough memory to execute the requested statement.
+            return -1;
         }
     }
+
+    cur_pos = *lineptr;  // We write every char in cur_pos[i]
+
+    for (;;) 
+    {
+        ch = getc(stream);
+
+        if (ferror(stream) || (ch == EOF && cur_pos == *lineptr))
+        {
+            return -1;
+        }
+
+        if (ch == EOF)
+        {
+            break;
+        }
+
+        if ((*lineptr + *n - cur_pos) < 2) 
+        {
+            new_lineptr_len = *n * 2;
+
+            if ((new_lineptr = (char *)realloc(*lineptr, new_lineptr_len)) == nullptr) 
+            {
+                errno = ENOMEM; // There is not enough memory to execute the requested statement.
+                return -1;
+            }
+            
+            cur_pos = new_lineptr + (cur_pos - *lineptr); // new_lineptr + num of chars
+
+            *lineptr = new_lineptr;
+
+            *n = new_lineptr_len;
+        }
+
+        // printf("%s\n", new_lineptr);
+
+        *(cur_pos++) = (char)ch;
+
+        if(ch == delim)
+            break;
+    }
+
+    *cur_pos = '\0';
+
+    return (ssize_t)(cur_pos - *lineptr);
+}
+
+//============================================================================================
+
+ssize_t my_getline(char **lineptr, size_t *n, FILE *stream) 
+{
+    return my_getdelim(lineptr, n, '\n', stream);
 }

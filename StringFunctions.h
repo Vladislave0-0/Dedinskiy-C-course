@@ -5,6 +5,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <limits.h>
 
 //==============================================================================
 /**
@@ -17,28 +19,11 @@ size_t my_strlen(const char* str);
 
 //==============================================================================
 /**
- * @brief Returns the length of the string without the null terminator 
- *        as a character of the string.
- * 
- * @return size_t 
- */
-size_t my_null_strlen(const char* str);
-
-//==============================================================================
-/**
  * @brief Appends the newline character to the output.
  * 
  * @return size_t 
  */
 size_t my_puts(const char* str);
-
-//==============================================================================
-/**
- * @brief Reads characters from an input stream and places them into a string.
- * 
- * @return size_t 
- */
-size_t my_getline(char** lineptr, size_t* n, FILE* stream);
 
 //==============================================================================
 /**
@@ -99,6 +84,25 @@ char* my_strdup(char* src);
  * @return const char* 
  */
 const char* my_fgets(FILE* stream, size_t size_of_dest, char* dest);
+
+//==============================================================================
+/**
+ * @brief Reads characters from the input stream up to a character delim or EOF 
+ *        and puts them into a string.
+ * 
+ * @return size_t 
+ */
+ssize_t my_getdelim(char **lineptr, size_t *n, int delim, FILE* stream);
+
+//==============================================================================
+/**
+ * @brief Reads characters from the input stream up to a character '\n' or EOF 
+ *        and puts them into a string. It is a special case of the function
+ *        my_getdelim.
+ * 
+ * @return size_t 
+ */
+ssize_t my_getline(char **lineptr, size_t *n, FILE *stream) ;
 
 //==============================================================================
 
