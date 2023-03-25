@@ -1,0 +1,27 @@
+signature: HUI
+quantity: 23
+
+| ip |		COMMAND		|	TYPE		ASM_CODE	|	ERROR
+|0000|		push        |	cmd    		65537   	|	 0
+|0001|		10          |	val    		10      	|	 0
+|0002|		jmp         |	jmp    		31      	|	 0
+|0003|		:1          |	flg    		6       	|	 0
+|0004|		push        |	cmd    		65537   	|	 0
+|0005|		20          |	val    		20      	|	 0
+|0006|		push        |	cmd    		65537   	|	 0
+|0007|		30          |	val    		30      	|	 0
+|0008|		push        |	cmd    		65537   	|	 0
+|0009|		40          |	val    		40      	|	 0
+|0010|		push        |	cmd    		65537   	|	 0
+|0011|		50          |	val    		50      	|	 0
+|0012|		pop         |	cmd    		131074  	|	 0
+|0013|		ax          |	reg    		21      	|	 0
+|0014|		pop         |	cmd    		327682  	|	 0
+|0015|		5           |	val    		5       	|	 0
+|0016|		push        |	cmd    		131073  	|	 0
+|0017|		ax          |	reg    		21      	|	 0
+|0018|		push        |	cmd    		327681  	|	 0
+|0019|		5           |	val    		5       	|	 0
+|0020|		add         |	cmd    		3       	|	 0
+|0021|		sub         |	cmd    		4       	|	 0
+|0022|		hlt         |	cmd    		0       	|	 0

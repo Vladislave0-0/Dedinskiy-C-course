@@ -1,0 +1,14 @@
+push 10
+jmp :1
+push 20
+1:
+push 30
+push 40
+push 50
+pop ax
+pop [5]
+push ax
+push [5]
+add
+sub
+hlt
