@@ -3,21 +3,18 @@
 
 //=========================================================================================================
 
-#include "Stack.h"
+#define STACK_DUMP(stk) stack_dump(stk, __FILE__, __LINE__, __PRETTY_FUNCTION__)
 
-//=========================================================================================================
-
-#define ASSERT_OK(stk)                                   \
-    do                                                   \
-    {                                                    \
-        if(stack_verify(stk) != 0)                       \
-        {                                                \
-            STACK_DUMP(stk);                             \
-            close_stack_logs();                          \
-            assert_dtor(stk);                            \
-        }                                                \
-    } while(0)                                           \
-
+#define ASSERT_OK(stk)                                      \
+    do                                                      \
+    {                                                       \
+        if(stack_verify(stk) != 0)                          \
+        {                                                   \
+            STACK_DUMP(stk);                                \
+            assert_dtor(stk);                               \
+        }                                                   \
+    } while(0) 
+     
 //=========================================================================================================
 /**
  * @brief Notes the type of error in stack.
@@ -25,14 +22,13 @@
  */
 enum StackErrors
 {
-    ERROR_DATA_NULLPTR              = 1 << 0,     // stk->data == nullptr
-    ERROR_STACK_NULLPTR             = 1 << 1,     // stk->stack_ptr == nullptr
-    ERROR_SIZE_BIGGER_THAN_CAPACITY = 1 << 2,     // stk->size > stk->capacity
-    ERROR_LEFT_CANARY_DEAD          = 1 << 3,     // stk->left_canary[0] != CANARY
-    ERROR_LEFT_CANARY_NULLPTR       = 1 << 4,     // stk->left_canary == nullptr
-    ERROR_RIGHT_CANARY_DEAD         = 1 << 5,     // stk->right_canary[0] != CANARY
-    ERROR_RIGHT_CANARY_NULLPTR      = 1 << 6,     // stk->right_canary == nullptr
-    ERROR_DATA_HASH                 = 1 << 7,     // stk->data_hash != stack_data_hash(stk)
+    ERROR_DATA_NULLPTR           = 1 << 0,     //| stk->data == nullptr
+    ERROR_STACK_CAPACITY         = 1 << 1,     //| stk->size > stk->capacity
+    ERROR_DATA_LEFT_CANARY_DEAD  = 1 << 2,     //| stk->data_left_can != DATA_CANARY
+    ERROR_DATA_RIGHT_CANARY_DEAD = 1 << 3,     //| stk->data_right_can != DATA_CANARY
+    ERROR_STK_LEFT_CANARY_DEAD   = 1 << 4,     //| stk->stk_left_can != STK_CANARY
+    ERROR_STK_RIGHT_CANARY_DEAD  = 1 << 5,     //| stk->stk_right_can != STK_CANARY
+    ERROR_DATA_HASH              = 1 << 6,     //| stk->data_hash != stack_data_hash(stk)
 };
 
 //=========================================================================================================
@@ -51,7 +47,7 @@ void stack_dump(Stack* stk, const char* file_name, size_t line, const char* func
  * @brief Сonsiders the error code as the sum of errors in binary code.
  * 
  * @param stk the stack pointer
- * @return int 
+ * @return int stk->error_code
  */
 int stack_verify(Stack* stk);
 
@@ -90,28 +86,6 @@ long long calculate_hash(elem_t* pointer, size_t size);
  * @return long long 
  */
 long long data_hash(Stack* stk);
-
-//=========================================================================================================
-/**
- * @brief Opens the file stack_log.txt in mode "w".
- * 
- */
-int open_stack_logs();
-
-//=========================================================================================================
-/**
- * @brief Prints all information about the stack at the moment to a file stack_log.txt.
- * 
- * @param stk the stack pointer
- */
-void stack_print_log(Stack* stk);
-
-//=========================================================================================================
-/**
- * @brief Closes the file stack_log.txt.
- * 
- */
-void close_stack_logs();
 
 //=========================================================================================================
 

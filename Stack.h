@@ -5,40 +5,53 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
+#include <math.h>
 
 //=========================================================================================================
 
-#define PRINT_LOG(...) fprintf(LOG_FILE, __VA_ARGS__)
+#define CANARY_PROTECTION
+#define HASH_PROTECTION
 
-#define STACK_DUMP(stack_ptr) stack_dump(stack_ptr, __FILE__, __LINE__, __PRETTY_FUNCTION__)
-
-//=========================================================================================================
-
-typedef double elem_t;
+#define PRINT_LOG(...) fprintf(stk->log_file, __VA_ARGS__)
 
 //=========================================================================================================
 
-struct Stack{
-    size_t* left_canary = nullptr;
-
-    void* stack_ptr  = nullptr;
-    elem_t* data     = nullptr;
-    size_t capacity  = 0;
-    size_t size      = 0;
-    int error_code   = 0;
-
-    long long data_hash = 0;
-
-    size_t* right_canary = nullptr;
-};
+typedef int elem_t;
 
 //=========================================================================================================
 
-const elem_t POISON = 1488;
-const size_t CANARY = 0xDEAD;
+const size_t POISON          = 0xDEADDED;
+const size_t DATA_CANARY     = 0xDEAD;
+const size_t STK_CANARY      = 0xDEDDEAD;
+const int DATA_CANARY_AMOUNT = 2;
 
 const size_t STACK_POP_RESIZE = 4;
 const size_t RESIZE_FACTOR    = 2;
+
+//=========================================================================================================
+/**
+ * @brief Stack structure.
+ * 
+ */
+struct Stack
+{
+    size_t stk_left_can = 0;
+
+    FILE* log_file  = nullptr;  
+    size_t capacity = 0;
+    size_t size     = 0;
+
+    size_t data_left_can = 0;
+    elem_t* data     = nullptr;
+    size_t data_right_can = 0;
+
+    int error_code = 0;
+    long long data_hash = 0;
+
+    size_t stk_right_can = 0;
+
+};
 
 //=========================================================================================================
 /**
@@ -47,10 +60,10 @@ const size_t RESIZE_FACTOR    = 2;
  */
 enum ErrorCodes
 {
-    STACK_NULLPTR             = 1,    //| Stack nullptr error.
-    STACK_CAPACITY_BELOW_NULL = 2,    //| Incorrect value of stack capacity.
-    STACK_LOGS_NULLPTR        = 3,    //| File open error.
-    STACK_DATA_NULLPTR        = 4,    //| Stack data creation error.
+    ERROR_STACK_NULLPTR = 1,    //| Stack nullptr error.
+    ERROR_LOG_FILE_OPEN = 2,    //| File open error.
+    ERROR_DATA_CALLOC   = 3,    //| Stack data creation error.
+    ERROR_DATA_REALLOC  = 4,    //| Stack dara reallocation error.
 };
 
 //=========================================================================================================
@@ -58,18 +71,9 @@ enum ErrorCodes
  * @brief Creates and initializes stack.
  * 
  * @param stk the stack pointer
- * @return int
+ * @return int error
  */
 int stack_ctor(Stack* stk);
-
-//=========================================================================================================
-/**
- * @brief Reads from console stack capacity.
- * 
- * @param capacity 
- * @return int 
- */
-int stack_size(int* capacity);
 
 //=========================================================================================================
 /**
@@ -86,7 +90,7 @@ void stack_push(Stack* stk, elem_t elem);
  * 
  * @param stk the stack pointer
  */
-void stack_pop(Stack* stk);
+void stack_pop(Stack* stk, elem_t* elem);
 
 //=========================================================================================================
 /**
@@ -105,7 +109,24 @@ void stack_resize(Stack* stk, size_t new_capacity);
  * @param start the start of filling stack with NAN value
  * @param finish the end of filling stack with NAN value
  */
-void fill_with_NAN(Stack* stk, size_t start, size_t finish);
+void fill_with_POISON(Stack* stk, size_t start, size_t finish);
+
+//=========================================================================================================
+/**
+ * @brief Opens file stack_log.txt.
+ * 
+ * @param stk the stack pointer
+ * @return int error
+ */
+int open_log_file(Stack* stk);
+
+//=========================================================================================================
+/**
+ * @brief Writes the state of the stack at the current moment of code execution in file stack_log.txt.
+ * 
+ * @param stk the stack pointer
+ */
+void stk_print_log(Stack* stk);
 
 //=========================================================================================================
 /**
