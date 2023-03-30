@@ -4,31 +4,21 @@ CFLAGS = -g -c -Winit-self -Wredundant-decls -Wundef -Wfloat-equal -Winline -Wun
 		 -Wlogical-op -Wno-missing-field-initializers -Wnon-virtual-dtor -Woverloaded-virtual -Wpointer-arith -Wsign-promo 		\
 		 -Wstack-usage=8192 -Wstrict-aliasing -Wstrict-null-sentinel -Wtype-limits -Wwrite-strings -Werror=vla -D_DEBUG			\
 
-TARGET = CPU
 CC = g++
 
-PREF_STK = ../Stack/
-PREF_OBJ = ./obj/
-PREF_SRC = ./src/
+DIR_ASM = ./Assembler/
+DIR_CPU = ./CPU/
 
-CPU_SRC = $(wildcard $(PREF_SRC)*.cpp)
-STK_SRC = $(wildcard $(PREF_STK)*.cpp)
+TARGET = PROCESSOR
 
-CPU_OBJ = $(patsubst $(PREF_SRC)%.cpp, $(PREF_OBJ)%.o, $(CPU_SRC))
-STK_OBJ = $(patsubst $(PREF_STK)%.cpp, $(PREF_OBJ)%.o, $(STK_SRC))
+all: make_assembler make_CPU
 
-OBJ = $(CPU_OBJ) $(STK_OBJ)
+make_assembler:
+	@cd $(DIR_ASM) && make
 
-all : $(TARGET)
-
-$(TARGET) : $(OBJ) 	
-	@$(CC) $(OBJ) -o $(TARGET)
-
-$(PREF_OBJ)%.o : $(PREF_SRC)%.cpp
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-$(PREF_OBJ)%.o : $(PREF_STK)%.cpp
-	@$(CC) $(CFLAGS) -c $< -o $@
+make_CPU:
+	@cd $(DIR_CPU) && make
 
 clean:
-	rm $(TARGET) $(PREF_OBJ)*.o
+	@cd $(DIR_ASM) && make clean
+	@cd $(DIR_CPU) && make clean

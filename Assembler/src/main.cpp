@@ -7,12 +7,12 @@ int main(int argc, char *argv[])
 {
     if((argc == 1) && (strcmp(argv[0], "./asm") == 0))
     {
-        printf("You didn't write a file name on the command line. The default file is \"source.txt\".\n\n");
+        printf("\nIN ASM. You didn't write a file name on the command line. The default file is \"source.txt\".\n\n");
     }
 
     else if(argc != 2)
     {
-        printf("Incorrect value of the number of command line arguments!\n");
+        printf("IN ASM. Incorrect value of the number of command line arguments!\n");
 
         return ERROR_VALUE_OF_ARGC;
     }

@@ -1,4 +1,5 @@
 #include "Tokenization.h"
+#include "../../Include/DSL.h"
 
 //==========================================================================================================================
 
@@ -17,19 +18,39 @@ void AsmInfo_ctor(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct Fla
 {
     AsmInfo->lst_file = create_file(TextInfo->asm_file_name, ".lst");
 
+    if(AsmInfo->lst_file == nullptr)
+    {
+        AsmInfo->error = ERROR_LST_FILE_OPEN;
+    }
+
     AsmInfo->quantity  = TextInfo->tok_num;
 
     AsmInfo->tok_arr = (Tokens*)calloc(AsmInfo->quantity, sizeof(Tokens));
-    assert(AsmInfo->tok_arr != nullptr);
+    
+    if(AsmInfo->tok_arr == nullptr)
+    {
+        AsmInfo->error = ERROR_TOK_ARR_CALLOC;
+    }
 
     AsmInfo->code = (int*)calloc(AsmInfo->quantity, sizeof(int));
-    assert(AsmInfo->code != nullptr);
+    
+    if(AsmInfo->code == nullptr)
+    {
+        AsmInfo->error = ERROR_CODE_ARR_CALLOC;
+    }
 
     tokens_processing(AsmInfo, TextInfo, Flags);
 
-    // HLT_processing(AsmInfo);
-
     listing(AsmInfo);
+
+    if(AsmInfo->error != 0)
+    {
+        printf("IN ASM. Error tokenization. Check your .txt file.\n");
+
+        return;
+    }   
+
+    HLT_processing(AsmInfo);
 
     if(AsmInfo->error != 0)
     {
@@ -37,14 +58,6 @@ void AsmInfo_ctor(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct Fla
 
         return;
     }    
-
-
-    if(AsmInfo->error != 0)
-    {
-        AsmInfo->error = ERROR_TOKENIZATION;
-
-        return;
-    }
 
     bin_file_code(AsmInfo, TextInfo);
 }
@@ -54,7 +67,11 @@ void AsmInfo_ctor(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct Fla
 FILE* open_file(const char* filename)
 {
     FILE* file_input = fopen(filename, "w");
-    assert(file_input != nullptr);
+    
+    if(file_input == nullptr)
+    {
+        return nullptr;
+    }
 
     return file_input;
 }
@@ -111,7 +128,7 @@ void tokens_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struc
 
             if(0) {}
 
-            #include "../../cmd.h"
+            #include "../../Include/cmd.h"
 
             else
             {
@@ -125,7 +142,7 @@ void tokens_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struc
     }
 }
 
-#undef DEF_ASM_TOK
+#undef DEF_CMD
 
 //==========================================================================================================================
 
@@ -623,6 +640,10 @@ void args_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct 
 
         case(CALL): JMP_ARG_TOK
 
+        case(JGE): JMP_ARG_TOK
+
+        case(JLE): JMP_ARG_TOK
+
         default:
         {
             AsmInfo->tok_arr[AsmInfo->cur_ip].error = ERROR_TOKEN;
@@ -740,7 +761,7 @@ void HLT_processing(struct AsmInfo* AsmInfo)
         }
     }
 
-    if(HLT_num != 1)
+    if(HLT_num < 1)
     {
         AsmInfo->error = ERROR_HLT_NUM;
     }

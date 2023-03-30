@@ -1,0 +1,2778 @@
+//========STACK INITIALIZATION========//
+Date: 31.3.2023
+Time: 2:17:36
+
+{
+[STK_CANARY] = 233692845
+capacity     = 10
+size         = 0
+data_hash    = [-3175794156679307166]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[1] = 233496045
+	*[2] = 233496045
+	*[3] = 233496045
+	*[4] = 233496045
+	*[5] = 233496045
+	*[6] = 233496045
+	*[7] = 233496045
+	*[8] = 233496045
+	*[9] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+
+
+COMMAND: IN
+{
+[STK_CANARY] = 233692845
+capacity     = 10
+size         = 1
+data_hash    = [6612227687134090593]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 12
+	*[1] = 233496045
+	*[2] = 233496045
+	*[3] = 233496045
+	*[4] = 233496045
+	*[5] = 233496045
+	*[6] = 233496045
+	*[7] = 233496045
+	*[8] = 233496045
+	*[9] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [0; 0; 0; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 10
+size         = 2
+data_hash    = [-8183971666583270539]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 12
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[4] = 233496045
+	*[5] = 233496045
+	*[6] = 233496045
+	*[7] = 233496045
+	*[8] = 233496045
+	*[9] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [0; 0; 0; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 10
+size         = 3
+data_hash    = [311534570557198089]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 12
+	*[1] = 1
+	*[2] = 1
+	*[3] = 233496045
+	*[4] = 233496045
+	*[5] = 233496045
+	*[6] = 233496045
+	*[7] = 233496045
+	*[8] = 233496045
+	*[9] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [0; 0; 0; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 5
+size         = 2
+data_hash    = [262230325524]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 12
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[4] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [0; 1; 0; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496441]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 12
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [0; 1; 1; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496441]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 12
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939296774]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 12
+	*[1] = 0
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496078]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 1
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7938902556]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 1
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: MUL
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496078]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 1
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496078]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 1
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7938914535]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 1
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496078]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 1
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7938902556]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 1
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: ADD
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496111]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 2
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 1; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 2; 0]
+
+
+COMMAND: JMP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 2; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496078]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 1
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 2; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7938903645]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 1
+	*[1] = 2
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 2; 0]
+
+
+COMMAND: MUL
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496111]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 2
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 1; 2; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 2; 2; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496111]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 2
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 2; 2; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7938950472]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 2
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 2; 2; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 2; 2; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496111]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 2
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 2; 2; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7938938493]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 2
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 2; 2; 0]
+
+
+COMMAND: ADD
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496144]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 3
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 2; 2; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 2; 3; 0]
+
+
+COMMAND: JMP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 2; 3; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496111]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 2
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 2; 3; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7938940671]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 2
+	*[1] = 3
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 2; 3; 0]
+
+
+COMMAND: MUL
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496243]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 6
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 2; 3; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 6; 3; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496144]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 3
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 6; 3; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7938986409]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 3
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 6; 3; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 6; 3; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496144]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 3
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 6; 3; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7938974430]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 3
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 6; 3; 0]
+
+
+COMMAND: ADD
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496177]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 4
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 6; 3; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 6; 4; 0]
+
+
+COMMAND: JMP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 6; 4; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496243]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 6
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 6; 4; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939085508]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 6
+	*[1] = 4
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 6; 4; 0]
+
+
+COMMAND: MUL
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496837]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 24
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 6; 4; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 24; 4; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496177]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 4
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 24; 4; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939022346]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 4
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 24; 4; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 24; 4; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496177]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 4
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 24; 4; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939010367]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 4
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 24; 4; 0]
+
+
+COMMAND: ADD
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496210]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 5
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 24; 4; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 24; 5; 0]
+
+
+COMMAND: JMP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 24; 5; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496837]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 24
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 24; 5; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939733463]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 24
+	*[1] = 5
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 24; 5; 0]
+
+
+COMMAND: MUL
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233500005]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 120
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 24; 5; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 120; 5; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496210]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 5
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 120; 5; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939058283]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 5
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 120; 5; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 120; 5; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496210]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 5
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 120; 5; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939046304]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 5
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 120; 5; 0]
+
+
+COMMAND: ADD
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496243]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 6
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 120; 5; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 120; 6; 0]
+
+
+COMMAND: JMP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 120; 6; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233500005]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 120
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 120; 6; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7943184504]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 120
+	*[1] = 6
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 120; 6; 0]
+
+
+COMMAND: MUL
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233519805]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 720
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 120; 6; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 720; 6; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496243]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 6
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 720; 6; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939094220]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 6
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 720; 6; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 720; 6; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496243]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 6
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 720; 6; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939082241]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 6
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 720; 6; 0]
+
+
+COMMAND: ADD
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496276]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 7
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 720; 6; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 720; 7; 0]
+
+
+COMMAND: JMP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 720; 7; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233519805]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 720
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 720; 7; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7964747793]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 720
+	*[1] = 7
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 720; 7; 0]
+
+
+COMMAND: MUL
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233662365]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 5040
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 720; 7; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 5040; 7; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496276]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 7
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 5040; 7; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939130157]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 7
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 5040; 7; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 5040; 7; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496276]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 7
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 5040; 7; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939118178]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 7
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 5040; 7; 0]
+
+
+COMMAND: ADD
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496309]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 8
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 5040; 7; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 5040; 8; 0]
+
+
+COMMAND: JMP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 5040; 8; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233662365]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 5040
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 5040; 8; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [8119996722]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 5040
+	*[1] = 8
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 5040; 8; 0]
+
+
+COMMAND: MUL
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [234826605]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 40320
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 5040; 8; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 40320; 8; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496309]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 8
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 40320; 8; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939166094]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 8
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 40320; 8; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 40320; 8; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496309]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 8
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 40320; 8; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939154115]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 8
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 40320; 8; 0]
+
+
+COMMAND: ADD
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496342]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 9
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 40320; 8; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 40320; 9; 0]
+
+
+COMMAND: JMP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 40320; 9; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [234826605]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 40320
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 40320; 9; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [9387855171]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 40320
+	*[1] = 9
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 40320; 9; 0]
+
+
+COMMAND: MUL
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [245471085]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 362880
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 40320; 9; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 362880; 9; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496342]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 9
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 362880; 9; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939202031]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 9
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 362880; 9; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 362880; 9; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496342]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 9
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 362880; 9; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939190052]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 9
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 362880; 9; 0]
+
+
+COMMAND: ADD
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496375]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 10
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 362880; 9; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 362880; 10; 0]
+
+
+COMMAND: JMP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 362880; 10; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [245471085]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 362880
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 362880; 10; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [20979694980]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 362880
+	*[1] = 10
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 362880; 10; 0]
+
+
+COMMAND: MUL
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [353246445]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 3628800
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 362880; 10; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 3628800; 10; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496375]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 10
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 3628800; 10; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939237968]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 10
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 3628800; 10; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 3628800; 10; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496375]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 10
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 3628800; 10; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939225989]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 10
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 3628800; 10; 0]
+
+
+COMMAND: ADD
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496408]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 11
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 3628800; 10; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 3628800; 11; 0]
+
+
+COMMAND: JMP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 3628800; 11; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [353246445]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 3628800
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 3628800; 11; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [138347063109]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 3628800
+	*[1] = 11
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 3628800; 11; 0]
+
+
+COMMAND: MUL
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [1550750445]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 39916800
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 3628800; 11; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 39916800; 11; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496408]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 11
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 39916800; 11; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939273905]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 11
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 39916800; 11; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 39916800; 11; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496408]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 11
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 39916800; 11; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939261926]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 11
+	*[1] = 1
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 39916800; 11; 0]
+
+
+COMMAND: ADD
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496441]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 12
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 39916800; 11; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 39916800; 12; 0]
+
+
+COMMAND: JMP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 39916800; 12; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [1550750445]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 39916800
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 39916800; 12; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [1442428920198]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 39916800
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 39916800; 12; 0]
+
+
+COMMAND: MUL
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [16040548845]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 479001600
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 39916800; 12; 0]
+
+
+COMMAND: POP
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 479001600; 12; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [233496441]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 12
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 479001600; 12; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 4
+size         = 2
+data_hash    = [7939309842]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 12
+	*[1] = 12
+	*[2] = 233496045
+	*[3] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 479001600; 12; 0]
+
+
+COMMAND: JE
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 479001600; 12; 0]
+
+
+COMMAND: PUSH
+{
+[STK_CANARY] = 233692845
+capacity     = 2
+size         = 1
+data_hash    = [16040548845]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 479001600
+	*[1] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 479001600; 12; 0]
+
+
+COMMAND: OUT
+{
+[STK_CANARY] = 233692845
+capacity     = 1
+size         = 0
+data_hash    = [233496045]
+data         = [0x55615a23e4a4]
+	{
+	*[DATA_CANARY] = 57005
+	*[0] = 233496045
+	*[DATA_CANARY] = 57005
+	}
+[STK_CANARY] = 233692845
+}
+REG: [12; 479001600; 12; 0]
+
+

@@ -3,13 +3,22 @@
 
 //=======================================================================================
 
-#include "../../Stack/src/StackDebug.h"
-#include "../../Stack/src/Stack.h"
+#include "../../Stack/StackDebug.h"
+#include "../../Stack/Stack.h"
 
-const int REGISTER_SHIFT = 21;
-const int RAM_SIZE       = 1000;
-const int REGS_NUM       = 4;
 
+#include <math.h>
+#include <string.h>
+#include <stdlib.h>
+
+//=======================================================================================
+
+const int REGISTER_SHIFT  = 21;
+const int RAM_SIZE        = 2304;
+const int REGS_NUM        = 4;
+const int MAX_WORD_LENGTH = 32; 
+
+//=======================================================================================
 
 #define GETKEY(arg) (arg & 0xFFFF)
 
@@ -34,9 +43,11 @@ struct CPU
 
 enum CPU_errors
 {
-    ERROR_STACK_CREATION   = 1,
-    ERROR_BIN_FILE_OPEN    = 2,
-    ERROR_DEVISION_BY_ZERO = 3,
+    ERROR_VALUE_OF_ARGC     = 1,
+    ERROR_STACK_CREATION    = 2,
+    ERROR_BIN_FILE_OPEN     = 3,
+    ERROR_DEVISION_BY_ZERO  = 4,
+    ERROR_NEG_SQRT_ROOT_NUM = 5,
 };
 
 enum CPU_code_mask
@@ -51,6 +62,18 @@ enum CPU_code_mask
     IN   = 7,
     OUT  = 8,
     RET  = 9,
+    POW  = 10,
+    SIN  = 11,
+    COS  = 12,
+    TG   = 13,
+    CTG  = 14,
+    SQRT = 15,
+    NEG  = 16,
+    COPY = 17,
+    
+    REG_DUMP  = 18,
+    RAM_DUMP  = 19,
+    REG_PURGE = 20,
 
     AX = 21,
     BX = 22,
@@ -63,6 +86,8 @@ enum CPU_code_mask
     JG   = 34,
     JL   = 35,
     CALL = 36,
+    JGE  = 37,
+    JLE  = 38,
 };
 
 enum CMD_mask
@@ -84,23 +109,27 @@ enum TypeOfAsmCode
 
 //=======================================================================================
 
-int CPU_ctor(struct CPU* cpu);
+int CPU_code_ctor(struct CPU* cpu, const char* CPU_filename);
 
 //=======================================================================================
 
-int open_bin_file(struct CPU* cpu);
+FILE* open_bin_file(struct CPU* cpu, const char* filename);
 
 //=======================================================================================
 
-void reading_file(struct CPU* cpu);
+FILE* create_filename(struct CPU* cpu, const char* cpu_file_name);
 
 //=======================================================================================
 
-int execute_code(struct CPU* cpu);
+int reading_file(struct CPU* cpu);
 
 //=======================================================================================
 
-void get_arg(struct CPU* cpu, int** arg);
+int execute_code(struct CPU* cpu, struct Stack* stk);
+
+//=======================================================================================
+
+void get_arg(struct CPU* cpu, elem_t** arg);
 
 //=======================================================================================
 

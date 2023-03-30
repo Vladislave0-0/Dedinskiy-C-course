@@ -1,4 +1,5 @@
 #include "InputProcessing.h"
+#include "../../Include/DSL.h"
 
 //============================================================================================================================
 
@@ -36,7 +37,7 @@ void text_info_ctor(struct TextInfo* TextInfo, struct FlagsInfo* Flags, const ch
 
     if(TextInfo->error != 0)
     {
-        printf("You have lexical error. Incorrect word: \"%s\".\n"
+        printf("IN ASM. You have lexical error. Incorrect word: \"%s\".\n"
                 "Number of uncorrect word in the file input.txt: %lu.\n"
                 "You may find it faster with Ctrl + F.\n", TextInfo->ptr_arr[TextInfo->cur_word], TextInfo->cur_word + 1);
 
@@ -50,7 +51,7 @@ void text_info_ctor(struct TextInfo* TextInfo, struct FlagsInfo* Flags, const ch
 
     if(TextInfo->error != 0)
     {
-        printf("You have flag error! Error code: %d.\n", TextInfo->error);
+        printf("IN ASM. You have flag or label error! Error code: %d.\n", TextInfo->error);
 
         return;
     }
@@ -64,13 +65,12 @@ void open_file(struct TextInfo* TextInfo, const char* filename)
 
     if(file_input == nullptr)
     {
-        printf("There is no file named \"%s\".\n", filename);
+        printf("IN ASM. There is no file named \"%s\".\n", filename);
 
         TextInfo->error = ERROR_MAIN_FILE_OPEN;
 
         return;
     }
-
 
     TextInfo->mainfile = file_input;
 }
@@ -162,7 +162,7 @@ void fill_ptr_arr(struct TextInfo* TextInfo)
 
 //============================================================================================================================
 
-#define DEF_CMD(name, cmd_type, has_arg, cpu_code)                                      \
+#define DEF_CMD(name, cmd_type, has_arg, cpu_code)                                          \
         else if(strcasecmp(TextInfo->ptr_arr[TextInfo->cur_word], #name) == 0)              \
         {                                                                                   \
             continue;                                                                       \
@@ -175,7 +175,7 @@ void lexical_processing(struct TextInfo* TextInfo, struct FlagsInfo* Flags)
         if(0) {}
 
         // CMD, REG, JMP processing
-        #include "../../cmd.h"
+        #include "../../Include/cmd.h"
 
         // ARG PROCESSING
         
@@ -318,7 +318,11 @@ void flags_processing(struct TextInfo* TextInfo, struct FlagsInfo* Flags)
 
     for(size_t i = 0; i < TextInfo->words_num; i++)
     {
-        if(!strcasecmp(TextInfo->ptr_arr[i], "JMP") || !strcasecmp(TextInfo->ptr_arr[i], "JE") || !strcasecmp(TextInfo->ptr_arr[i], "JNE") || !strcasecmp(TextInfo->ptr_arr[i], "JG") || !strcasecmp(TextInfo->ptr_arr[i], "JL") || !strcasecmp(TextInfo->ptr_arr[i], "JMP") || !strcasecmp(TextInfo->ptr_arr[i], "CALL"))
+        if(!strcasecmp(TextInfo->ptr_arr[i], "JMP")   || !strcasecmp(TextInfo->ptr_arr[i], "JE")  || 
+           !strcasecmp(TextInfo->ptr_arr[i], "JNE")   || !strcasecmp(TextInfo->ptr_arr[i], "JG")  || 
+           !strcasecmp(TextInfo->ptr_arr[i], "JL")    || !strcasecmp(TextInfo->ptr_arr[i], "JMP") || 
+           !strcasecmp(TextInfo->ptr_arr[i], "CALL")  || !strcasecmp(TextInfo->ptr_arr[i], "JGE") ||
+           !strcasecmp(TextInfo->ptr_arr[i], "JLE"))
         {
             jmp_words_num++;
 
@@ -382,8 +386,9 @@ void flags_processing(struct TextInfo* TextInfo, struct FlagsInfo* Flags)
     // проверка, что после JUMP и CALL только выражения вида ":..."
 
     if((!strcasecmp(TextInfo->ptr_arr[TextInfo->words_num - 1], "JMP") || !strcasecmp(TextInfo->ptr_arr[TextInfo->words_num - 1], "JE")    ||
-        !strcasecmp(TextInfo->ptr_arr[TextInfo->words_num - 1], "JNE")  || !strcasecmp(TextInfo->ptr_arr[TextInfo->words_num - 1], "JG")    ||
-        !strcasecmp(TextInfo->ptr_arr[TextInfo->words_num - 1], "JL")   || !strcasecmp(TextInfo->ptr_arr[TextInfo->words_num - 1], "CALL")))
+        !strcasecmp(TextInfo->ptr_arr[TextInfo->words_num - 1], "JNE") || !strcasecmp(TextInfo->ptr_arr[TextInfo->words_num - 1], "JG")    ||
+        !strcasecmp(TextInfo->ptr_arr[TextInfo->words_num - 1], "JL")  || !strcasecmp(TextInfo->ptr_arr[TextInfo->words_num - 1], "CALL")) ||
+        !strcasecmp(TextInfo->ptr_arr[TextInfo->words_num - 1], "JGE") || !strcasecmp(TextInfo->ptr_arr[TextInfo->words_num - 1], "JLE"))
     {
         TextInfo->error = ERROR_JUMP_WITHOUT_FLAG;
 
@@ -392,9 +397,10 @@ void flags_processing(struct TextInfo* TextInfo, struct FlagsInfo* Flags)
     // всё та же проверка
     for(size_t i = 0; i < TextInfo->words_num - 1; i++)
     {
-        if(((!strcasecmp(TextInfo->ptr_arr[i], "JMP") || !strcasecmp(TextInfo->ptr_arr[i], "JE")    ||
-             !strcasecmp(TextInfo->ptr_arr[i], "JNE") || !strcasecmp(TextInfo->ptr_arr[i], "JG")    || 
-             !strcasecmp(TextInfo->ptr_arr[i], "JL")) || !strcasecmp(TextInfo->ptr_arr[i], "CALL")) && 
+        if((!strcasecmp(TextInfo->ptr_arr[i], "JMP") || !strcasecmp(TextInfo->ptr_arr[i], "JE")   ||
+            !strcasecmp(TextInfo->ptr_arr[i], "JNE") || !strcasecmp(TextInfo->ptr_arr[i], "JG")   || 
+            !strcasecmp(TextInfo->ptr_arr[i], "JL")  || !strcasecmp(TextInfo->ptr_arr[i], "CALL") ||
+            !strcasecmp(TextInfo->ptr_arr[i], "JGE") || !strcasecmp(TextInfo->ptr_arr[i], "JLE")) && 
             (TextInfo->ptr_arr[i + 1][0] != ':'))
         {
             TextInfo->error = ERROR_JUMP_WITHOUT_FLAG;

@@ -3,7 +3,6 @@
 //=============================================================================================================
 
 #include "InputProcessing.h"
-#include <string.h>
 
 //=============================================================================================================
 
@@ -53,6 +52,18 @@ enum AssemblerCodes
     IN   = 7,                   //| Waiting an integer from console.
     OUT  = 8,                   //| Prints an integer in console.
     RET  = 9,                   //| Returns the ip that comes after CALL.
+    POW  = 10,                  //| Raising a number to a power.
+    SIN  = 11,                  //| Sine calculation.
+    COS  = 12,                  //| Cosine calculation.
+    TG   = 13,                  //| Tangent calculation.
+    CTG  = 14,                  //| Cotangent calculation.
+    SQRT = 15,                  //| Square root calculation.
+    NEG  = 16,                  //| Multiply the number in the stack by minus one.
+    COPY = 17,                  //| 
+
+    REG_DUMP  = 18,             //| Output status of registers.
+    RAM_DUMP  = 19,             //| Video memory status output.
+    REG_PURGE = 20,             //| Zeroing the state of the registers.
 
     // REGISTER
     AX = 21,                    //| Register ax.
@@ -62,11 +73,13 @@ enum AssemblerCodes
 
     // JUMP
     JMP  = 31,                  //| Common jump.
-    JE   = 32,                  //| Conditional jump --> jump if equal.
-    JNE  = 33,                  //| Conditional jump --> jump if not equal.
-    JG   = 34,                  //| Conditional jump --> jump if grower.
-    JL   = 35,                  //| Conditional jump --> jump if lower.
+    JE   = 32,                  //| Conditional jump --> label if equal.
+    JNE  = 33,                  //| Conditional jump --> label if not equal.
+    JG   = 34,                  //| Conditional jump --> label if grower.
+    JL   = 35,                  //| Conditional jump --> label if lower.
     CALL = 36,                  //| Jump for functions with stack of returns.
+    JGE  = 37,                  //| Conditional jump --> label if grower or equal.
+    JLE  = 38,                  //| Conditional jump --> label if lower or equal.
 };
 
 enum TypeOfAsmCode
@@ -88,19 +101,27 @@ enum CodeMask
     // [reg]     == 00000000 00000110 00000000 00000001
     // [val+reg] == 00000000 00000111 00000000 00000001
 
-    VAL_MASK = 1 << 16,
-    REG_MASK = 1 << 17,
-    RAM_MASK = 1 << 18,
+    // Example for POP:
+    // reg       == 00000000 00000010 00000000 00000010
+    // [val]     == 00000000 00000101 00000000 00000010
+    // [reg]     == 00000000 00000110 00000000 00000010
+    // [val+reg] == 00000000 00000111 00000000 00000010
+
+    VAL_MASK = 1 << 16,         //| Bit shift by 16 bits if the argument is a number.
+    REG_MASK = 1 << 17,         //| Bit shift by 17 bits if the argument is register.
+    RAM_MASK = 1 << 18,         //| Bit shift by 18 bits if the argument is ram.
 };
 
-enum ErrorTokenTypes
+enum AssemblerErrors
 {
-    ERROR_TOKENIZATION = -1,    //| If at least one token has an error.
-    WITHOUT_ERROR      =  0,    //| There are no errors.
-    ERROR_TOKEN        =  1,    //| Unknown token.
-    CMD_WITH_ERROR_ARG =  2,    //| Command with invalid argument.
-    ARG_WITH_ERROR_CMD =  3,    //| Argument with invalid command.
-    ERROR_HLT_NUM      =  4,    //| Incorrect value of code endings for the processor.
+    ERROR_TOKENIZATION    = 1,    //| If at least one token has an error.
+    ERROR_TOKEN           = 2,    //| Unknown token.
+    CMD_WITH_ERROR_ARG    = 3,    //| Command with invalid argument.
+    ARG_WITH_ERROR_CMD    = 4,    //| Argument with invalid command.
+    ERROR_HLT_NUM         = 5,    //| Incorrect value of code endings for the processor.
+    ERROR_LST_FILE_OPEN   = 6,    //| 
+    ERROR_TOK_ARR_CALLOC  = 7,
+    ERROR_CODE_ARR_CALLOC = 8,
 };
 
 //=============================================================================================================
