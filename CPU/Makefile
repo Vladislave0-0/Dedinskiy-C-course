@@ -32,3 +32,4 @@ $(PREF_OBJ)%.o : $(PREF_STK)%.cpp
 
 clean:
 	rm $(TARGET) $(PREF_OBJ)*.o
+	

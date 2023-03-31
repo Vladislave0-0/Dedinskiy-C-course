@@ -59,7 +59,7 @@ enum AssemblerCodes
     CTG  = 14,                  //| Cotangent calculation.
     SQRT = 15,                  //| Square root calculation.
     NEG  = 16,                  //| Multiply the number in the stack by minus one.
-    COPY = 17,                  //| 
+    COPY = 17,                  //| Pushing the last element on the stack.
 
     REG_DUMP  = 18,             //| Output status of registers.
     RAM_DUMP  = 19,             //| Video memory status output.
@@ -95,17 +95,17 @@ enum TypeOfAsmCode
 enum CodeMask
 {
     // Example for PUSH:
-    // val       == 00000000 00000001 00000000 00000001
-    // reg       == 00000000 00000010 00000000 00000001
-    // [val]     == 00000000 00000101 00000000 00000001
-    // [reg]     == 00000000 00000110 00000000 00000001
-    // [val+reg] == 00000000 00000111 00000000 00000001
+    // val       === 00000000 00000001 00000000 00000001
+    // reg       === 00000000 00000010 00000000 00000001
+    // [val]     === 00000000 00000101 00000000 00000001
+    // [reg]     === 00000000 00000110 00000000 00000001
+    // [val+reg] === 00000000 00000111 00000000 00000001
 
     // Example for POP:
-    // reg       == 00000000 00000010 00000000 00000010
-    // [val]     == 00000000 00000101 00000000 00000010
-    // [reg]     == 00000000 00000110 00000000 00000010
-    // [val+reg] == 00000000 00000111 00000000 00000010
+    // reg       === 00000000 00000010 00000000 00000010
+    // [val]     === 00000000 00000101 00000000 00000010
+    // [reg]     === 00000000 00000110 00000000 00000010
+    // [val+reg] === 00000000 00000111 00000000 00000010
 
     VAL_MASK = 1 << 16,         //| Bit shift by 16 bits if the argument is a number.
     REG_MASK = 1 << 17,         //| Bit shift by 17 bits if the argument is register.
@@ -119,49 +119,101 @@ enum AssemblerErrors
     CMD_WITH_ERROR_ARG    = 3,    //| Command with invalid argument.
     ARG_WITH_ERROR_CMD    = 4,    //| Argument with invalid command.
     ERROR_HLT_NUM         = 5,    //| Incorrect value of code endings for the processor.
-    ERROR_LST_FILE_OPEN   = 6,    //| 
-    ERROR_TOK_ARR_CALLOC  = 7,
-    ERROR_CODE_ARR_CALLOC = 8,
+    ERROR_LST_FILE_OPEN   = 6,    //| Listing creation error.
+    ERROR_TOK_ARR_CALLOC  = 7,    //| Error while creating or populating an array of structures.
+    ERROR_CODE_ARR_CALLOC = 8,    //| Error creating or filling an array with assembler code.
 };
 
 //=============================================================================================================
-
+/**
+ * @brief 
+ * 
+ * @param AsmInfo structure for tokenization.
+ * @param TextInfo structure for lexical processing.
+ * @param Flags structure for handling flags, jumps and labels.
+ */
 void AsmInfo_ctor(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct FlagsInfo* Flags);
 
 //=============================================================================================================
-
+/**
+ * @brief Opening a file by its name.
+ * 
+ * @param filename file name.
+ * @return FILE* pointer in file.
+ */
 FILE* open_file(const char* filename);
 
 //=============================================================================================================
-
+/**
+ * @brief Creating files with the required extension.
+ * 
+ * @param asm_file_name assembler file name without extension.
+ * @param extension required extension.
+ * @return FILE* pointer in file.
+ */
 FILE* create_file(char* asm_file_name, const char* extension);
 
 //=============================================================================================================
-
+/**
+ * @brief Output listing to file source.lst.
+ * 
+ * @param AsmInfo structure for tokenization.
+ */
 void listing(struct AsmInfo* AsmInfo);
 
 //=============================================================================================================
-
+/**
+ * @brief Function for tokenization.
+ * 
+ * @param AsmInfo structure for tokenization.
+ * @param TextInfo structure for lexical processing.
+ * @param Flags structure for handling flags, jumps and labels.
+ */
 void tokens_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct FlagsInfo* Flags);
 
 //=============================================================================================================
-
+/**
+ * @brief Handling the correct presence of a command .
+ * 
+ * @param AsmInfo structure for tokenization.
+ */
 void HLT_processing(struct AsmInfo* AsmInfo);
 
 //=============================================================================================================
-
+/**
+ * @brief 
+ * 
+ * @param AsmInfo structure for tokenization.
+ * @param TextInfo structure for lexical processing.
+ * @param Flags structure for handling flags, jumps and labels.
+ * @param AsmCode previous command code.
+ */
 void args_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct FlagsInfo* Flags, int AsmCode);
 
 //=============================================================================================================
-
+/**
+ * @brief Encoding the signature as a word to an integer.
+ * 
+ * @param AsmInfo structure for tokenization.
+ * @return int signature
+ */
 int get_signature(AsmInfo* AsmInfo);
 
 //=============================================================================================================
-
+/**
+ * @brief Writing to a binary file an encoded assembler file.
+ * 
+ * @param AsmInfo structure for tokenization.
+ * @param TextInfo structure for lexical processing.
+ */
 void bin_file_code(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo);
 
 //=============================================================================================================
-
+/**
+ * @brief Function to free occupied memory, closes files.
+ * 
+ * @param AsmInfo structure for tokenization.
+ */
 void AsmInfo_dtor(struct AsmInfo* AsmInfo);
 
 //=============================================================================================================
