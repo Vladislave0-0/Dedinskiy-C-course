@@ -7,6 +7,10 @@ int main()
 
     if(stack_ctor(&stk) == 0)
     {
+        stack_push(&stk, 20);
+        stack_push(&stk, 20);
+        stack_push(&stk, 20);
+
         // write here...
 
         stack_dtor(&stk);

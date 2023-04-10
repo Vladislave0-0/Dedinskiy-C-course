@@ -24,7 +24,7 @@ int stack_ctor(Stack* stk)
         return ERROR_LOG_FILE_OPEN;
     }
 
-    #ifdef CANARY_PROTECTION
+#ifdef CANARY_PROTECTION
 
     stk->stk_left_can = STK_CANARY;
     stk->stk_right_can = STK_CANARY;
@@ -48,7 +48,7 @@ int stack_ctor(Stack* stk)
 
     stk->data++;
 
-    #else
+#else
 
     stk->data = (elem_t*)calloc(stk->capacity, sizeof(elem_t));
 
@@ -59,15 +59,15 @@ int stack_ctor(Stack* stk)
         return ERROR_DATA_CALLOC;
     }
 
-    #endif //CANARY_PROTECTION
+#endif //CANARY_PROTECTION
 
     fill_with_POISON(stk, 0, stk->capacity);
 
-    #ifdef HASH_PROTECTION
+#ifdef HASH_PROTECTION
 
     stk->data_hash = data_hash(stk);
 
-    #endif
+#endif
 
     stk_print_log(stk);
 
@@ -89,11 +89,11 @@ void stack_push(Stack* stk, elem_t elem)
 
     stk->size++;
 
-    #ifdef HASH_PROTECTION
+#ifdef HASH_PROTECTION
 
     stk->data_hash = data_hash(stk);
 
-    #endif
+#endif
 
     stk_print_log(stk);
 }
@@ -110,11 +110,11 @@ void stack_pop(Stack* stk, elem_t* elem)
     
     stk->data[stk->size] = POISON;
 
-    #ifdef HASH_PROTECTION
+#ifdef HASH_PROTECTION
 
     stk->data_hash = data_hash(stk);
 
-    #endif
+#endif
 
     if(stk->size * STACK_POP_RESIZE <= stk->capacity)
     {
@@ -133,7 +133,7 @@ void stack_resize(Stack* stk, size_t new_capacity)
     size_t old_capacity = stk->capacity;
     stk->capacity = new_capacity;
 
-    #ifdef CANARY_PROTECTION
+#ifdef CANARY_PROTECTION
 
     stk->data--;
 
@@ -156,7 +156,7 @@ void stack_resize(Stack* stk, size_t new_capacity)
 
     stk->data++;
 
-    #else
+#else
 
     stk->data = (elem_t*)realloc(stk->data, stk->capacity * sizeof(elem_t));
 
@@ -167,23 +167,23 @@ void stack_resize(Stack* stk, size_t new_capacity)
         exit(ERROR_DATA_REALLOC);
     }
 
-    #endif //CANARY_PROTECTION
+#endif //CANARY_PROTECTION
 
 
 
-    #ifdef HASH_PROTECTION
+#ifdef HASH_PROTECTION
 
     stk->data_hash = data_hash(stk);
 
-    #endif
+#endif
 
     fill_with_POISON(stk, old_capacity, stk->capacity); 
 
-    #ifdef HASH_PROTECTION
+#ifdef HASH_PROTECTION
 
     stk->data_hash = data_hash(stk);
 
-    #endif
+#endif
 }
 
 //=========================================================================================================
@@ -218,31 +218,39 @@ void stk_print_log(Stack* stk)
 {
     PRINT_LOG("{\n");
 
-    #ifdef CANARY_PROTECTION
+#ifdef CANARY_PROTECTION
     PRINT_LOG("[STK_CANARY] = %lu\n", stk->stk_left_can);
-    #endif //CANARY_PROTECTION
+#endif //CANARY_PROTECTION
 
     PRINT_LOG("capacity     = %lu\n", stk->capacity);
 
     PRINT_LOG("size         = %lu\n", stk->size);
 
-    #ifdef HASH_PROTECTION
+#ifdef HASH_PROTECTION
     PRINT_LOG("data_hash    = [%lld]\n", stk->data_hash);
-    #endif //HASH_PROTECTION
+#endif //HASH_PROTECTION
 
     PRINT_LOG("data         = [%p]\n", stk->data);
 
     PRINT_LOG("\t{\n");
 
-    #ifdef CANARY_PROTECTION
-    PRINT_LOG("\t*[DATA_CANARY] = %lu\n", stk->data_left_can);
-    #endif //CANARY_PROTECTION
+#ifdef CANARY_PROTECTION
+    PRINT_LOG("\t[DATA_CANARY] = %lu\n", stk->data_left_can);
+#endif //CANARY_PROTECTION
 
     for(size_t i = 0; i < stk->capacity; i++)
     {
         if(!isnan(stk->data[i]))
         {
-            PRINT_LOG("\t*[%lu] = %d\n", i, stk->data[i]);
+            if(i < stk->size)
+            {
+                PRINT_LOG("   *[%lu] = %d\n", i, stk->data[i]);
+            }
+
+            else
+            {
+                PRINT_LOG("\t[%lu] = %d\t\t\t<-- POISON\n", i, stk->data[i]);
+            }
         }
 
         else 
@@ -251,15 +259,15 @@ void stk_print_log(Stack* stk)
         }
     }
 
-    #ifdef CANARY_PROTECTION
-    PRINT_LOG("\t*[DATA_CANARY] = %ld\n", stk->data_right_can);
-    #endif //CANARY_PROTECTION
+#ifdef CANARY_PROTECTION
+    PRINT_LOG("\t[DATA_CANARY] = %ld\n", stk->data_right_can);
+#endif //CANARY_PROTECTION
 
     PRINT_LOG("\t}\n");
 
-    #ifdef CANARY_PROTECTION
+#ifdef CANARY_PROTECTION
     PRINT_LOG("[STK_CANARY] = %lu\n", stk->stk_right_can);
-    #endif //CANARY_PROTECTION
+#endif //CANARY_PROTECTION
 
     PRINT_LOG("}\n\n\n");
 }
@@ -275,11 +283,9 @@ void stack_dtor(Stack* stk)
         stk->data[i] = POISON;
     }
 
-    #ifdef CANARY_PROTECTION
-
+#ifdef CANARY_PROTECTION
     stk->data--;
-
-    #endif //CANARY_PROTECTION
+#endif //CANARY_PROTECTION
 
     stk->capacity       = 0;
     stk->size           = 0;
