@@ -13,6 +13,7 @@ int queue_ctor(struct queue* que)
         return que->error_code;
     }
 
+
     que->queue_log = fopen("queue_log.dot", "w");
 
     if(que->queue_log == nullptr)
@@ -24,8 +25,9 @@ int queue_ctor(struct queue* que)
         return que->error_code;
     }
 
+
     printf("Hello, this is the terminal menu. The queue can be of size as a power of two. "
-           "Select the queue size you need: enter a power of two from 1 to 9.\n");
+           "Select the queue size you need: enter a power of two from 1 to 9.\nPower of 2: ");
 
     int power = 0;
 
@@ -44,6 +46,7 @@ int queue_ctor(struct queue* que)
 
     que->mask = que->capacity - 1;
 
+
     que->data = (elem_t*)calloc(que->capacity, sizeof(elem_t));
 
     if(que->data == nullptr)
@@ -54,6 +57,7 @@ int queue_ctor(struct queue* que)
 
         return que->error_code;
     }
+
 
     fill_with_POISON(que);
 
@@ -76,11 +80,11 @@ void queue_push(struct queue* que, elem_t value)
 {
     if(check_que_tail(que) == EMPTY_QUEUE)
     {
-        que->data[que->tail] = value;
-        que->size++;
-        que->tail++;
+        que->data[que->tail++] = value;
 
-        que->tail = que->tail & que->mask;
+        que->size++;
+
+        que->tail &= que->mask;
     }
     
     else
@@ -99,25 +103,18 @@ elem_t queue_pop(struct queue* que)
     {
         pop_value = que->data[que->head];
 
-        que->data[que->head] = POISON;
-
-        que->head++;
+        que->data[que->head++] = POISON;
 
         que->size--;
 
-        que->head = que->head & que->mask;
+        que->head &= que->mask;
 
         return pop_value;
     }
 
-    else
-    {
-        printf("Queue is empty! If you want to continue push the value in the queue.\n");
+    printf("Queue is empty! If you want to continue push the value in the queue.\n");
 
-        return pop_value;
-    }
-
-    return pop_value;
+    return POISON;
 }
 
 //=========================================================================================================
@@ -247,13 +244,18 @@ void queue_dtor(struct queue* que)
 {
     fill_with_POISON(que);
 
-    que->error_code = 0;
-    que->capacity   = 0;
-    que->size       = 0;
-
     fclose(que->queue_log);
     que->queue_log = nullptr;
     
     free(que->data);
     que->data = nullptr;
+
+    que->capacity = 0;
+    que->mask     = 0;
+    que->size     = 0;
+
+    que->tail = 0;
+    que->head = 0;
+
+    que->error_code = 0;
 }

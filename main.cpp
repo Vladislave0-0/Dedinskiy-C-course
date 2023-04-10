@@ -14,4 +14,4 @@ int main()
     }
 }
 
-// dot queue_log.dot -Tpng -o "name".png
+// Write in terminal <dot queue_log.dot -Tpng -o "name".png> to get image
