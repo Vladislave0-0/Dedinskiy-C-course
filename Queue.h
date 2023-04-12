@@ -12,9 +12,10 @@ typedef int elem_t;
 
 //==========================================================================
 
-const elem_t POISON   = 0xDEADDED;
-const int FULL_QUEUE  = 1;
-const int EMPTY_QUEUE = 0;
+const elem_t POISON      = 0xDEADDED;
+const int FULL_QUEUE     = 1;
+const int EMPTY_QUEUE    = 0;
+const int CAPACITY_POWER = 5;
 
 //==========================================================================
 /**
@@ -25,7 +26,7 @@ struct queue
 {
     FILE* queue_log = nullptr;
 
-    int capacity = 0;
+    int capacity = 1 << CAPACITY_POWER;
     int mask     = 0;
     elem_t* data = nullptr;
     int size     = 0;
@@ -71,8 +72,8 @@ void fill_with_POISON(struct queue* que);
 /**
  * @brief Adding an element to the end of the queue.
  * 
- * @param que the queue pointer
- * @param value element to be queued
+ * @param que 
+ * @param value 
  */
 void queue_push(struct queue* que, elem_t value);
 

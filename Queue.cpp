@@ -26,26 +26,7 @@ int queue_ctor(struct queue* que)
     }
 
 
-    printf("Hello, this is the terminal menu. The queue can be of size as a power of two. "
-           "Select the queue size you need: enter a power of two from 1 to 9.\nPower of 2: ");
-
-    int power = 0;
-
-    int scanf_check = scanf("%d", &power);
-
-    if(scanf_check != 1 || (power < 1) || (power > 9))
-    {
-        que->error_code = ERROR_CAPACITY_USER_INPUT;
-
-        printf("Error code: %d. Check file \"Queue.h\" to decipher the error code.\n", que->error_code);
-
-        return que->error_code;
-    }
-
-    que->capacity = 1 << power; 
-
     que->mask = que->capacity - 1;
-
 
     que->data = (elem_t*)calloc(que->capacity, sizeof(elem_t));
 
