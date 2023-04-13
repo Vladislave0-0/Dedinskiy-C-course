@@ -28,21 +28,25 @@ int queue_ctor(struct queue* que)
 
     que->mask = que->capacity - 1;
 
-    que->data = (elem_t*)calloc(que->capacity, sizeof(elem_t));
-
-    if(que->data == nullptr)
-    {
-        que->error_code = ERROR_DATA_CALLOC_NULLPTR;
-
-        printf("Error code: %d. Check file \"Queue.h\" to decipher the error code.\n", que->error_code);
-
-        return que->error_code;
-    }
-
 
     fill_with_POISON(que);
 
     return 0;
+}
+
+//=========================================================================================================
+
+static int check_que_tail(struct queue* que)
+{
+    if((que->tail == que->head) && (que->size != 0))
+    {
+        return FULL_QUEUE;
+    }
+
+    else
+    {
+        return EMPTY_QUEUE;
+    }
 }
 
 //=========================================================================================================
@@ -106,7 +110,7 @@ void que_dot_print(struct queue* que)
 
     fprintf(que->queue_log, "    {\n    rankdir = BT;\n");
 
-    fprintf(que->queue_log, "    size = \"6.7, 15\";\n");
+    fprintf(que->queue_log, "    size = \"50, 50\";\n");
 
     fprintf(que->queue_log, "    first [color = \"red\", shape = record, label = \"{ {size} | {%d} } | { {head_pos} | {%d} } | { {tail_pos} | {%d} }\"];\n    }\n\n\n", que->size, que->head, que->tail);
 
@@ -206,21 +210,6 @@ void terminal_menu(struct queue* que)
 
 //=========================================================================================================
 
-int check_que_tail(struct queue* que)
-{
-    if((que->tail == que->head) && (que->size != 0))
-    {
-        return FULL_QUEUE;
-    }
-
-    else
-    {
-        return EMPTY_QUEUE;
-    }
-}
-
-//=========================================================================================================
-
 void queue_dtor(struct queue* que)
 {
     fill_with_POISON(que);
@@ -228,9 +217,6 @@ void queue_dtor(struct queue* que)
     fclose(que->queue_log);
     que->queue_log = nullptr;
     
-    free(que->data);
-    que->data = nullptr;
-
     que->capacity = 0;
     que->mask     = 0;
     que->size     = 0;

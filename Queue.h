@@ -3,7 +3,6 @@
 
 //==========================================================================
 
-#include <stdlib.h>
 #include <stdio.h>
 
 //==========================================================================
@@ -26,9 +25,10 @@ struct queue
 {
     FILE* queue_log = nullptr;
 
+    elem_t data[1 << CAPACITY_POWER] = { 0 };
+
     int capacity = 1 << CAPACITY_POWER;
     int mask     = 0;
-    elem_t* data = nullptr;
     int size     = 0;
 
     int tail = 0;
@@ -44,10 +44,8 @@ struct queue
  */
 enum QueueErrors
 {
-    ERROR_DATA_CALLOC_NULLPTR = 1,
-    ERROR_QUEUE_NULLPTR       = 2,
-    ERROR_LOG_FILE_OPEN       = 3,
-    ERROR_CAPACITY_USER_INPUT = 4,
+    ERROR_QUEUE_NULLPTR = 1,
+    ERROR_LOG_FILE_OPEN = 2,
 };
 
 //==========================================================================
@@ -109,15 +107,6 @@ void terminal_menu(struct queue* que);
  * @param que the queue pointer
  */
 void queue_dtor(struct queue* que);
-
-//==========================================================================
-/**
- * @brief Returns 0 if the queue is not full, and 1 if full.
- * 
- * @param que the queue pointer
- * @return int state of fullness
- */
-int check_que_tail(struct queue* que);
 
 //==========================================================================
 
