@@ -19,10 +19,10 @@ int stack_ctor(Stack* stk)
 
     if(open_log_file(stk) != 0)
     {
-        fclose(stk->log_file);
         printf("Error code: %d. Check file \"Stack.h\" to decipher the error code.\n", ERROR_LOG_FILE_OPEN);
         return ERROR_LOG_FILE_OPEN;
     }
+
 
 #ifdef CANARY_PROTECTION
 
@@ -202,7 +202,7 @@ void fill_with_POISON(Stack* stk, size_t start, size_t finish)
 
 int open_log_file(Stack* stk)
 {
-    stk->log_file = fopen("../Stack/stack_log.txt", "w");
+    stk->log_file = fopen("stack_log.txt", "w");
 
     if(stk->log_file == nullptr)
     {
