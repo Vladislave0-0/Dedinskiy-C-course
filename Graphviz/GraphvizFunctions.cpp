@@ -48,6 +48,7 @@ int graph_print(struct list* lst)
     fprintf(lst->graph_file, "{\n");
     fprintf(lst->graph_file, "\trankdir = LR;\n\n");
 
+
     for(int i = 0; i < lst->capacity -1 ; i++)
     {
         fprintf(lst->graph_file, "\tnode%d -> node%d [color = invis, weight = 1000];\n", i, i + 1);
@@ -187,6 +188,7 @@ int html_print(struct list* lst, char* function)
     fprintf(lst->html_file, "\t   free_node = <font color = " STRUCTS_VAL_CLR ">%d</font>;\n\n", lst->free_node);
     fprintf(lst->html_file, "\t   size      = <font color = " STRUCTS_VAL_CLR ">%d</font>;\n", lst->size);
     fprintf(lst->html_file, "\t   capacity  = <font color = " STRUCTS_VAL_CLR ">%d</font>;\n", lst->capacity);
+    fprintf(lst->html_file, "\n\t   is_linearized  = <font color = " STRUCTS_VAL_CLR ">%d</font>;\n", lst->is_linearized);
     fprintf(lst->html_file, "\t};\n");
     fprintf(lst->html_file, "\t</h2>\n");
 

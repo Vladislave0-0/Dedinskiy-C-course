@@ -11,6 +11,7 @@ int main()
     // Here you can write list functions...
 
 //=============================
+
     elem_t a = 0;
     push_after(&lst, 0, 10);
     push_after(&lst, 0, 20);
@@ -24,6 +25,8 @@ int main()
     push_after(&lst, 1, 100);
     push_after(&lst, 1, 200);
     push_after(&lst, 1, 300);
+    node_remove(&lst, 1, &a);
+
 //=============================
     
     if(lst.error_code == SUCCESS)

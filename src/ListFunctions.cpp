@@ -46,6 +46,8 @@ int list_ctor(struct list* lst)
     lst->head_node = -1;
     lst->tail_node = -1;
 
+    lst->is_linearized = 1;
+
 
     MAKE_GRAPHVIZ("list_ctor", -1, -1);
 
@@ -78,6 +80,7 @@ int push_after(struct list* lst, int node_index, elem_t value)
 {
     CHECK_ERROR;
 
+
     if(node_index > lst->capacity - 1)
     {
         PRINT_INFO("You are off the list!");
@@ -85,84 +88,80 @@ int push_after(struct list* lst, int node_index, elem_t value)
         return SUCCESS;
     }
 
+    if(lst->head_node == -1)
+    {
+        lst->head_node = 0;
+
+        lst->tail_node = 0;
+
+        lst->free_node = lst->nodes_arr[lst->free_node].next;
+
+        lst->nodes_arr[lst->head_node].next = -1;
+
+        lst->nodes_arr[lst->head_node].value = value;
+
+        lst->size++;
+    }
+
     else
     {
-        if(lst->head_node == -1)
+        if((node_index != lst->head_node) && (lst->nodes_arr[node_index].prev == -1))
         {
-            lst->head_node = 0;
+            PRINT_INFO("Referencing a non-existent cell of the list!");
 
-            lst->tail_node = 0;
+            return SUCCESS;
+        }
 
-            lst->free_node = lst->nodes_arr[lst->free_node].next;
+        if(lst->size >= lst->capacity - 1)
+        {
+            int new_node_index = 0;
 
-            lst->nodes_arr[lst->head_node].next = -1;
+            if(translate_physical_adress_to_logical_position(lst, node_index, &new_node_index) != SUCCESS)
+            {
+                RETURN_LIST_ERROR(lst->error_code);
+            }
 
-            lst->nodes_arr[lst->head_node].value = value;
+            if(list_resize(lst, (int)(lst->capacity * RESIZE_FACTOR)) != SUCCESS)
+            {
+                RETURN_LIST_ERROR(lst->error_code);
+            }
 
-            lst->size++;
+            node_index = new_node_index;
+        }
+
+        int cur_node = lst->free_node;
+
+        lst->free_node = lst->nodes_arr[lst->free_node].next;
+
+        lst->nodes_arr[cur_node].value = value;
+
+        lst->size++;
+        
+
+        if(node_index == lst->tail_node)
+        {
+            lst->nodes_arr[cur_node].prev = lst->tail_node;
+
+            lst->nodes_arr[cur_node].next = -1;
+
+            lst->nodes_arr[lst->tail_node].next = cur_node;
+
+            lst->tail_node = cur_node;
         }
 
         else
         {
-            if((node_index != lst->head_node) && (lst->nodes_arr[node_index].prev == -1))
-            {
-                PRINT_INFO("Referencing a non-existent cell of the list!");
+            lst->nodes_arr[cur_node].prev = node_index;
 
-                return SUCCESS;
-            }
+            lst->nodes_arr[cur_node].next = lst->nodes_arr[node_index].next;
 
-            else
-            {
-                if(lst->size >= lst->capacity - 1)
-                {
-                    int new_node_index = 0;
+            lst->nodes_arr[lst->nodes_arr[cur_node].next].prev = cur_node;
 
-                    if(translate_physical_adress_to_logical_position(lst, node_index, &new_node_index) != SUCCESS)
-                    {
-                        RETURN_LIST_ERROR(lst->error_code);
-                    }
-
-                    if(list_resize(lst, (int)(lst->capacity * RESIZE_FACTOR)) != SUCCESS)
-                    {
-                        RETURN_LIST_ERROR(lst->error_code);
-                    }
-
-                    node_index = new_node_index;
-                }
-
-                int cur_node = lst->free_node;
-
-                lst->free_node = lst->nodes_arr[lst->free_node].next;
-
-                lst->nodes_arr[cur_node].value = value;
-
-                lst->size++;
-                
-
-                if(node_index == lst->tail_node)
-                {
-                    lst->nodes_arr[cur_node].prev = lst->tail_node;
-
-                    lst->nodes_arr[cur_node].next = -1;
-
-                    lst->nodes_arr[lst->tail_node].next = cur_node;
-
-                    lst->tail_node = cur_node;
-                }
-
-                else
-                {
-                    lst->nodes_arr[cur_node].prev = node_index;
-
-                    lst->nodes_arr[cur_node].next = lst->nodes_arr[node_index].next;
-
-                    lst->nodes_arr[lst->nodes_arr[cur_node].next].prev = cur_node;
-
-                    lst->nodes_arr[lst->nodes_arr[cur_node].prev].next = cur_node;
-                }
-            }
+            lst->nodes_arr[lst->nodes_arr[cur_node].prev].next = cur_node;
         }
     }
+
+    linearized_check(lst);
 
 
     MAKE_GRAPHVIZ("push_after", node_index, value);
@@ -176,86 +175,85 @@ int push_before(struct list* lst, int node_index, elem_t value)
 {
     CHECK_ERROR;
 
+
     if(node_index > lst->capacity - 1)
     {
         PRINT_INFO("You are off the list!");
     }  
 
+
+    if(lst->head_node == -1)
+    {
+        lst->head_node = 0;
+
+        lst->tail_node = 0;
+
+        lst->free_node = lst->nodes_arr[lst->free_node].next;
+
+        lst->nodes_arr[lst->head_node].next = -1;
+
+        lst->nodes_arr[lst->head_node].value = value;
+
+        lst->size++; 
+    }
+
     else
     {
-        if(lst->head_node == -1)
+        if((node_index != lst->head_node) && (lst->nodes_arr[node_index].prev == -1))
         {
-            lst->head_node = 0;
+            PRINT_INFO("Referencing a non-existent cell of the list!");
+        }
 
-            lst->tail_node = 0;
+        if(lst->size >= lst->capacity - 1)
+        {
+            int new_node_index = 0;
 
-            lst->free_node = lst->nodes_arr[lst->free_node].next;
+            if(translate_physical_adress_to_logical_position(lst, node_index, &new_node_index) != SUCCESS)
+            {
+                RETURN_LIST_ERROR(lst->error_code);
+            }
 
-            lst->nodes_arr[lst->head_node].next = -1;
+            if(list_resize(lst, (int)(lst->capacity * RESIZE_FACTOR)) != SUCCESS)
+            {
+                RETURN_LIST_ERROR(lst->error_code);
+            }
 
-            lst->nodes_arr[lst->head_node].value = value;
+            node_index = new_node_index;
+        }
 
-            lst->size++; 
+        int cur_node = lst->free_node;
+
+        lst->free_node = lst->nodes_arr[lst->free_node].next;
+
+        lst->nodes_arr[cur_node].value = value;
+
+        lst->size++;
+
+        if(node_index == lst->head_node)
+        {
+            lst->nodes_arr[cur_node].prev = -1;
+
+            lst->nodes_arr[cur_node].next = lst->head_node;
+
+            lst->nodes_arr[lst->head_node].prev = cur_node;
+
+            lst->head_node = cur_node;
         }
 
         else
         {
-            if((node_index != lst->head_node) && (lst->nodes_arr[node_index].prev == -1))
-            {
-                PRINT_INFO("Referencing a non-existent cell of the list!");
-            }
+            lst->nodes_arr[cur_node].next = node_index;
 
-            else
-            {
-                if(lst->size >= lst->capacity - 1)
-                {
-                    int new_node_index = 0;
+            lst->nodes_arr[cur_node].prev = lst->nodes_arr[node_index].prev;
 
-                    if(translate_physical_adress_to_logical_position(lst, node_index, &new_node_index) != SUCCESS)
-                    {
-                        RETURN_LIST_ERROR(lst->error_code);
-                    }
+            lst->nodes_arr[node_index].prev = cur_node;
 
-                    if(list_resize(lst, (int)(lst->capacity * RESIZE_FACTOR)) != SUCCESS)
-                    {
-                        RETURN_LIST_ERROR(lst->error_code);
-                    }
-
-                    node_index = new_node_index;
-                }
-
-                int cur_node = lst->free_node;
-
-                lst->free_node = lst->nodes_arr[lst->free_node].next;
-
-                lst->nodes_arr[cur_node].value = value;
-
-                lst->size++;
-
-                if(node_index == lst->head_node)
-                {
-                    lst->nodes_arr[cur_node].prev = -1;
-
-                    lst->nodes_arr[cur_node].next = lst->head_node;
-
-                    lst->nodes_arr[lst->head_node].prev = cur_node;
-
-                    lst->head_node = cur_node;
-                }
-
-                else
-                {
-                    lst->nodes_arr[cur_node].next = node_index;
-
-                    lst->nodes_arr[cur_node].prev = lst->nodes_arr[node_index].prev;
-
-                    lst->nodes_arr[node_index].prev = cur_node;
-
-                    lst->nodes_arr[lst->nodes_arr[cur_node].prev].next = cur_node;
-                }
-            }
+            lst->nodes_arr[lst->nodes_arr[cur_node].prev].next = cur_node;
         }
     }
+
+    linearized_check(lst);
+
 
     MAKE_GRAPHVIZ("push_before", node_index, value);
 
@@ -271,110 +269,114 @@ int node_remove(struct list* lst, int node_index, elem_t* arg)
     if(node_index > lst->capacity - 1)
     {
         PRINT_INFO("You are off the list!");
+
+        return SUCCESS;
+    }
+
+    if(lst->head_node == -1)
+    {
+        PRINT_INFO("The list is empty!");
+
+        return SUCCESS;
     }
 
     else
     {
-        if(lst->head_node == -1)
+        if((lst->nodes_arr[node_index].prev == -1) && node_index != lst->head_node)
         {
-            PRINT_INFO("The list is empty!");
+            PRINT_INFO("You can't remove node_");
+
+            printf("%d! It is free node!", node_index);
+
+            return SUCCESS;
         }
 
-        else
+        if(lst->size * LIST_REMOVE_RESIZE <= lst->capacity)
         {
-            if((lst->nodes_arr[node_index].prev == -1) && node_index != lst->head_node)
+            if(node_index == lst->head_node)
             {
-                PRINT_INFO("You can't remove node_");
-                printf("%d! It is free node!", node_index);
+                if(list_resize(lst, (int)(lst->capacity / RESIZE_FACTOR)) != SUCCESS)
+                {
+                    RETURN_LIST_ERROR(lst->error_code);
+                }
+
+                node_index = lst->head_node;
+            }
+
+            else if(node_index == lst->tail_node)
+            {
+                if(list_resize(lst, (int)(lst->capacity / RESIZE_FACTOR)) != SUCCESS)
+                {
+                    RETURN_LIST_ERROR(lst->error_code);
+                }
+
+                node_index = lst->tail_node;       
             }
 
             else
             {
-                if(lst->size * LIST_REMOVE_RESIZE <= lst->capacity)
+                int new_node_index = 0;
+
+                if(translate_physical_adress_to_logical_position(lst, node_index, &new_node_index) != SUCCESS)
                 {
-                    if(node_index == lst->head_node)
-                    {
-                        if(list_resize(lst, (int)(lst->capacity / RESIZE_FACTOR)) != SUCCESS)
-                        {
-                            RETURN_LIST_ERROR(lst->error_code);
-                        }
-
-                        node_index = lst->head_node;
-                    }
-
-                    else if(node_index == lst->tail_node)
-                    {
-                        if(list_resize(lst, (int)(lst->capacity / RESIZE_FACTOR)) != SUCCESS)
-                        {
-                            RETURN_LIST_ERROR(lst->error_code);
-                        }
-
-                        node_index = lst->tail_node;       
-                    }
-
-                    else
-                    {
-                        int new_node_index = 0;
-
-                        if(translate_physical_adress_to_logical_position(lst, node_index, &new_node_index) != SUCCESS)
-                        {
-                            RETURN_LIST_ERROR(lst->error_code);
-                        }
-
-                        if(list_resize(lst, (int)(lst->capacity / RESIZE_FACTOR)) != SUCCESS)
-                        {
-                            RETURN_LIST_ERROR(lst->error_code);
-                        }
-
-                        node_index = new_node_index;
-                    }
+                    RETURN_LIST_ERROR(lst->error_code);
                 }
 
-                *arg = lst->nodes_arr[node_index].value;
-
-                lst->nodes_arr[node_index].value = POISON;
-
-                lst->size--;
-
-                if(node_index == lst->head_node)
+                if(list_resize(lst, (int)(lst->capacity / RESIZE_FACTOR)) != SUCCESS)
                 {
-                    lst->nodes_arr[lst->nodes_arr[node_index].next].prev = -1;
-
-                    lst->head_node = lst->nodes_arr[node_index].next;
-
-                    lst->nodes_arr[node_index].next = lst->free_node;
-
-                    lst->free_node = node_index;
+                    RETURN_LIST_ERROR(lst->error_code);
                 }
 
-                else if(node_index == lst->tail_node)
-                {
-                    lst->nodes_arr[lst->nodes_arr[node_index].prev].next = -1;
-
-                    lst->tail_node = lst->nodes_arr[node_index].prev;
-
-                    lst->nodes_arr[node_index].prev = -1;
-
-                    lst->nodes_arr[node_index].next = lst->free_node;
-
-                    lst->free_node = node_index;
-                }
-
-                else
-                {
-                    lst->nodes_arr[lst->nodes_arr[node_index].prev].next = lst->nodes_arr[node_index].next;
-
-                    lst->nodes_arr[lst->nodes_arr[node_index].next].prev = lst->nodes_arr[node_index].prev;
-
-                    lst->nodes_arr[node_index].prev = -1;
-
-                    lst->nodes_arr[node_index].next = lst->free_node;
-
-                    lst->free_node = node_index;
-                }
+                node_index = new_node_index;
             }
         }
+
+        *arg = lst->nodes_arr[node_index].value;
+
+        lst->nodes_arr[node_index].value = POISON;
+
+        lst->size--;
+
+        if(node_index == lst->head_node)
+        {
+            lst->nodes_arr[lst->nodes_arr[node_index].next].prev = -1;
+
+            lst->head_node = lst->nodes_arr[node_index].next;
+
+            lst->nodes_arr[node_index].next = lst->free_node;
+
+            lst->free_node = node_index;
+        }
+
+        else if(node_index == lst->tail_node)
+        {
+            lst->nodes_arr[lst->nodes_arr[node_index].prev].next = -1;
+
+            lst->tail_node = lst->nodes_arr[node_index].prev;
+
+            lst->nodes_arr[node_index].prev = -1;
+
+            lst->nodes_arr[node_index].next = lst->free_node;
+
+            lst->free_node = node_index;
+        }
+
+        else
+        {
+            lst->nodes_arr[lst->nodes_arr[node_index].prev].next = lst->nodes_arr[node_index].next;
+
+            lst->nodes_arr[lst->nodes_arr[node_index].next].prev = lst->nodes_arr[node_index].prev;
+
+            lst->nodes_arr[node_index].prev = -1;
+
+            lst->nodes_arr[node_index].next = lst->free_node;
+
+            lst->free_node = node_index;
+        }
     }
+
+    linearized_check(lst);
+
 
     MAKE_GRAPHVIZ("node_remove", node_index, POISON);
 
@@ -415,6 +417,11 @@ int list_linearize(struct list* lst)
 {
     CHECK_ERROR;
 
+    if(lst->is_linearized == 1)
+    {
+        return SUCCESS;
+    }
+    
     node* new_nodes_arr = (node*)calloc(lst->capacity, sizeof(node));
 
     if(new_nodes_arr == nullptr)
@@ -458,6 +465,8 @@ int list_linearize(struct list* lst)
     free(lst->nodes_arr);
     lst->nodes_arr = new_nodes_arr;
 
+    lst->is_linearized = 1;
+
     MAKE_GRAPHVIZ("list_linearize", -1, -1);
 
     return SUCCESS;
@@ -469,20 +478,31 @@ int list_resize(struct list* lst, int new_capacity)
 {
     CHECK_ERROR;
 
-    lst->capacity = new_capacity;
-
-    if(list_linearize(lst) != SUCCESS)
+    if(lst->size * LIST_REMOVE_RESIZE <= lst->capacity)
     {
-        return lst->error_code;
+        lst->capacity = new_capacity;
+
+        if(list_linearize(lst) != SUCCESS)
+        {
+            return lst->error_code;
+        }
     }
 
-    lst->nodes_arr = (node*)realloc(lst->nodes_arr, new_capacity * sizeof(node));
-
-    if(lst->nodes_arr == nullptr)
+    else
     {
-        lst->error_code = ERROR_RESIZE_NULLPTR;
+        lst->capacity = new_capacity;
 
-        return lst->error_code;     
+        if(list_linearize(lst) != SUCCESS)
+        {
+            return lst->error_code;
+        }
+
+        if(lst->nodes_arr == nullptr)
+        {
+            lst->error_code = ERROR_RESIZE_NULLPTR;
+
+            return lst->error_code;     
+        }
     }
 
     if(lst->free_node == -1)
@@ -491,6 +511,53 @@ int list_resize(struct list* lst, int new_capacity)
     }
 
     MAKE_GRAPHVIZ("list_resize", -1, -1);
+
+    return SUCCESS;
+}
+
+//=====================================================================================================================================
+
+int linearized_check(struct list* lst)
+{
+    CHECK_ERROR;
+
+    if((lst->size == 1) && (lst->nodes_arr[0].value != POISON))
+    {
+        lst->is_linearized = 1;
+
+        return SUCCESS;
+    }
+
+    int index = 0;
+
+    if(lst->nodes_arr[0].prev == -1)
+    {
+        index++;
+    }
+
+    for(int i = 0; i < lst->size; i++)
+    {
+        if(lst->nodes_arr[i].next != i + 1)
+        {
+            break;
+        }
+
+        index++;
+    }
+
+    if(lst->nodes_arr[index].next == -1)
+    {
+        index++;
+    }
+
+    if(index == lst->size)
+    {
+        lst->is_linearized = 1;
+
+        return SUCCESS;
+    }
+
+    lst->is_linearized = 0;
 
     return SUCCESS;
 }
@@ -508,6 +575,13 @@ int translate_logical_position_to_physical_adress(struct list* lst, int logic_in
         lst->error_code = ERROR_TRANSLATE_LOG_TO_PHYS;
 
         return lst->error_code;
+    }
+
+    if(lst->is_linearized == 1)
+    {
+        *phys_adress = logic_index;
+
+        return SUCCESS;
     }
 
     int cur_node = lst->head_node;
@@ -537,6 +611,13 @@ int translate_physical_adress_to_logical_position(struct list* lst, int phys_adr
         return lst->error_code;
     }
     
+    if(lst->is_linearized == 1)
+    {
+        *logic_index = phys_adress;
+
+        return SUCCESS;
+    }
+
     int nodes_counter = 0;
 
     for(int cur_node = phys_adress; cur_node != lst->head_node; nodes_counter++)
@@ -574,6 +655,9 @@ void list_dtor(struct list* lst)
             lst->nodes_arr = nullptr; 
 
             fclose(lst->html_file);
+            lst->html_file = nullptr;
+
+            printf(CYN "SUCCESS list_dtor!\n" RESET);
 
             break;
         }
@@ -602,7 +686,7 @@ void list_dtor(struct list* lst)
             lst->capacity = 0;
 
             free(lst->nodes_arr);
-            lst->nodes_arr = nullptr;      
+            lst->html_file = nullptr;     
 
             break; 
         }
@@ -626,6 +710,7 @@ void list_dtor(struct list* lst)
             lst->nodes_arr = nullptr;
 
             fclose(lst->html_file);
+            lst->html_file = nullptr;
 
             break;
         }
@@ -649,6 +734,7 @@ void list_dtor(struct list* lst)
             lst->nodes_arr = nullptr;
 
             fclose(lst->html_file);
+            lst->html_file = nullptr;
 
             break;
         }
@@ -662,6 +748,7 @@ void list_dtor(struct list* lst)
             lst->capacity   = 0;
 
             fclose(lst->html_file);
+            lst->html_file = nullptr;
 
             break; 
         }
@@ -685,6 +772,7 @@ void list_dtor(struct list* lst)
             lst->nodes_arr = nullptr;
 
             fclose(lst->html_file);
+            lst->html_file = nullptr;
 
             break;  
         }
@@ -708,6 +796,7 @@ void list_dtor(struct list* lst)
             lst->nodes_arr = nullptr;  
 
             fclose(lst->html_file);
+            lst->html_file = nullptr;
 
             break;
         }

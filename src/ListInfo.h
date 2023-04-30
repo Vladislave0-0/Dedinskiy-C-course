@@ -45,6 +45,8 @@ struct list
     int size     = 0;                   //| Current list size.
 
     int error_code = 0;                 //| List error code.
+
+    bool is_linearized = 0;             //| List linearization state.
 };
 
 //================================================================================================

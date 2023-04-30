@@ -18,7 +18,7 @@
 //==============================================================================================================
 
 #define PRINT_INFO(string)                                                                                                      \
-        printf(BLU "In function %s at %s(%u):\n" RESET WHT "%s\n" RESET, __PRETTY_FUNCTION__, __FILE__, __LINE__, string);      \
+        printf(BLU "In function %s at %s(%u):\n" RESET WHT "%s\n\n" RESET, __PRETTY_FUNCTION__, __FILE__, __LINE__, string);    \
 
 //==============================================================================================================
 
@@ -159,6 +159,15 @@ int translate_physical_adress_to_logical_position(struct list* lst, int phys_adr
  * @param lst the list pointer
  */
 void list_dtor(struct list* lst);
+
+//==============================================================================================================
+/**
+ * @brief Checks if a list is linear.
+ * 
+ * @param lst the list pointer
+ * @return int error_code
+ */
+int linearized_check(struct list* lst);
 
 //==============================================================================================================
 
