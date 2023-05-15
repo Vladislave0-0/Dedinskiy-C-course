@@ -1,0 +1,1 @@
+cos(x+(-50)*sin(y*x))*cos(x+(-50)*sin(y*x))
