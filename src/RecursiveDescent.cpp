@@ -1,18 +1,16 @@
-#include "RecursiveDescent.h"
-#include <math.h>
-#include "DSL.h"
+#include "./RecursiveDescent.h"
 
-//======================================================================
+//==================================================================================================================================
 
-void file_processing(struct Tree* tree, const char* filename)
+int file_processing(struct Tree* tree, const char* filename)
 {
     tree->mainfile = fopen(filename, "rb");
 
     if(tree->mainfile == nullptr)
     {
-        printf("BAD_MAINFILE\n");
+        tree->error_code = ERROR_OPEN_MAINFILE;
 
-        return;
+        RETURN_DIFF_ERROR(ERROR_OPEN_MAINFILE);
     }
 
     num_of_chars(tree, filename);
@@ -20,11 +18,13 @@ void file_processing(struct Tree* tree, const char* filename)
     chars_buffer(tree, tree->mainfile);
 
     fclose(tree->mainfile);
+
+    return SUCCESS;
 }
 
-//======================================================================
+//==================================================================================================================================
 
-void num_of_chars(struct Tree* tree, const char* filename)
+int num_of_chars(struct Tree* tree, const char* filename)
 {
     struct stat buf = {};
 
@@ -32,34 +32,35 @@ void num_of_chars(struct Tree* tree, const char* filename)
 
     if(buf.st_size <= 0)
     {
-        printf("BAD_CHARS_NUM\n");
+        tree->error_code = ERROR_NUM_OF_CHARS;
 
-        return;
+        RETURN_DIFF_ERROR(ERROR_NUM_OF_CHARS);
     }
 
     tree->chars_num =  buf.st_size;
+
+    return SUCCESS;
 }
 
-//======================================================================
+//==================================================================================================================================
 
-void chars_buffer(struct Tree* tree, FILE* stream)
+int chars_buffer(struct Tree* tree, FILE* stream)
 {
     tree->buffer_ptr = (char*)calloc(tree->chars_num + 1, sizeof(char));
-
     if(tree->buffer_ptr == nullptr)
     {
-        printf("BAD_CHARS_BUFFER\n");
+        tree->error_code = ERROR_BUFFER_CALLOC;
 
-        return;
+        RETURN_DIFF_ERROR(ERROR_BUFFER_CALLOC);
     }
 
-    size_t fread_ch = fread(tree->buffer_ptr, sizeof(char), tree->chars_num, stream);
 
+    size_t fread_ch = fread(tree->buffer_ptr, sizeof(char), tree->chars_num, stream);
     if(fread_ch != tree->chars_num)
     {
-        printf("BAD_FREAD\n");
+        tree->error_code = ERROR_FREAD;
 
-        return;
+        RETURN_DIFF_ERROR(ERROR_FREAD);
     }
 
     tree->buffer_ptr[tree->chars_num] = '\0';
@@ -75,6 +76,13 @@ void chars_buffer(struct Tree* tree, FILE* stream)
     }
 
     char* new_buffer = (char*)calloc(tree->chars_num - sep_num + 1, sizeof(char));
+    if(new_buffer == nullptr)
+    {
+        tree->error_code = ERROR_NEW_BUFFER_CALLOC;
+
+        RETURN_DIFF_ERROR(ERROR_NEW_BUFFER_CALLOC);
+    }
+
 
     size_t new_buf = 0;
     size_t old_buf = 0;
@@ -94,19 +102,26 @@ void chars_buffer(struct Tree* tree, FILE* stream)
     free(tree->buffer_ptr);
 
     tree->buffer_ptr = new_buffer;
+
+    return SUCCESS;
 }
 
-//======================================================================
+//==================================================================================================================================
 
-void variables_processing(struct Tree* tree)
+int variables_processing(struct Tree* tree)
 {
     printf(CYN "Hello! Enter the number of variables: " WHT);
-
     scanf("%d", &(tree->vars_num));
 
-    tree->vars_arr = (Var*)calloc(tree->vars_num, sizeof(Var));
 
-    assert(tree->vars_arr != nullptr);
+    tree->vars_arr = (Var*)calloc(tree->vars_num, sizeof(Var));
+    if(tree->vars_arr == nullptr)
+    {
+        tree->error_code = ERROR_VARIABLES_CALLOC;
+
+        RETURN_DIFF_ERROR(ERROR_VARIABLES_CALLOC);
+    }
+
 
     for(int i = 0; i < tree->vars_num; i++)
     {
@@ -117,33 +132,41 @@ void variables_processing(struct Tree* tree)
         scanf("%lf" RESET, &(tree->vars_arr[i].value));
     }
 
-    // for(int i = 0; i < tree->vars_num; i++)
-    // {
-    //     printf("\n\nVar_%d: %s --- %lf\n", i + 1, tree->vars_arr[i].text, tree->vars_arr[i].value);
-    // }
+    return SUCCESS;
 }
 
-//======================================================================
+//==================================================================================================================================
 
 Node* make_tree(struct Tree* tree)
 {
     Node* root = getGen(tree);
 
+    if(root == nullptr)
+    {
+        tree->error_code = ERROR_FILE_SYNTAX;
+
+        printf(RED "\nIn function %s at %s(%u):\nError code: %d. Check file \"Tree.h\" to decipher "
+                   "the error code.\n\n" RESET, __PRETTY_FUNCTION__, __FILE__, __LINE__, tree->error_code);
+    }
+
     return root;
 }
 
-//======================================================================
+//==================================================================================================================================
 
 Node* getGen(struct Tree* tree)
 {    
     Node* root = getExp(tree);
 
-    assert(STR[STR_POS] == '\0');
+    if(STR[STR_POS] != '\0')
+    {
+        return nullptr;
+    }
 
     return root;
 }
 
-//==============================================================================
+//==================================================================================================================================
 
 Node* getExp(struct Tree* tree)
 {
@@ -169,6 +192,11 @@ Node* getExp(struct Tree* tree)
 
         right_child = getMul(tree);
 
+        if(right_child == nullptr)
+        {
+            return nullptr;
+        }
+
         parent->right_child = right_child;
 
         left_child = parent;
@@ -177,7 +205,7 @@ Node* getExp(struct Tree* tree)
     return left_child;
 }
 
-//==============================================================================
+//==================================================================================================================================
 
 Node* getMul(struct Tree* tree)
 {
@@ -202,6 +230,10 @@ Node* getMul(struct Tree* tree)
         }
 
         right_child = getDeg(tree);
+        if(right_child == nullptr)
+        {
+            return nullptr;
+        }
 
         parent->right_child = right_child;
 
@@ -211,7 +243,7 @@ Node* getMul(struct Tree* tree)
     return left_child;
 }
 
-//==============================================================================
+//==================================================================================================================================
 
 Node* getDeg(struct Tree* tree)
 {
@@ -219,11 +251,16 @@ Node* getDeg(struct Tree* tree)
     Node* right_child = nullptr;
     Node* parent      = nullptr;
 
-    if(STR[STR_POS] == '^')
+    while(STR[STR_POS] == '^')
     {
         STR_POS++;
 
         right_child = getBrt(tree);
+
+        if(right_child == nullptr)
+        {
+            return nullptr;
+        }
 
         parent = POW_NODE(left_child, right_child);
 
@@ -233,7 +270,7 @@ Node* getDeg(struct Tree* tree)
     return left_child;
 }
 
-//==============================================================================
+//==================================================================================================================================
 
 Node* getBrt(struct Tree* tree)
 {
@@ -245,7 +282,10 @@ Node* getBrt(struct Tree* tree)
 
         node = getExp(tree);
 
-        assert(STR[STR_POS++] == ')');
+        if(STR[STR_POS++] != ')')
+        {
+            return nullptr;
+        }
     }
 
     else if((STR[STR_POS] >= '0' && STR[STR_POS] <= '9') || (STR[STR_POS] == '-'))
@@ -261,7 +301,7 @@ Node* getBrt(struct Tree* tree)
     return node;
 }
 
-//==============================================================================
+//==================================================================================================================================
 
 Node* getWord(struct Tree* tree)
 {
@@ -269,13 +309,23 @@ Node* getWord(struct Tree* tree)
 
     char* variable = getVar(tree);
 
+    if(variable == nullptr)
+    {
+        tree->error_code = ERROR_GET_VAR_CALLOC;
+
+        printf(RED "\nIn function %s at %s(%u):\nError code: %d. Check file \"Tree.h\" to decipher "
+                   "the error code.\n\n" RESET, __PRETTY_FUNCTION__, __FILE__, __LINE__, tree->error_code);
+
+        return nullptr;
+    }
+
     if(STR[STR_POS] == '(')
     {
         STR_POS++;
 
         Node* arg_node = getExp(tree);
 
-        if(!strcasecmp(variable, "sqrt"))           node = SQRT_NODE  (arg_node);
+        if(     !strcasecmp(variable, "sqrt"))      node = SQRT_NODE  (arg_node);
         else if(!strcasecmp(variable, "sin"))       node = SIN_NODE   (arg_node);
         else if(!strcasecmp(variable, "cos"))       node = COS_NODE   (arg_node);
         else if(!strcasecmp(variable, "tg"))        node = TG_NODE    (arg_node);
@@ -288,16 +338,30 @@ Node* getWord(struct Tree* tree)
         else if(!strcasecmp(variable, "ch"))        node = CH_NODE    (arg_node);
         else if(!strcasecmp(variable, "ln"))        node = LN_NODE    (arg_node);
         else if(!strcasecmp(variable, "exp"))       node = EXP_NODE   (arg_node);
+        else return nullptr;
 
-        assert(STR[STR_POS++] == ')');
+        if(STR[STR_POS++] != ')')
+        {
+            return nullptr;
+        }
+
         free(variable);
+        variable = nullptr;
     }
 
     else
     {
         if(find_var(tree, variable) == 0)
         {
-            add_var(tree, variable);
+            if(add_var(tree, variable) == nullptr)
+            {
+                tree->error_code = ERROR_ADD_VAR_REALLOC;
+
+                printf(RED "\nIn function %s at %s(%u):\nError code: %d. Check file \"Tree.h\" to decipher "
+                            "the error code.\n\n" RESET, __PRETTY_FUNCTION__, __FILE__, __LINE__, tree->error_code);
+
+                return nullptr;
+            }
         }
 
         tree->vars_to_free[tree->vars_num_to_free++] = variable;
@@ -309,13 +373,16 @@ Node* getWord(struct Tree* tree)
     return node;
 }
 
-//==============================================================================
+//==================================================================================================================================
 
 char* getVar(struct Tree* tree)
 {
     char* variable = (char*)calloc(MAX_WORD_LEN, sizeof(char));
 
-    assert(variable != nullptr);
+    if(variable == nullptr)
+    {
+        return nullptr;
+    }
 
     for(int i = 0; (STR[STR_POS] >= 'A' && STR[STR_POS] <= 'Z') || (STR[STR_POS] >= 'a' && STR[STR_POS] <= 'z'); i++, STR_POS++)
     {
@@ -325,7 +392,7 @@ char* getVar(struct Tree* tree)
     return variable;
 }
 
-//==============================================================================
+//==================================================================================================================================
 
 int find_var(struct Tree* tree, char* variable)
 {
@@ -340,22 +407,25 @@ int find_var(struct Tree* tree, char* variable)
     return 0;
 }
 
-//==============================================================================
+//==================================================================================================================================
 
-void add_var(struct Tree* tree, char* variable)
+Var* add_var(struct Tree* tree, char* variable)
 {
-    tree->vars_arr = (Var*)realloc(tree->vars_arr, (tree->vars_num + 1)* sizeof(Var));
+    tree->vars_arr = (Var*)realloc(tree->vars_arr, (tree->vars_num + 1) * sizeof(Var));
 
-    assert(tree->vars_arr != nullptr);
+    if(tree->vars_arr == nullptr)
+    {
+        return nullptr;
+    }
 
     strcpy(tree->vars_arr[tree->vars_num].text, variable);
 
-    tree->vars_arr[tree->vars_num].value = POISON;
+    tree->vars_arr[tree->vars_num++].value = POISON;
 
-    tree->vars_num++;
+    return tree->vars_arr;
 }
 
-//==============================================================================
+//==================================================================================================================================
 
 Node* getNum(struct Tree* tree)
 {
@@ -375,7 +445,15 @@ Node* getNum(struct Tree* tree)
             ;
     }
 
-    assert(STR_POS > calls_num);
+    if(STR_POS <= calls_num)
+    {
+        tree->error_code = ERROR_GET_NUM;
+
+        printf(RED "\nIn function %s at %s(%u):\nError code: %d. Check file \"Tree.h\" to decipher "
+                    "the error code.\n\n" RESET, __PRETTY_FUNCTION__, __FILE__, __LINE__, tree->error_code);
+
+        return nullptr;
+    }
 
     return CREATE_NUM(val);
 }

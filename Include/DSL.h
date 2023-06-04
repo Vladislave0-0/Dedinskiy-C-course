@@ -26,3 +26,15 @@
 #define CH_NODE(    right_child) CREATE_FUNC(right_child, "ch")
 #define LN_NODE(    right_child) CREATE_FUNC(right_child, "ln")
 #define EXP_NODE(   right_child) CREATE_FUNC(right_child, "exp")
+
+// #defines for differentiation                 
+#define cL define_copy(root->left_child)
+#define cR define_copy(root->right_child)
+#define dL define_make_diff(init_tree, root->left_child, diff_var)
+#define dR define_make_diff(init_tree, root->right_child, diff_var)
+
+#define Add(left, right) CREATE_OP(left, right, '+')
+#define Sub(left, right) CREATE_OP(left, right, '-')
+#define Mul(left, right) CREATE_OP(left, right, '*')
+#define Div(left, right) CREATE_OP(left, right, '/')
+#define Pow(left, right) CREATE_OP(left, right, '^')

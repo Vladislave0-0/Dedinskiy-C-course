@@ -1,0 +1,42 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[10pt]{extsizes}
+\usepackage{amsmath, amsfonts, amssymb, amsthm, mathtools}
+\usepackage{geometry}
+\geometry{
+	a4paper,
+	left = 20 mm,
+	top = 20 mm,
+}
+
+\title{\vspace{-1.0cm}\textbf{Taking the derivative of a function.}}
+\author{Vlad Lazar aka Properdosik and god of recursions.}
+
+\begin{document}
+\maketitle
+\section{Introduction}
+\textit{Rest in peace, my brothers, for it is coming...}
+
+\section{Variables processing.}
+Variables that you entered during initialization:\\
+$x = 8.156$
+\\$y = 9.123$
+\\$z = 15.7109$
+
+\section{The entered function.}
+$f(x,\ y,\ z) = sin(tg(ctg(x \cdot y + ch(ln(z))))) \cdot cos(tg(ctg(x \cdot y + ch(ln(z))))) \cdot ln(z \cdot x \cdot y)$
+
+\section{Variable substitution in entered function.}
+$\frac{\partial f(8.156,\ 9.123,\ 15.7109)}{\partial x} = 2.3594$
+
+\section{The first derivative of the variable x.}
+$\frac{\partial f(x,\ y,\ z)}{\partial x} = (cos(tg(ctg(x \cdot y + ch(ln(z))))) \cdot \frac{1}{cos(ctg(x \cdot y + ch(ln(z))))^{2}} \cdot \frac{-1}{sin(x \cdot y + ch(ln(z)))^{2}} \cdot ((1 \cdot y + 0 \cdot x) + sh(ln(z)) \cdot \frac{0}{z}) \cdot cos(tg(ctg(x \cdot y + ch(ln(z))))) + (-1) \cdot sin(tg(ctg(x \cdot y + ch(ln(z))))) \cdot \frac{1}{cos(ctg(x \cdot y + ch(ln(z))))^{2}} \cdot \frac{-1}{sin(x \cdot y + ch(ln(z)))^{2}} \cdot ((1 \cdot y + 0 \cdot x) + sh(ln(z)) \cdot \frac{0}{z}) \cdot sin(tg(ctg(x \cdot y + ch(ln(z)))))) \cdot ln(z \cdot x \cdot y) + \frac{((0 \cdot x + 1 \cdot z) \cdot y + 0 \cdot z \cdot x)}{z \cdot x \cdot y} \cdot sin(tg(ctg(x \cdot y + ch(ln(z))))) \cdot cos(tg(ctg(x \cdot y + ch(ln(z)))))$
+
+\section{Simplified first derivative of the variable x.}
+$\frac{\partial f(x,\ y,\ z)}{\partial x} = (cos(tg(ctg(x \cdot y + ch(ln(z))))) \cdot \frac{1}{cos(ctg(x \cdot y + ch(ln(z))))^{2}} \cdot \frac{-1}{sin(x \cdot y + ch(ln(z)))^{2}} \cdot y \cdot cos(tg(ctg(x \cdot y + ch(ln(z))))) + (-1) \cdot sin(tg(ctg(x \cdot y + ch(ln(z))))) \cdot \frac{1}{cos(ctg(x \cdot y + ch(ln(z))))^{2}} \cdot \frac{-1}{sin(x \cdot y + ch(ln(z)))^{2}} \cdot y \cdot sin(tg(ctg(x \cdot y + ch(ln(z)))))) \cdot ln(z \cdot x \cdot y) + \frac{z \cdot y}{z \cdot x \cdot y} \cdot sin(tg(ctg(x \cdot y + ch(ln(z))))) \cdot cos(tg(ctg(x \cdot y + ch(ln(z)))))$
+
+\section{Variable substitution in first derivative.}
+$\frac{\partial f(8.156,\ 9.123,\ 15.7109)}{\partial x} = -6548.9$
+
+\end{document}

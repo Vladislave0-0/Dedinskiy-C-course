@@ -3,26 +3,25 @@
 
 //======================================================================
 
-#include "Tree.h"
 #include <sys/stat.h>
-#include "Colors.h"
-#include <assert.h>
+
+#include "./Tree.h"
 
 //======================================================================
 
-void file_processing(struct Tree* tree, const char* filename);
+int file_processing(struct Tree* tree, const char* filename);
 
 //======================================================================
 
-void num_of_chars(struct Tree* tree, const char* filename);
+int num_of_chars(struct Tree* tree, const char* filename);
 
 //======================================================================
 
-void chars_buffer(struct Tree* tree, FILE* stream);
+int chars_buffer(struct Tree* tree, FILE* stream);
 
 //======================================================================
 
-void variables_processing(struct Tree* tree);
+int variables_processing(struct Tree* tree);
 
 //======================================================================
 
@@ -62,7 +61,7 @@ int find_var(struct Tree* tree, char* variable);
 
 //==============================================================================
 
-void add_var(struct Tree* tree, char* variable);
+Var* add_var(struct Tree* tree, char* variable);
 
 //==============================================================================
 
