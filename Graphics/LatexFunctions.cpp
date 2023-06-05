@@ -36,7 +36,7 @@ void tex_print_tree(Node* root, FILE* tex_file, const char* section)
         {
             if(root->parent != nullptr)
             {
-                if(root->parent->type == FUNC)
+                if((root->parent->type == FUNC) || ((root->parent->type == OP) && (root->parent->val.op_code == '/')))
                 {
                     tex_print_tree(root->left_child, tex_file, section);
                     fprintf(tex_file, " + ");
@@ -159,7 +159,7 @@ void tex_print_var(Tree* tree, FILE* fileptr)
 
 //===================================================================================================================================
 
-void func_for_texdef(FILE* file, const char* section, Tree* tree, const char* derivative_var, int derivative_number, int print_type)
+void func_for_tex_define(FILE* file, const char* section, Tree* tree, const char* derivative_var, int derivative_number, int print_type)
 {
     fprintf(file, "\n\\section{%s}\n", section);                                            
     fprintf(file, "$");                                                                     

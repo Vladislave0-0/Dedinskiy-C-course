@@ -20,23 +20,32 @@
 
 \section{Variables processing.}
 Variables that you entered during initialization:\\
-$x = 8.156$
-\\$y = 9.123$
-\\$z = 15.7109$
+$x = 2.0111$
+\\$y = 6.1561$
+\\$z = 1.1651$
 
 \section{The entered function.}
-$f(x,\ y,\ z) = sin(tg(ctg(x \cdot y + ch(ln(z))))) \cdot cos(tg(ctg(x \cdot y + ch(ln(z))))) \cdot ln(z \cdot x \cdot y)$
+$f(x,\ y,\ z) = arctg(x \cdot y^{2} + z \cdot x^{2})$
 
 \section{Variable substitution in entered function.}
-$\frac{\partial f(8.156,\ 9.123,\ 15.7109)}{\partial x} = 2.3594$
-
-\section{The first derivative of the variable x.}
-$\frac{\partial f(x,\ y,\ z)}{\partial x} = (cos(tg(ctg(x \cdot y + ch(ln(z))))) \cdot \frac{1}{cos(ctg(x \cdot y + ch(ln(z))))^{2}} \cdot \frac{-1}{sin(x \cdot y + ch(ln(z)))^{2}} \cdot ((1 \cdot y + 0 \cdot x) + sh(ln(z)) \cdot \frac{0}{z}) \cdot cos(tg(ctg(x \cdot y + ch(ln(z))))) + (-1) \cdot sin(tg(ctg(x \cdot y + ch(ln(z))))) \cdot \frac{1}{cos(ctg(x \cdot y + ch(ln(z))))^{2}} \cdot \frac{-1}{sin(x \cdot y + ch(ln(z)))^{2}} \cdot ((1 \cdot y + 0 \cdot x) + sh(ln(z)) \cdot \frac{0}{z}) \cdot sin(tg(ctg(x \cdot y + ch(ln(z)))))) \cdot ln(z \cdot x \cdot y) + \frac{((0 \cdot x + 1 \cdot z) \cdot y + 0 \cdot z \cdot x)}{z \cdot x \cdot y} \cdot sin(tg(ctg(x \cdot y + ch(ln(z))))) \cdot cos(tg(ctg(x \cdot y + ch(ln(z)))))$
+$\frac{\partial f(2.0111,\ 6.1561,\ 1.1651)}{\partial x} = 1.55844$
 
 \section{Simplified first derivative of the variable x.}
-$\frac{\partial f(x,\ y,\ z)}{\partial x} = (cos(tg(ctg(x \cdot y + ch(ln(z))))) \cdot \frac{1}{cos(ctg(x \cdot y + ch(ln(z))))^{2}} \cdot \frac{-1}{sin(x \cdot y + ch(ln(z)))^{2}} \cdot y \cdot cos(tg(ctg(x \cdot y + ch(ln(z))))) + (-1) \cdot sin(tg(ctg(x \cdot y + ch(ln(z))))) \cdot \frac{1}{cos(ctg(x \cdot y + ch(ln(z))))^{2}} \cdot \frac{-1}{sin(x \cdot y + ch(ln(z)))^{2}} \cdot y \cdot sin(tg(ctg(x \cdot y + ch(ln(z)))))) \cdot ln(z \cdot x \cdot y) + \frac{z \cdot y}{z \cdot x \cdot y} \cdot sin(tg(ctg(x \cdot y + ch(ln(z))))) \cdot cos(tg(ctg(x \cdot y + ch(ln(z)))))$
+$\frac{\partial f(x,\ y,\ z)}{\partial x} = \frac{y^{2} + x^{2} \cdot \frac{2}{x} \cdot z}{1 + (x \cdot y^{2} + z \cdot x^{2})^{2}}$
 
-\section{Variable substitution in first derivative.}
-$\frac{\partial f(8.156,\ 9.123,\ 15.7109)}{\partial x} = -6548.9$
+\section{Variable substitution in first derivative of x.}
+$\frac{\partial f(2.0111,\ 6.1561,\ 1.1651)}{\partial x} = 0.006501$
+
+\section{Simplified first derivative of the variable y.}
+$\frac{\partial f(x,\ y,\ z)}{\partial y} = \frac{y^{2} \cdot \frac{2}{y} \cdot x}{1 + (x \cdot y^{2} + z \cdot x^{2})^{2}}$
+
+\section{Variable substitution in first derivative of y.}
+$\frac{\partial f(2.0111,\ 6.1561,\ 1.1651)}{\partial y} = 0.00378011$
+
+\section{Simplified first derivative of the variable z.}
+$\frac{\partial f(x,\ y,\ z)}{\partial z} = \frac{x^{2}}{1 + (x \cdot y^{2} + z \cdot x^{2})^{2}}$
+
+\section{Variable substitution in first derivative of z.}
+$\frac{\partial f(2.0111,\ 6.1561,\ 1.1651)}{\partial z} = 0.000617451$
 
 \end{document}

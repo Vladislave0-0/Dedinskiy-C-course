@@ -8,29 +8,19 @@ Node* make_diff(Tree* init_tree, Node* diff_node, Node* root, const char* diff_v
 {
     if(root->type == OP)
     {
-        if(root->val.op_code == '+')
+        switch(root->val.op_code)
         {
-            return Add(dL, dR);
-        }
+            case('+'): return Add(dL, dR);
+            case('-'): return Sub(dL, dR);
+            case('*'): return Add(Mul(dL, cR), Mul(dR, cL));
+            case('/'): return Div(Sub(Mul(dL, cR), Mul(dR, cL)), Pow(cR, CREATE_NUM(2)));
+            case('^'): return Mul(Pow(cL, cR), Add(Mul(dR, LN_NODE(cL)), Div(Mul(cR, dL), cL)));
 
-        else if(root->val.op_code == '-')
-        {
-            return Sub(dL, dR);
-        }
-
-        else if(root->val.op_code == '*')
-        {
-            return Add(Mul(dL, cR), Mul(dR, cL));
-        }
-
-        else if(root->val.op_code == '/')
-        {
-            return Div(Sub(Mul(dL, cR), Mul(dR, cL)), Pow(cR, CREATE_NUM(2)));
-        }
-
-        else if(root->val.op_code == '^')
-        {
-            return Mul(Pow(cL, cR), Add(Mul(dR, LN_NODE(cL)), Div(Mul(cR, dL), cL)));
+            default:
+            {
+                printf(RED "UNKNOWN OPERATOR IN FUNC MAKE_DIFF!\n\n" RESET);
+                break;
+            }
         }
     }
 
@@ -68,9 +58,9 @@ Node* make_diff(Tree* init_tree, Node* diff_node, Node* root, const char* diff_v
         
         if(!strcmp(root->val.var, "arccos"))    return Mul(Div(CREATE_NUM(-1), SQRT_NODE(Sub(CREATE_NUM(1), Pow(cR, CREATE_NUM(2))))), dR);
         
-        if(!strcmp(root->val.var, "arctg"))     return Div(dR, Sub(CREATE_NUM(1), Pow(cR, CREATE_NUM(2))));
+        if(!strcmp(root->val.var, "arctg"))     return Div(dR, Add(CREATE_NUM(1), Pow(cR, CREATE_NUM(2))));
         
-        if(!strcmp(root->val.var, "arcctg"))    return Div(Mul(CREATE_NUM(-1), dR), Sub(CREATE_NUM(1), Pow(cR, CREATE_NUM(2))));
+        if(!strcmp(root->val.var, "arcctg"))    return Div(Mul(CREATE_NUM(-1), dR), Add(CREATE_NUM(1), Pow(cR, CREATE_NUM(2))));
         
         if(!strcmp(root->val.var, "sh"))        return Mul(CH_NODE(cR), dR);
         
@@ -90,6 +80,7 @@ Node* define_copy(Node* node_side)
 {                      
     Node* cur_node = CREATE_NODE;  
     node_copy(cur_node, node_side); 
+
     return cur_node; 
 }
 
@@ -103,21 +94,12 @@ Node* define_make_diff(Tree* init_tree, Node* node_side, const char* diff_var)
     cur_node = make_diff(init_tree, cur_node, node_side, diff_var);
     Node* cur_node2 = cur_node;
 
-    if(cur_node1 != cur_node2) // указатель после дифференцирования меняется и первый каллок может быть утерян
+    if(cur_node1 != cur_node2)      //| the pointer changes after differentiation and the first call may be lost
     {
         free(cur_node1);
     }
 
     return cur_node;
-}
-
-//==========================================================================================================================================
-
-void other_tree_dtor(Tree* diff_tree)
-{
-    childs_dtor(diff_tree->root);
-
-    free(diff_tree);
 }
 
 //==========================================================================================================================================

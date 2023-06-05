@@ -1,1 +1,1 @@
-sin(tg(ctg(x*y + ch(ln(z)))))*cos(tg(ctg(x*y + ch(ln(z)))))*ln(z*x*y)
+arctg(x*y^2+z*x^2)

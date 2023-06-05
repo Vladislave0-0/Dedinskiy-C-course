@@ -145,6 +145,15 @@ void childs_dtor(struct Node* node)
 
 //================================================================================================================
 
+void other_tree_dtor(Tree* some_tree)
+{
+    childs_dtor(some_tree->root);
+
+    free(some_tree);
+}
+
+//================================================================================================================
+
 void variable_substitution(Tree* init_tree, Node* root)
 {
     if(root->left_child != nullptr)
@@ -174,46 +183,46 @@ void variable_substitution(Tree* init_tree, Node* root)
 
 //================================================================================================================
 
-void node_copy(struct Node* diff_node, struct Node* root)
+void node_copy(struct Node* some_node, struct Node* root)
 {
-    diff_node->type   = root->type;
-    diff_node->parent = root->parent;
+    some_node->type   = root->type;
+    some_node->parent = root->parent;
 
-    if(diff_node->type == NUM)
+    if(some_node->type == NUM)
     {
-        diff_node->val.number = root->val.number;
+        some_node->val.number = root->val.number;
     }
 
-    else if(diff_node->type == OP)
+    else if(some_node->type == OP)
     {
-        diff_node->val.op_code = root->val.op_code;
+        some_node->val.op_code = root->val.op_code;
     }
 
-    else if((diff_node->type == VAR) || (diff_node->type == FUNC))
+    else if((some_node->type == VAR) || (some_node->type == FUNC))
     {
-        diff_node->val.var = root->val.var;
+        some_node->val.var = root->val.var;
     }
 
     if(root->left_child != nullptr)
     {
-        diff_node->left_child = CREATE_NODE;
-        node_copy(diff_node->left_child, root->left_child);
+        some_node->left_child = CREATE_NODE;
+        node_copy(some_node->left_child, root->left_child);
     }
 
     else
     {
-        diff_node->left_child = nullptr;
+        some_node->left_child = nullptr;
     }
 
     if(root->right_child != nullptr)
     {
-        diff_node->right_child = CREATE_NODE;
-        node_copy(diff_node->right_child, root->right_child);
+        some_node->right_child = CREATE_NODE;
+        node_copy(some_node->right_child, root->right_child);
     }
 
     else
     {
-        diff_node->right_child = nullptr;
+        some_node->right_child = nullptr;
     }
 }
 

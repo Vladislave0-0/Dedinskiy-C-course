@@ -45,19 +45,41 @@ int main()
     diff_tree->root = make_diff(init_tree, diff_tree->root, init_tree->root, "x");
     childs_dtor(root_to_free);
     parents_copy(diff_tree->root);
-    TEX_PRINT_TREE(tex_file, "The first derivative of the variable x.", init_tree, diff_tree->root, "x", 1, VARIABLE);
+    // TEX_PRINT_TREE(tex_file, "The first derivative of the variable x.", init_tree, diff_tree->root, "x", 1, VARIABLE);
     simplification(init_tree, diff_tree->root);
     TEX_PRINT_TREE(tex_file, "Simplified first derivative of the variable x.", init_tree, diff_tree->root, "x", 1, VARIABLE);
-    make_graph(diff_tree->root, "DiffTree.txt");
-
-
+    make_graph(diff_tree->root, "DiffTree_var_x.txt");
     node_copy(numerical_tree->root, diff_tree->root);
     variable_substitution(init_tree, numerical_tree->root);
     func_like_eval(numerical_tree->root);
-    TEX_PRINT_TREE(tex_file, "Variable substitution in first derivative.", init_tree, numerical_tree->root, "x", 1, NUMBER);
+    TEX_PRINT_TREE(tex_file, "Variable substitution in first derivative of x.", init_tree, numerical_tree->root, "x", 1, NUMBER);
+
+
+    diff_tree->root = make_diff(init_tree, diff_tree->root, init_tree->root, "y");
+    parents_copy(diff_tree->root);
+    // TEX_PRINT_TREE(tex_file, "The first derivative of the variable y.", init_tree, diff_tree->root, "y", 1, VARIABLE);
+    simplification(init_tree, diff_tree->root);
+    TEX_PRINT_TREE(tex_file, "Simplified first derivative of the variable y.", init_tree, diff_tree->root, "y", 1, VARIABLE);
+    make_graph(diff_tree->root, "DiffTree_var_y.txt");
+    node_copy(numerical_tree->root, diff_tree->root);
+    variable_substitution(init_tree, numerical_tree->root);
+    func_like_eval(numerical_tree->root);
+    TEX_PRINT_TREE(tex_file, "Variable substitution in first derivative of y.", init_tree, numerical_tree->root, "y", 1, NUMBER);
+
+
+    diff_tree->root = make_diff(init_tree, diff_tree->root, init_tree->root, "z");
+    parents_copy(diff_tree->root);
+    // TEX_PRINT_TREE(tex_file, "The first derivative of the variable z.", init_tree, diff_tree->root, "z", 1, VARIABLE);
+    simplification(init_tree, diff_tree->root);
+    TEX_PRINT_TREE(tex_file, "Simplified first derivative of the variable z.", init_tree, diff_tree->root, "z", 1, VARIABLE);
+    make_graph(diff_tree->root, "DiffTree_var_z.txt");
+    node_copy(numerical_tree->root, diff_tree->root);
+    variable_substitution(init_tree, numerical_tree->root);
+    func_like_eval(numerical_tree->root);
+    TEX_PRINT_TREE(tex_file, "Variable substitution in first derivative of z.", init_tree, numerical_tree->root, "z", 1, NUMBER);
+
+
     other_tree_dtor(numerical_tree);
-
-
     TEX_END(tex_file, tex_filename, "SomeTexInfo");
     other_tree_dtor(diff_tree);
     init_tree_dtor(init_tree);

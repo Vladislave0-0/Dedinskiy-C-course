@@ -364,11 +364,15 @@ Node* getWord(struct Tree* tree)
             }
         }
 
+        if(tree->vars_num_to_free >= INIT_WORDS_NUM - 1)
+        {
+            printf(RED "Ohh, INIT_WORDS_NUM in Tree.h is small. Increase it!" RESET);
+        }
+
         tree->vars_to_free[tree->vars_num_to_free++] = variable;
 
         node = CREATE_VAR(variable);
     }
-
 
     return node;
 }

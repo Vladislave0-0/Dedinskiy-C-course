@@ -2,24 +2,28 @@
 
 //=====================================================================================================================
 
-#define PRINT_NUM                                                                                                                                                                       \
-        fprintf(dotfile, "\tnode_%p [style = \"filled\", fillcolor = skyblue, shape = Mrecord, label = \"{{<f1> %p}| {type: NUM | value = %lf} | {<f2>%p | <f3> %p}}\"];\n",            \
-                          root, root, root->val.number, root->right_child, root->right_child);                                                                                          \
+#define PRINT_NUM                                                                                           \
+        fprintf(dotfile, "\tnode_%p [style = \"filled\", fillcolor = skyblue, shape = Mrecord, label = "    \
+                         "\"{{<f1> %p}| {type: NUM | value = %lf} | {<f2>%p | <f3> %p}}\"];\n",             \
+                          root, root, root->val.number, root->right_child, root->right_child);              \
 
 
-#define PRINT_VAR                                                                                                                                                                       \
-        fprintf(dotfile, "\tnode_%p [style = \"filled\", fillcolor = red, shape = Mrecord, label = \"{{<f1> %p}| {type: VAR | value = %s} | {<f2>%p | <f3> %p}}\"];\n",                 \
-                          root, root, root->val.var, root->left_child, root->right_child);                                                                                              \
+#define PRINT_VAR                                                                                           \
+        fprintf(dotfile, "\tnode_%p [style = \"filled\", fillcolor = red, shape = Mrecord, label = "        \
+                         "\"{{<f1> %p}| {type: VAR | value = %s} | {<f2>%p | <f3> %p}}\"];\n",              \
+                          root, root, root->val.var, root->left_child, root->right_child);                  \
 
 
-#define PRINT_FUNC                                                                                                                                                                      \
-        fprintf(dotfile, "\tnode_%p [style = \"filled\", fillcolor = green, shape = Mrecord, label = \"{{<f1> %p}| {type: FUNC | value = %s} | {<f2>%p | <f3> %p}}\"];\n",              \
-                          root, root, root->val.var, root->left_child, root->right_child);                                                                                              \
+#define PRINT_FUNC                                                                                          \
+        fprintf(dotfile, "\tnode_%p [style = \"filled\", fillcolor = green, shape = Mrecord, label = "      \
+                         "\"{{<f1> %p}| {type: FUNC | value = %s} | {<f2>%p | <f3> %p}}\"];\n",             \
+                          root, root, root->val.var, root->left_child, root->right_child);                  \
 
 
-#define PRINT_OP                                                                                                                                                                        \
-        fprintf(dotfile, "\tnode_%p [style = \"filled\", fillcolor = yellow, shape = Mrecord, label = \"{{<f1> %p}| {type: OP | value = %c} | {<f2>%p | <f3> %p}}\"];\n",               \
-                          root, root, root->val.op_code, root->left_child, root->right_child);                                                                                          \
+#define PRINT_OP                                                                                            \
+        fprintf(dotfile, "\tnode_%p [style = \"filled\", fillcolor = yellow, shape = Mrecord, label = "     \
+                         "\"{{<f1> %p}| {type: OP | value = %c} | {<f2>%p | <f3> %p}}\"];\n",               \
+                          root, root, root->val.op_code, root->left_child, root->right_child);              \
 
 
 #define PRINT_CHILD                                                                                 \
@@ -110,6 +114,3 @@ void print_dot_tree(Node* root, FILE* dotfile)
         print_dot_tree(root->right_child, dotfile);
     }
 }
-
-//dot graphviz.txt -Tpng -o tree.png
-//pdflatex TexExpression.tex > nul 2>&1
