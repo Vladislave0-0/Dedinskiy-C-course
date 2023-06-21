@@ -11,3 +11,5 @@ CC = g++
 all:
 	@$(CC) $(CFLAGS) main.cpp Stack.cpp StackDebug.cpp -o $(TARGET)
     
+clean:
+	rm $(TARGET)

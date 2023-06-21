@@ -20,19 +20,19 @@ int stack_verify(Stack* stk)
 
 #  ifdef CANARY_PROTECTION
 
-        stk->error_code = (stk->data == nullptr) * ERROR_DATA_NULLPTR          +
-        (stk->size > stk->capacity) * ERROR_STACK_CAPACITY                     +
-        (stk->data_left_can != DATA_CANARY) * ERROR_DATA_LEFT_CANARY_DEAD      +
-        (stk->data_right_can != DATA_CANARY) * ERROR_DATA_RIGHT_CANARY_DEAD    +
-        (stk->stk_left_can != STK_CANARY) * ERROR_STK_LEFT_CANARY_DEAD         +
-        (stk->stk_right_can != STK_CANARY) * ERROR_STK_RIGHT_CANARY_DEAD       +
-        (stk->data_hash != data_hash(stk)) * ERROR_DATA_HASH;
+        stk->error_code = (stk->data == nullptr)               * ERROR_DATA_NULLPTR           +
+                          (stk->size > stk->capacity)          * ERROR_STACK_CAPACITY         +
+                          (stk->data_left_can != DATA_CANARY)  * ERROR_DATA_LEFT_CANARY_DEAD  +
+                          (stk->data_right_can != DATA_CANARY) * ERROR_DATA_RIGHT_CANARY_DEAD +
+                          (stk->stk_left_can != STK_CANARY)    * ERROR_STK_LEFT_CANARY_DEAD   +
+                          (stk->stk_right_can != STK_CANARY)   * ERROR_STK_RIGHT_CANARY_DEAD  +
+                          (stk->data_hash != data_hash(stk))   * ERROR_DATA_HASH;
 
 #  else
 
-        stk->error_code = (stk->data == nullptr) * ERROR_DATA_NULLPTR          +
-        (stk->size > stk->capacity) * ERROR_STACK_CAPACITY                     +
-        (stk->data_hash != data_hash(stk)) * ERROR_DATA_HASH;
+        stk->error_code = (stk->data == nullptr)             * ERROR_DATA_NULLPTR   +
+                          (stk->size > stk->capacity)        * ERROR_STACK_CAPACITY +
+                          (stk->data_hash != data_hash(stk)) * ERROR_DATA_HASH;
 
 
 #  endif //CANARY_PROTECTION
@@ -41,17 +41,17 @@ int stack_verify(Stack* stk)
 #else
 #  ifdef CANARY_PROTECTION
 
-        stk->error_code = (stk->data == nullptr) * ERROR_DATA_NULLPTR          +
-        (stk->size > stk->capacity) * ERROR_STACK_CAPACITY                     +
-        (stk->data_left_can != DATA_CANARY) * ERROR_DATA_LEFT_CANARY_DEAD      +
-        (stk->data_right_can != DATA_CANARY) * ERROR_DATA_RIGHT_CANARY_DEAD    +
-        (stk->stk_left_can != STK_CANARY) * ERROR_STK_LEFT_CANARY_DEAD         +
-        (stk->stk_right_can != STK_CANARY) * ERROR_STK_RIGHT_CANARY_DEAD;
+        stk->error_code = (stk->data == nullptr)               * ERROR_DATA_NULLPTR           +
+                          (stk->size > stk->capacity)          * ERROR_STACK_CAPACITY         +
+                          (stk->data_left_can != DATA_CANARY)  * ERROR_DATA_LEFT_CANARY_DEAD  +
+                          (stk->data_right_can != DATA_CANARY) * ERROR_DATA_RIGHT_CANARY_DEAD +
+                          (stk->stk_left_can != STK_CANARY)    * ERROR_STK_LEFT_CANARY_DEAD   +
+                          (stk->stk_right_can != STK_CANARY)   * ERROR_STK_RIGHT_CANARY_DEAD;
 
 #  else
 
-        stk->error_code = (stk->data == nullptr) * ERROR_DATA_NULLPTR          +
-        (stk->size > stk->capacity) * ERROR_STACK_CAPACITY;
+        stk->error_code = (stk->data == nullptr)      * ERROR_DATA_NULLPTR    +
+                          (stk->size > stk->capacity) * ERROR_STACK_CAPACITY;
 
 #  endif //CANARY_PROTECTION
 
@@ -151,7 +151,7 @@ long long calculate_hash(elem_t* pointer, size_t size)
 
     for(size_t i = 0; i < size; i++)
     {
-        hash = ((hash << 5) + hash) + pointer[i];
+        hash = (long long)(((hash << 5) + hash) + (long long)pointer[i]);
     }
 
     return hash;

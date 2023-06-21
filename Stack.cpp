@@ -38,10 +38,10 @@ int stack_ctor(Stack* stk)
         return ERROR_DATA_CALLOC;
     }
 
-    *stk->data = DATA_CANARY;
+    *stk->data = (elem_t)DATA_CANARY;
 
-    stk->data_left_can  = *stk->data;
-    stk->data_right_can = *(stk->data + stk->capacity + 1);
+    stk->data_left_can  = (size_t)*stk->data;
+    stk->data_right_can = (size_t)*(stk->data + stk->capacity + 1);
     
     stk->data_left_can = DATA_CANARY;
     stk->data_right_can = DATA_CANARY;
@@ -146,10 +146,10 @@ void stack_resize(Stack* stk, size_t new_capacity)
         exit(ERROR_DATA_REALLOC);
     }
 
-    *stk->data = DATA_CANARY;
+    *stk->data = (elem_t)DATA_CANARY;
 
-    stk->data_left_can  = *stk->data;
-    stk->data_right_can = *(stk->data + stk->capacity + 1);
+    stk->data_left_can  = (size_t)*stk->data;
+    stk->data_right_can = (size_t)*(stk->data + stk->capacity + 1);
     
     stk->data_left_can = DATA_CANARY;
     stk->data_right_can = DATA_CANARY;
@@ -244,12 +244,12 @@ void stk_print_log(Stack* stk)
         {
             if(i < stk->size)
             {
-                PRINT_LOG("   *[%lu] = %d\n", i, stk->data[i]);
+                PRINT_LOG("   *[%lu] = " FORM_SPEC "\n", i, stk->data[i]);
             }
 
             else
             {
-                PRINT_LOG("\t[%lu] = %d\t\t\t<-- POISON\n", i, stk->data[i]);
+                PRINT_LOG("\t[%lu] = " PSN_FORM_SPEC "\t\t\t<-- POISON\n", i, (psn_t)stk->data[i]);
             }
         }
 
