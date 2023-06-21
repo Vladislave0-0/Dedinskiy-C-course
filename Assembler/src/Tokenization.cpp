@@ -32,7 +32,7 @@ void AsmInfo_ctor(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct Fla
         AsmInfo->error = ERROR_TOK_ARR_CALLOC;
     }
 
-    AsmInfo->code = (int*)calloc(AsmInfo->quantity, sizeof(int));
+    AsmInfo->code = (float*)calloc(AsmInfo->quantity, sizeof(float));
     
     if(AsmInfo->code == nullptr)
     {
@@ -158,7 +158,7 @@ void tokens_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struc
                 {                                                                                                   \
                     strcpy(AsmInfo->tok_arr[AsmInfo->cur_ip].text, TextInfo->ptr_arr[TextInfo->cur_word]);          \
                                                                                                                     \
-                    AsmInfo->tok_arr[AsmInfo->cur_ip].value = (int)Flags->jumps_arr[i].ip;                          \
+                    AsmInfo->tok_arr[AsmInfo->cur_ip].value = (float)Flags->jumps_arr[i].ip;                          \
                                                                                                                     \
                     break;                                                                                          \
                 }                                                                                                   \
@@ -177,12 +177,19 @@ void args_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct 
         {
             // if it is VAL
             size_t VAL_chars = 0;
+            size_t dots_counter = 0;    
 
             for(size_t i = 0; i < strlen(TextInfo->ptr_arr[TextInfo->cur_word]); i++)
             {
                 if((TextInfo->ptr_arr[TextInfo->cur_word][i] == '-') && (i == 0))
                 {
                     i++;
+                }
+
+                if((TextInfo->ptr_arr[TextInfo->cur_word][i] == '.') && isdigit(TextInfo->ptr_arr[TextInfo->cur_word][i + 1]) != 0)
+                {
+                    dots_counter++;
+                    continue;
                 }
 
                 if(isdigit(TextInfo->ptr_arr[TextInfo->cur_word][i]) == 0)
@@ -193,7 +200,7 @@ void args_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct 
                 }
             }   
 
-            if(VAL_chars == 0)
+            if((VAL_chars == 0) && (dots_counter < 2))
             {
                 AsmInfo->cur_ip++;
 
@@ -201,7 +208,7 @@ void args_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct 
 
                 AsmInfo->tok_arr[AsmInfo->cur_ip].tok_type = VAL;
 
-                AsmInfo->tok_arr[AsmInfo->cur_ip].value = atoi(TextInfo->ptr_arr[TextInfo->cur_word]);
+                AsmInfo->tok_arr[AsmInfo->cur_ip].value = (float)atof(TextInfo->ptr_arr[TextInfo->cur_word]);
 
                 AsmInfo->tok_arr[AsmInfo->cur_ip - 1].asm_code += VAL_MASK;
 
@@ -317,7 +324,7 @@ void args_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct 
 
                     AsmInfo->tok_arr[AsmInfo->cur_ip].tok_type = VAL;
 
-                    AsmInfo->tok_arr[AsmInfo->cur_ip].value = atoi(TextInfo->ptr_arr[TextInfo->cur_word] + 1);
+                    AsmInfo->tok_arr[AsmInfo->cur_ip].value = (float)atof(TextInfo->ptr_arr[TextInfo->cur_word] + 1);
 
                     AsmInfo->tok_arr[AsmInfo->cur_ip - 1].asm_code += VAL_MASK + RAM_MASK;
 
@@ -365,7 +372,7 @@ void args_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct 
 
                     AsmInfo->tok_arr[AsmInfo->cur_ip].tok_type = VAL;
 
-                    AsmInfo->tok_arr[AsmInfo->cur_ip].value = atoi(TextInfo->ptr_arr[TextInfo->cur_word] + 1); 
+                    AsmInfo->tok_arr[AsmInfo->cur_ip].value = (float)atof(TextInfo->ptr_arr[TextInfo->cur_word] + 1); 
                 }
 
                 AsmInfo->cur_ip++;
@@ -528,7 +535,7 @@ void args_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct 
 
                     AsmInfo->tok_arr[AsmInfo->cur_ip].tok_type = VAL;
 
-                    AsmInfo->tok_arr[AsmInfo->cur_ip].value = atoi(TextInfo->ptr_arr[TextInfo->cur_word] + 1);
+                    AsmInfo->tok_arr[AsmInfo->cur_ip].value = (float)atof(TextInfo->ptr_arr[TextInfo->cur_word] + 1);
 
                     AsmInfo->tok_arr[AsmInfo->cur_ip - 1].asm_code += VAL_MASK + RAM_MASK;
 
@@ -577,7 +584,7 @@ void args_processing(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo, struct 
 
                     AsmInfo->tok_arr[AsmInfo->cur_ip].tok_type = VAL;
 
-                    AsmInfo->tok_arr[AsmInfo->cur_ip].value = atoi(TextInfo->ptr_arr[TextInfo->cur_word] + 1); 
+                    AsmInfo->tok_arr[AsmInfo->cur_ip].value = (float)atof(TextInfo->ptr_arr[TextInfo->cur_word] + 1); 
                 }
 
                 AsmInfo->cur_ip++;
@@ -723,14 +730,14 @@ void listing(struct AsmInfo* AsmInfo)
         {
             case(VAL):
             {
-                fprintf(AsmInfo->lst_file, "%-8d\t|\t", AsmInfo->tok_arr[i].value);
+                fprintf(AsmInfo->lst_file, "%-8g\t|\t", AsmInfo->tok_arr[i].value);
 
                 break;
             }
 
             case(FLAG):
             {
-                fprintf(AsmInfo->lst_file, "%-8d\t|\t", AsmInfo->tok_arr[i].value);
+                fprintf(AsmInfo->lst_file, "%-8d\t|\t", (int)AsmInfo->tok_arr[i].value);
 
                 break;
             }
@@ -797,22 +804,22 @@ void bin_file_code(struct AsmInfo* AsmInfo, struct TextInfo* TextInfo)
             continue;
         }
 
-        AsmInfo->code[i] = AsmInfo->tok_arr[i].asm_code;
+        AsmInfo->code[i] = (float)AsmInfo->tok_arr[i].asm_code;
     }
 
 
     AsmInfo->bin_file = create_file(TextInfo->asm_file_name, ".code");
 
-    int* binary_file_calloc = (int*)calloc(AsmInfo->quantity + 2, sizeof(int));
-    binary_file_calloc[0] = get_signature(AsmInfo);
-    binary_file_calloc[1] = (int)AsmInfo->quantity;
+    float* binary_file_calloc = (float*)calloc(AsmInfo->quantity + 2, sizeof(float));
+    binary_file_calloc[0] = (float)get_signature(AsmInfo);
+    binary_file_calloc[1] = (float)AsmInfo->quantity;
     
     for(size_t i = BINARY_HEADER_NUMBER; i < AsmInfo->quantity + BINARY_HEADER_NUMBER; i++)
     {
         binary_file_calloc[i] = AsmInfo->code[i - BINARY_HEADER_NUMBER];
     }
 
-    fwrite(binary_file_calloc, sizeof(int), AsmInfo->quantity + BINARY_HEADER_NUMBER, AsmInfo->bin_file);
+    fwrite(binary_file_calloc, sizeof(float), AsmInfo->quantity + BINARY_HEADER_NUMBER, AsmInfo->bin_file);
 
     free(binary_file_calloc);
 }

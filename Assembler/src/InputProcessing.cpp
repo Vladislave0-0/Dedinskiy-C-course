@@ -179,14 +179,23 @@ void lexical_processing(struct TextInfo* TextInfo, struct FlagsInfo* Flags)
 
         // ARG PROCESSING
         
-        // if it is VAL
-        size_t VAL_chars = 0;
+        // if it is VAL. Now it is double also
+        size_t VAL_chars    = 0;
+        size_t dots_counter = 0;
 
         for(size_t j = 0; j < strlen(TextInfo->ptr_arr[TextInfo->cur_word]); j++)
         {
             if((TextInfo->ptr_arr[TextInfo->cur_word][j] == '-') && (j == 0))
             {
                 j++;
+            }
+
+            // printf("%c\n", TextInfo->ptr_arr[TextInfo->cur_word][j]);
+
+            if((TextInfo->ptr_arr[TextInfo->cur_word][j] == '.') && isdigit(TextInfo->ptr_arr[TextInfo->cur_word][j + 1]) != 0)
+            {
+                dots_counter++;
+                continue;
             }
 
             if(isdigit(TextInfo->ptr_arr[TextInfo->cur_word][j]) == 0)
@@ -197,7 +206,7 @@ void lexical_processing(struct TextInfo* TextInfo, struct FlagsInfo* Flags)
             }
         }   
 
-        if(VAL_chars == 0)
+        if((VAL_chars == 0) && (dots_counter < 2))
         {
             continue;
         }

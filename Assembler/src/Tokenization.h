@@ -16,7 +16,7 @@ struct Tokens
 
     size_t tok_type = 0;                      //| Token type.
     int asm_code    = 0;                      //| Token represented as ASM code.
-    int value       = 0;                      //| Value for tokens with type VAL.
+    float value     = 0;                      //| Value for tokens with type VAL.
 
     int error = 0;                            //| Error during tokenization.
 };
@@ -31,7 +31,7 @@ struct AsmInfo
     size_t quantity   = 0;                    //| Number of tokens.
 
     Tokens* tok_arr = nullptr;                //| Array of token structures.
-    int* code       = nullptr;                //| Array with assembler codes.
+    float* code     = nullptr;                //| Array with assembler codes.
     size_t cur_ip   = 0;                      //| Current ip counter.
 
     size_t error = 0;                         //| Is equal 0, if there were no errors in tokenization.

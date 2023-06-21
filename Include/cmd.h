@@ -40,8 +40,8 @@ DEF_CMD(DIV, CMD, 0,
 {
     POOP(&h_val);
     POOP(&l_val);
-
-    if(h_val == 0)
+    
+    if(float_comparison(h_val, 0) == EQUAL)
     {
         cpu->error = ERROR_DEVISION_BY_ZERO;
 
@@ -55,7 +55,7 @@ DEF_CMD(IN, CMD, 0,
 {
     printf("Enter a number in stack: ");
 
-    scanf("%d", &arg);
+    scanf(FORM_SPEC, &arg);
     
     PUUSH(arg);
 })
@@ -64,30 +64,39 @@ DEF_CMD(OUT, CMD, 0,
 {
     POOP(&h_val);
 
-    printf("cpu_out: %d\n", h_val);
+    if(float_comparison(h_val, 0) == EQUAL)
+    {
+        printf("cpu_out: 0\n");
+    }
+
+    else
+    {
+        printf("cpu_out: " FORM_SPEC "\n", h_val);
+    }
+
 })
 
 DEF_CMD(RET, CMD, 0, 
 {
     POOP(&h_val);
     
-    cpu->cur_ip = h_val - 1;
+    cpu->cur_ip = (size_t)h_val - 1;
 })
 
 // JMP
 DEF_CMD(JMP, JUMP, 1, 
 {
-    cpu->cur_ip = *arg_ptr - 1;
+    cpu->cur_ip = (size_t)*arg_ptr - 1;
 })
 
 DEF_CMD(JE, JUMP, 1,
 {
     POOP(&h_val);
     POOP(&l_val);
-
-    if(l_val == h_val)
+    
+    if(float_comparison(l_val, h_val) == EQUAL)
     {
-        cpu->cur_ip = *arg_ptr - 1;
+        cpu->cur_ip = (size_t)*arg_ptr - 1;
     }
 })
 
@@ -96,9 +105,9 @@ DEF_CMD(JNE, JUMP, 1,
     POOP(&h_val);
     POOP(&l_val);
 
-    if(l_val != h_val)
+    if(float_comparison(l_val, h_val) != EQUAL)
     {
-        cpu->cur_ip = *arg_ptr - 1;
+        cpu->cur_ip = (size_t)*arg_ptr - 1;
     }  
 })
 
@@ -107,9 +116,9 @@ DEF_CMD(JG, JUMP, 1,
     POOP(&h_val);
     POOP(&l_val);
 
-    if(l_val > h_val)
+    if(float_comparison(l_val, h_val) == OVER)
     {
-        cpu->cur_ip = *arg_ptr - 1;
+        cpu->cur_ip = (size_t)*arg_ptr - 1;
     }  
 })
 
@@ -117,10 +126,10 @@ DEF_CMD(JGE, JUMP, 1,
 {
     POOP(&h_val);
     POOP(&l_val);
-
-    if(l_val >= h_val)
+    
+    if(float_comparison(l_val, h_val) != UNDER)
     {
-        cpu->cur_ip = *arg_ptr - 1;
+        cpu->cur_ip = (size_t)*arg_ptr - 1;
     }
 })
 
@@ -129,9 +138,9 @@ DEF_CMD(JLE, JUMP, 1,
     POOP(&h_val);
     POOP(&l_val);
 
-    if(l_val <= h_val)
+    if(float_comparison(l_val, h_val) != OVER)
     {
-        cpu->cur_ip = *arg_ptr - 1;
+        cpu->cur_ip = (size_t)*arg_ptr - 1;
     }
 })
 
@@ -140,17 +149,17 @@ DEF_CMD(JL, JUMP, 1,
     POOP(&h_val);
     POOP(&l_val);
 
-    if(l_val < h_val)
+    if(float_comparison(l_val, h_val) == UNDER)
     {
-        cpu->cur_ip = *arg_ptr - 1;
+        cpu->cur_ip = (size_t)*arg_ptr - 1;
     }  
 })
 
 DEF_CMD(CALL, JUMP, 1, 
 {
-    PUUSH((int)(cpu->cur_ip + 1));
+    PUUSH((elem_t)(cpu->cur_ip + 1));
 
-    cpu->cur_ip = *arg_ptr - 1;
+    cpu->cur_ip = (size_t)*arg_ptr - 1;
 })
 
 
@@ -194,7 +203,7 @@ DEF_CMD(SQRT, CMD, 0,
 {
     POOP(&h_val);
 
-    if(h_val < 0)
+    if(float_comparison(l_val, 0) == UNDER)
     {
         cpu->error = ERROR_NEG_SQRT_ROOT_NUM;
 
@@ -214,7 +223,7 @@ DEF_CMD(NEG, CMD, 0,
 DEF_CMD(REG_DUMP, CMD, 0,
 {
     printf("REG_DUMP:\n");
-    printf("[%d, %d, %d, %d]\n", RAX, RBX, RCX, RDX);
+    printf("[" FORM_SPEC ", " FORM_SPEC ", " FORM_SPEC ", " FORM_SPEC "]\n", RAX, RBX, RCX, RDX);
 })
 
 DEF_CMD(REG_PURGE, CMD, 0,
@@ -233,7 +242,7 @@ DEF_CMD(RAM_DUMP, CMD, 0,
 
     for(int m = 0, n = 1; m < RAM_SIZE; m++, n++)
     {
-        if(CRAM[m] == 0)
+        if(float_comparison(CRAM[m], 0) == EQUAL)
         {
             printf("□ ");
         }

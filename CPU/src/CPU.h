@@ -13,14 +13,15 @@
 
 //=======================================================================================
 
-const int REGISTER_SHIFT  = 21;
-const int RAM_SIZE        = 2304;
-const int REGS_NUM        = 4;
-const int MAX_WORD_LENGTH = 32; 
+const int REGISTER_SHIFT        = 21;
+const int RAM_SIZE              = 2304;
+const int REGS_NUM              = 4;
+const int MAX_WORD_LENGTH       = 32; 
+const double CMD_FLOAT_CONSTANT = 1E-6;
 
 //=======================================================================================
 
-#define GETKEY(arg) (arg & 0xFFFF)
+#define GETKEY(arg) ((int)arg & 0xFFFF)
 
 //=======================================================================================
 
@@ -123,6 +124,14 @@ enum TypeOfAsmCode
     UNKNOWN = 0,                //| Unknown type of the assembler code.
 };
 
+// enum for function float_comparison
+enum ComparisonResult
+{
+    UNDER = -1,
+    EQUAL =  0,
+    OVER  =  1,
+};
+
 //=======================================================================================
 /**
  * @brief General function of generating and executing code.
@@ -188,7 +197,18 @@ void get_arg(struct CPU* cpu, elem_t** arg);
  * @param cpu a structure for storing all information about the stack and assembly code.
  * @param arg command argument.
  */
-void get_label(struct CPU* cpu, int** arg);
+void get_label(struct CPU* cpu, elem_t** arg);
+
+//=======================================================================================
+/**
+ * @brief A function for comparing float numbers with an accuracy of 6 digits 
+ *        after the decimal point.
+ * 
+ * @param x1 first number
+ * @param x2 second number
+ * @return ComparisonResult 
+ */
+ComparisonResult float_comparison(const double x1, const double x2);
 
 //=======================================================================================
 

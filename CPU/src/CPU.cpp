@@ -43,6 +43,9 @@ int CPU_code_ctor(struct CPU* cpu, const char* cpu_file_name)
         return cpu->error;
     }
 
+    fclose(stk.log_file);
+
+
     return 0;
 }
 
@@ -88,11 +91,14 @@ int reading_file(struct CPU* cpu)
         return ERROR_VALUE_OF_ARGC;
     }
 
-    fread(file_buffer, sizeof(int), 1, cpu->bin_file);
-    fread(file_buffer + 1, sizeof(int), 1, cpu->bin_file);
+    fread(file_buffer, sizeof(elem_t), 1, cpu->bin_file);
+    fread(file_buffer + 1, sizeof(elem_t), 1, cpu->bin_file);
 
-    cpu->signature = file_buffer[0];
-    cpu->quantity = file_buffer[1];
+    cpu->signature = (int)file_buffer[0];
+    cpu->quantity  = (int)file_buffer[1];
+
+    // printf("%d\n", cpu->signature);
+    // printf("%d\n", cpu->quantity);
 
     cpu->code_buffer = (elem_t*)calloc(cpu->quantity, sizeof(elem_t));
     
@@ -103,7 +109,7 @@ int reading_file(struct CPU* cpu)
 
     // for(int i = 0; i < cpu->quantity; i++)
     // {
-    //     printf("[%d] == %d\n", i, cpu->code_buffer[i]);
+    //     printf("[%d] == " FORM_SPEC "\n", i, cpu->code_buffer[i]);
     // }
 
     free(file_buffer);
@@ -139,7 +145,8 @@ int reading_file(struct CPU* cpu)
 
 int execute_code(struct CPU* cpu, struct Stack* stk)
 {
-    elem_t arg = 0;
+    
+    elem_t  arg     = 0;
     elem_t* arg_ptr = &arg;
 
     elem_t h_val = 0;
@@ -147,7 +154,7 @@ int execute_code(struct CPU* cpu, struct Stack* stk)
 
     elem_t* code = cpu->code_buffer;
 
-    while(code[cpu->cur_ip] != HLT)
+    while(float_comparison(code[cpu->cur_ip], HLT) != EQUAL)
     {
         switch(GETKEY(code[cpu->cur_ip]))
         {
@@ -155,7 +162,7 @@ int execute_code(struct CPU* cpu, struct Stack* stk)
 
             default:
             {
-                printf("ПИЗДА РУЛЮ\n");
+                printf("SOMETHING WRONG IN EXECUTE_CODE!\n");
 
                 break;
             }
@@ -168,7 +175,7 @@ int execute_code(struct CPU* cpu, struct Stack* stk)
         cpu->cur_ip++;
 
         stk_print_log(stk);
-        PRINT_LOG("REG: [%d; %d; %d; %d]\n\n\n", RAX, RBX, RCX, RDX);
+        PRINT_LOG("REG: [" FORM_SPEC "; " FORM_SPEC "; " FORM_SPEC "; " FORM_SPEC "]\n\n\n", RAX, RBX, RCX, RDX);
     }
 
     return 0;
@@ -180,7 +187,7 @@ int execute_code(struct CPU* cpu, struct Stack* stk)
 
 void get_arg(struct CPU* cpu, elem_t** arg)
 {
-    int cmd = cpu->code_buffer[cpu->cur_ip];
+    int cmd = (int)cpu->code_buffer[cpu->cur_ip];
     **arg = 0;
 
     if(cmd & VAL_MASK)
@@ -197,12 +204,12 @@ void get_arg(struct CPU* cpu, elem_t** arg)
 
         if(cmd & RAM_MASK)
         {
-            **arg += cpu->REG[cpu->code_buffer[cpu->cur_ip] - REGISTER_SHIFT];
+            **arg += cpu->REG[(int)cpu->code_buffer[cpu->cur_ip] - REGISTER_SHIFT];
         }
 
         else
         {
-            *arg = &cpu->REG[cpu->code_buffer[cpu->cur_ip] - REGISTER_SHIFT];
+            *arg = &cpu->REG[(int)cpu->code_buffer[cpu->cur_ip] - REGISTER_SHIFT];
 
             return;
         }
@@ -210,7 +217,7 @@ void get_arg(struct CPU* cpu, elem_t** arg)
 
     if(cmd & RAM_MASK)
     {
-        *arg = &cpu->RAM[**arg];
+        *arg = &cpu->RAM[(int)**arg];
 
         return;
     }
@@ -218,9 +225,24 @@ void get_arg(struct CPU* cpu, elem_t** arg)
 
 //=============================================================================================================
 
-void get_label(struct CPU* cpu, int** arg)
+void get_label(struct CPU* cpu, elem_t** arg)
 {
     cpu->cur_ip++;
 
     **arg += cpu->code_buffer[cpu->cur_ip];
+}
+
+//=============================================================================================================
+
+ComparisonResult float_comparison(const double x1, const double x2)
+{
+    if (fabs(x1 - x2) <= CMD_FLOAT_CONSTANT)
+    {
+        return EQUAL;
+    }
+
+    else 
+    {
+        return ((x1-x2) > CMD_FLOAT_CONSTANT) ? OVER : UNDER;
+    }
 }

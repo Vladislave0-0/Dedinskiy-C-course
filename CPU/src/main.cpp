@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
         CPU_code_ctor(&cpu, argv[1]);
     }
 
+    // fclose();
+
     // if(CPU_ctor(&cpu) != 0)
     // {
     //     return cpu.error;
