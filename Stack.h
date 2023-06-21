@@ -135,6 +135,13 @@ void stk_print_log(Stack* stk);
 
 //=================================================================================
 /**
+ * @brief Prints the time of the current run in file stack_log.txt.
+ * 
+ */
+void stack_time(Stack* stk);
+
+//=================================================================================
+/**
  * @brief Removes the stack, fills stack fields with POISON value, frees memory.
  * 
  * @param stk the stack pointer

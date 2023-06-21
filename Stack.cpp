@@ -1,5 +1,6 @@
 #include "Stack.h"
 #include "StackDebug.h"
+#include <time.h>
 
 //=========================================================================================================
 
@@ -69,6 +70,8 @@ int stack_ctor(Stack* stk)
 
 #endif
 
+    PRINT_LOG("//========STACK INITIALIZATION========//\n");
+    stack_time(stk);
     stk_print_log(stk);
 
     return 0;
@@ -270,6 +273,19 @@ void stk_print_log(Stack* stk)
 #endif //CANARY_PROTECTION
 
     PRINT_LOG("}\n\n\n");
+}
+
+//=========================================================================================================
+
+void stack_time(Stack* stk)
+{
+    time_t my_time = time(NULL);
+
+    struct tm *now = localtime(&my_time);
+
+    PRINT_LOG("Date: %d.%d.%d\n", now->tm_mday, now->tm_mon + 1, now->tm_year + 1900);
+
+    PRINT_LOG("Time: %d:%d:%d\n\n", now->tm_hour, now->tm_min, now->tm_sec);
 }
 
 //=========================================================================================================
