@@ -1,21 +1,13 @@
-
-; string example for running the code: frame.com   a       b        c           d         e
-;                                      ^           ^       ^        ^           ^         ^
-;                                      prog_name   width   height   attribute   pattern   sentence
-
 .model tiny				; the directive indicating the size of the valiable memory segment
 .code					; the directive of the beginning of the code segment
 .186 					; the directive that defines which processor version the code is instended for
 org 100h				; location in the memory of the first command
-LOCALS @@
+LOCALS @@               ; directive for local labels
 
 ;==========================================================================================================
 
-FHEIGHT      equ 10d
-FWIDTH       equ 22d
 SCREEN_WIDTH equ 160d
 VMEM_SEGMENT equ 0b800h
-BACK_COLOR   equ 4bh
 H_OFFSET     equ SCREEN_WIDTH*5
 
 
@@ -26,7 +18,11 @@ EXIT	macro
 		nop
 		endm
 
-;=================================================================
+;=========================================================================================================
+; string example for running the code: frame.com   a       b        c           d         e         &
+;                                      ^           ^       ^        ^           ^         ^         ^
+;                                      prog_name   width   height   attribute   pattern   message   endL
+;=========================================================================================================
 
 Start:
         mov bx, VMEM_SEGMENT
@@ -39,8 +35,8 @@ Start:
 
         EXIT
 
-;=================================================================+++
-; Parses the entered string
+;=================================================================
+; Parses the entered string.
 ;-----------------------------------------------------------------
 ; Enter:    None
 ; Exit:     None
@@ -88,8 +84,8 @@ ParseString     proc
 
 
 
-;=================================================================+++
-; Parses the type of pattern (programm or user-defined)
+;=================================================================
+; Parses the type of pattern (programm or user-defined).
 ;-----------------------------------------------------------------
 ; Enter:    SI - pointer to pattern part of cmd line adress
 ; Exit:     AX - type of pattern
@@ -112,7 +108,7 @@ ParsePattern    proc
 
 
 ;=================================================================
-; Parses the entered decimal number from ASCII
+; Parses the entered decimal number from ASCII.
 ;-----------------------------------------------------------------
 ; Enter:    SI - pointer to part with dec of cmd line adress
 ; Exit:     AX - number
@@ -169,7 +165,7 @@ ParseDec        proc
 
 
 ;=================================================================
-; Parses the entered hexagonal number
+; Parses the entered hexagonal number.
 ;-----------------------------------------------------------------
 ; Enter:    SI - pointer to part with hex of cmd line adress
 ; Exit:     AX - number
@@ -295,33 +291,33 @@ PrintFrame  proc
 
 
             ; FRAME PRINTOUT
-            call PrintLine                  ; prints first line
+            call PrintLine      ; prints first line
                                             
-            xor cx, cx                      ; prints middle lines
-            mov cl, bh                      ; CX = height*2 - 4
-            shl cx, 1                       ; CX *= 2
-            sub cx, 4d                      ; CX -= 4
+            xor cx, cx          ; prints middle lines
+            mov cl, bh          ; CX = height*2 - 4
+            shl cx, 1           ; CX *= 2
+            sub cx, 4d          ; CX -= 4
 @@GetChrs:  call PrintLine
-			dec cx							; CX--
-            sub si, 3                       ; SI -= 3 for looping pattern
+			dec cx		        ; CX--
+            sub si, 3           ; SI -= 3 for looping pattern
 			loop @@GetChrs
-            add si, 3                       ; for 3 last chrs in pattern
+            add si, 3           ; for 3 last chrs in pattern
 
-            call PrintLine                  ; prints last line
+            call PrintLine      ; prints last line
 
 
-            pop si                          ; saved SI
-            pop dx                          ; saved DX
-            pop bx                          ; saved BX
+            pop si              ; saved SI
+            pop dx              ; saved DX
+            pop bx              ; saved BX
 
 
             ; USER MESSAGE PRINTOUT
             cmp dh, 4
             jz @@PrntMsg1
-            inc si
+            inc si                      ; skip pattern
             jmp @@PrntMsg2
 
-@@PrntMsg1: add si, 9
+@@PrntMsg1: add si, 9                   ; if pattern from user, then skip all pattern
 @@PrntMsg2: call SkipSpaces
             call PrintMsg
 
@@ -341,13 +337,14 @@ PrintFrame  proc
 ;=================================================================            
 PrintMsg    proc
 
-            push cx     
-            push di
-            push dx
-            push si
-            xor cx, cx
-            xor di, di
+            push cx         ; save CX
+            push di         ; save DI
+            push dx         ; save Dx
+            push si         ; save SI
+            xor cx, cx      ; CX = 0
+            xor di, di      ; Dx = 0
 
+            ; COUNTING LENGTH OF USER MESSAGE
 @@CntLen:   lodsb
             cmp al, '&'
             jz @@ExitLen
@@ -356,7 +353,7 @@ PrintMsg    proc
 @@ExitLen:  dec cx
             pop si
 
-
+            ; CALCULATION OF MESSAGE OFFSET
             mov ah, dl
             shr cx, 1
             sub di, cx
@@ -373,6 +370,8 @@ PrintMsg    proc
 
             pop dx
             mov ah, dl
+
+            ; PRINTOUT OF MESSAGE
 @@Next:     lodsb
             cmp al, '&'
             jz @@Exit
@@ -380,35 +379,35 @@ PrintMsg    proc
             jmp @@Next
 
 
-@@Exit:  	pop di
-            pop cx
+@@Exit:  	pop di      ; saved DI
+            pop cx      ; saved CX
             ret
 			endp	
 
 
         
 ;=================================================================
-; Gets type of the programm pattern
+; Sets the desired offset to print the desired pattern.
 ;-----------------------------------------------------------------
-; Enter: 
+; Enter:    DH - type number of the programm pattern
 ; Exit:     SI - offset of control string
 ; Expects:  DH - type of pattern
-; Destroys: 
+; Destroys: None
 ;=================================================================
 ProgPattern proc
 
-            push ax                          ; save AX
-            xor ax, ax                       ; AX = 0
+            push ax                         ; save AX
+            xor ax, ax                      ; AX = 0
 
-            mov al, dh                       ; AL = DH
-            push dx
-            mov dh, 9d                       ; DH = 9
-            mul dh                           ; AX *= 9
-            pop dx
+            mov al, dh                      ; AL = DH
+            push dx                         ; save DX
+            mov dh, 9d                      ; DH = 9
+            mul dh                          ; AX *= 9
+            pop dx                          ; saved DX
             mov si, offset control_string
-            add si, ax
+            add si, ax                      ; SI += AX
 
-            pop ax
+            pop ax                          ; saved AX
 
 			ret
 			endp	
@@ -416,7 +415,7 @@ ProgPattern proc
 
 
 ;=================================================================
-; Draws one line of the frame
+; Draws one line of the frame.
 ;-----------------------------------------------------------------
 ; Enter:    DX - counter for middle elements
 ;           DI - vmem position on screen
@@ -431,12 +430,15 @@ PrintLine   proc
 		    push cx                 ; save CX
             mov cx, dx
 
+            ; LEFT CHARACTER
             lodsb                   ; AL = DS:[SI++]
             stosw                   ; ES:[DI] = AX, DI += 2
 
+            ; MIDDLE CHARACTERS
             lodsb
             rep stosw
 
+            ; RIGHT CHARACTER
             lodsb
             stosw
 
@@ -446,7 +448,6 @@ PrintLine   proc
 
 		    ret
 			endp	
-
 
 
 
