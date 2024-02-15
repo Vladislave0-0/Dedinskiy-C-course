@@ -39,13 +39,13 @@ Start:
 
         EXIT
 
-;=================================================================
+;=================================================================+++
 ; Parses the entered string
 ;-----------------------------------------------------------------
-; Enter:    
-; Exit:     
-; Expects:  
-; Destroys: 
+; Enter:    None
+; Exit:     None
+; Expects:  ES = 0b800h
+; Destroys: None
 ;=================================================================
 ParseString     proc
 
@@ -88,45 +88,23 @@ ParseString     proc
 
 
 
-;=================================================================
-; Parses the type of pattern(programmatic or user-defined)
+;=================================================================+++
+; Parses the type of pattern (programm or user-defined)
 ;-----------------------------------------------------------------
-; Enter:    SI - pointer to part of cmd line adress
+; Enter:    SI - pointer to pattern part of cmd line adress
 ; Exit:     AX - type of pattern
 ; Expects:  None
-; Destroys: AX, BX, CX, DX, SI
+; Destroys: None
 ;=================================================================
 ParsePattern    proc
 
                 lodsb
-                cmp al, '1'             ; programmatic patterns
-                jz @@Pattern1
-                cmp al, '2'
-                jz @@Pattern2
-                cmp al, '3'
-                jz @@Pattern3
-                cmp al, '4'
-                jz @@Pattern4
-                cmp al, '*'             ; user-defined pattern
+                cmp al, '*'
                 jz @@UserPattern
-                
-                mov ax, 5d
-                jmp @@PatternExit       ; unknown pattern - ERROR
+                sub al, '1'
+                jmp @@PatternExit
 
-
-@@Pattern1:     mov ax, 0d
-                jmp @@PatternExit
-@@Pattern2:     mov ax, 1d
-                jmp @@PatternExit
-@@Pattern3:     mov ax, 2d
-                jmp @@PatternExit
-@@Pattern4:     mov ax, 3d
-                jmp @@PatternExit
 @@UserPattern:  mov ax, 4d
-                ;dec si                  ; because there no space between '*' and next cmd
-                jmp @@PatternExit
-
-
 
 @@PatternExit:  ret
 			    endp	
@@ -134,12 +112,12 @@ ParsePattern    proc
 
 
 ;=================================================================
-; Parses the entered decimal number
+; Parses the entered decimal number from ASCII
 ;-----------------------------------------------------------------
-; Enter:    SI - pointer to part of cmd line adress
+; Enter:    SI - pointer to part with dec of cmd line adress
 ; Exit:     AX - number
 ; Expects:  None
-; Destroys: AX, BX, CX, DX, SI
+; Destroys: AX, BX, CX, DX
 ;=================================================================
 ParseDec        proc
 
@@ -175,7 +153,7 @@ ParseDec        proc
                 add bx, ax          ; BX += AX
                 mov ax, dx          ; DX *= 10
                 mul cx
-                mov dx, ax
+                mov dx, ax          ; DX = AX
                 dec di              ; DI--
                 jmp @@NextDigit
 
@@ -183,7 +161,7 @@ ParseDec        proc
                 pop di              ; saved DI
                 pop si              ; saved SI
                 add si, cx          ; SI += len of number
-                mov ax, bx
+                mov ax, bx          ; AX = BX
 
 			    ret
 			    endp
@@ -193,10 +171,10 @@ ParseDec        proc
 ;=================================================================
 ; Parses the entered hexagonal number
 ;-----------------------------------------------------------------
-; Enter:    SI - pointer to part of cmd line adress
+; Enter:    SI - pointer to part with hex of cmd line adress
 ; Exit:     AX - number
 ; Expects:  None
-; Destroys: AX, BX, CX, DX, SI
+; Destroys: AX, BX, CX, DX
 ;=================================================================
 ParseHex        proc
 
@@ -239,7 +217,7 @@ ParseHex        proc
                 add bx, ax          ; BX += AX
                 mov ax, dx          ; DX *= 16
                 mul cx
-                mov dx, ax
+                mov dx, ax          ; DX = AX
                 dec di              ; DI--
                 jmp @@NextDigit
 
@@ -248,7 +226,7 @@ ParseHex        proc
                 pop di              ; saved DI
                 pop si              ; saved SI
                 add si, cx          ; SI += len of number
-                mov ax, bx
+                mov ax, bx          ; AX = BX
 
 			    ret
 			    endp
@@ -256,7 +234,7 @@ ParseHex        proc
 
 
 ;=================================================================
-; Skips all spaces
+; Skips all spaces.
 ;-----------------------------------------------------------------
 ; Enter:    SI - pointer to part of cmd line adress
 ; Exit:     new SI with skipped spaces
@@ -277,37 +255,38 @@ SkipSpaces      proc
 
 
 ;=================================================================
-; Prints frame
+; Prints frame.
 ;-----------------------------------------------------------------
 ; Enter:    BL - width, BH - height
 ;           DL - attribute, DH - pattern
 ; Exit:     None
 ; Expects:  ES = 0b800h
-; Destroys: AX, DX, DI
+; Destroys: AX, DI
 ;=================================================================
 PrintFrame  proc
 
-            push bx                                                ; save BX
-            push dx                                                ; save DX
-            mov ah, dl                                             ; frame attribute
-            cld                                                    ; DF = 0 => DI++
-            push si                                                ; save SI
+            push bx                                         ; save BX
+            push dx                                         ; save DX
+            mov ah, dl                                      ; frame attribute
+            cld                                             ; DF = 0 => DI++
+            push si                                         ; save SI
 
 
-            cmp dh, 4                                              ; pattern selection
-            ja @@ErrPtrn                                           ; если паттерн программный: mov si, offset control_string + pattern_offset
-            cmp dh, 4                                              ; если патерн пользовательский: значение si уже в нужном месте командной строки
-            jz @@UserPtrn                                          ; иначе выходим на ошибку и ничего не печатаем
+            ; PATTERN SELECTION
+            cmp dh, 4                                       ; if pattern is wrong (type > 1 or type < 0)
+            ja @@ErrPtrn
+            cmp dh, 0
+            jb @@ErrPtrn 
+            cmp dh, 4                                       ; if the pattern is custom
+            jz @@UserPtrn                                   ; if program pattern
             jmp @@ProgPtrn
 
-
-@@ProgPtrn:
-            call ProgPattern
-@@UserPtrn: xor dx, dx                                             ; DX = 0
-            mov dl, bl                                             ; for (CX - counter)
+@@ProgPtrn: call ProgPattern
+@@UserPtrn: xor dx, dx                                      ; DX = 0
+            mov dl, bl                                      ; for (CX - counter)
 
 
-            mov di, SCREEN_WIDTH/2 + H_OFFSET - 2                  ; start position of printout
+            mov di, SCREEN_WIDTH/2 + H_OFFSET - 2           ; start position of printout
             push ax
             xor ax, ax
             mov al, bl
@@ -315,16 +294,17 @@ PrintFrame  proc
             pop ax
 
 
+            ; FRAME PRINTOUT
             call PrintLine                  ; prints first line
                                             
             xor cx, cx                      ; prints middle lines
             mov cl, bh                      ; CX = height*2 - 4
-            shl cx, 1
-            sub cx, 4d
-@@Next:		call PrintLine
+            shl cx, 1                       ; CX *= 2
+            sub cx, 4d                      ; CX -= 4
+@@GetChrs:  call PrintLine
 			dec cx							; CX--
             sub si, 3                       ; SI -= 3 for looping pattern
-			loop @@Next
+			loop @@GetChrs
             add si, 3                       ; for 3 last chrs in pattern
 
             call PrintLine                  ; prints last line
@@ -334,8 +314,75 @@ PrintFrame  proc
             pop dx                          ; saved DX
             pop bx                          ; saved BX
 
-@@ErrPtrn:
-			ret
+
+            ; USER MESSAGE PRINTOUT
+            cmp dh, 4
+            jz @@PrntMsg1
+            inc si
+            jmp @@PrntMsg2
+
+@@PrntMsg1: add si, 9
+@@PrntMsg2: call SkipSpaces
+            call PrintMsg
+
+@@ErrPtrn:  ret
+			endp	
+
+
+
+;=================================================================
+; Prints user's message in the middle of the frame.
+;-----------------------------------------------------------------
+; Enter:    BL - width, BH - height
+;           DL - attribute, DH - pattern
+; Exit:     None
+; Expects:  SI - pointer to user message
+; Destroys: AX, BX
+;=================================================================            
+PrintMsg    proc
+
+            push cx     
+            push di
+            push dx
+            push si
+            xor cx, cx
+            xor di, di
+
+@@CntLen:   lodsb
+            cmp al, '&'
+            jz @@ExitLen
+            inc cx
+            jmp @@CntLen
+@@ExitLen:  dec cx
+            pop si
+
+
+            mov ah, dl
+            shr cx, 1
+            sub di, cx
+            add di, H_OFFSET + 76d
+            xor cx, cx
+            mov cl, bh
+            dec cx
+            shr cx, 1
+            mov ax, cx
+            mov cx, SCREEN_WIDTH
+            mul cx
+            add di, ax
+            and di, 65534d
+
+            pop dx
+            mov ah, dl
+@@Next:     lodsb
+            cmp al, '&'
+            jz @@Exit
+            stosw
+            jmp @@Next
+
+
+@@Exit:  	pop di
+            pop cx
+            ret
 			endp	
 
 
