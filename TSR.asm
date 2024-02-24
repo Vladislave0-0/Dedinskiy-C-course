@@ -120,9 +120,9 @@ New08       proc
             pop ds
 
 
-	        mov bx, offset regs_mode
-	        mov byte ptr al, [bx]
-            cmp al, 01h
+	        mov bx, offset regs_mode            ; BX = &regs_mode
+	        mov byte ptr al, [bx]               ; AL = *BX
+            cmp al, 01h                         ; check if AL == 1d (1d == enabled frame)
             jne @@ExitInt
 
 
@@ -150,31 +150,31 @@ New08       proc
 ;=====================================================================================================
 PrintRegVal     proc
 
-                push bp								; begin
+                push bp								; begin stack frame
 			    mov bp, sp
 
-                mov bx, H_OFFSET + SCREEN_WIDTH + SCREEN_WIDTH/2 - 2d
+                mov bx, H_OFFSET + SCREEN_WIDTH + SCREEN_WIDTH/2 - 2d   ; start position of printout
 
 
-                push dx bp
+                push dx bp              ; save regs
                 mov dx, 10d             ; registers number for printout
-                add bp, 4d
+                add bp, 4d              ; BP += 4
 
 
-@@Loop:         mov ax, [bp]
+@@Loop:         mov ax, [bp]            ; to ax mov ax (= bp + 4), bx (= bp + 6), cx...
                 call HexToAscii
-                dec dx
-                cmp dx, 0
+                dec dx                  ; DX--
+                cmp dx, 0               ; check if DX == 0 (we have printed out all the registers)
                 je @@Exit
-                add bx, SCREEN_WIDTH
-                add bp, 2d
+                add bx, SCREEN_WIDTH    ; BX += 180d (moving to the next line)
+                add bp, 2d              ; BP += 2
                 jmp @@Loop
 
 
-@@Exit:         pop bp dx
+@@Exit:         pop bp dx               ; saved regs
 
-			    mov sp, bp
-			    pop bp								; saved BP
+			    mov sp, bp              ; end stack frame
+			    pop bp
 
                 ret
                 endp
