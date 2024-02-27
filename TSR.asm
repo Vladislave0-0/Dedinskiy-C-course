@@ -11,7 +11,8 @@ FWIDTH       equ 13d
 SCREEN_WIDTH equ 160d
 VMEM_SEGMENT equ 0b800h
 ATTR         equ 4ch
-H_OFFSET     equ SCREEN_WIDTH*5
+H_OFFSET     equ SCREEN_WIDTH*1
+SHADOW       equ 10000111b
 
 ;=====================================================================================================
 
@@ -226,6 +227,47 @@ HexToAscii  proc
 
 
 ;=====================================================================================================
+; Creates a shadow effect from the frame.
+;-----------------------------------------------------------------------------------------------------
+; Enter:    None
+; Exit:     None
+; Expects:  None
+; Destroys: None
+;===================================================================================================== 
+AddShadow   proc
+
+            push bx cx                                  ; save registers
+
+            mov bx, H_OFFSET + SCREEN_WIDTH*3/2 + 13d   ; start position of vertical printout
+            mov cx, FHEIGHT                             ; counter for printout
+
+@@Loop1:    and byte ptr es:[bx], SHADOW                ; the bits responsible for the background 
+                                                        ; color and text intensity = 0
+            add bx, SCREEN_WIDTH                        ; BX += 180d
+            dec cx                                      ; CX--
+            cmp cx, 0                                   ; if CX == 0 goto horizontal
+            jne @@Loop1
+
+
+            mov bx, H_OFFSET + SCREEN_WIDTH*FHEIGHT + SCREEN_WIDTH/2 - 11d ; start position of vertical printout
+            mov cx, FWIDTH - 1d                                            ; ; counter for printout
+
+@@Loop2:    and byte ptr es:[bx], SHADOW        ; the bits responsible for the background 
+                                                ; color and text intensity = 0
+            add bx, 2                           ; BX += 2
+            dec cx                              ; CX--
+            cmp cx, 0                           ; if CX == 0 goto pop
+            jne @@Loop2
+
+
+            pop cx bx                           ; saved registers
+
+            ret
+            endp
+
+
+
+;=====================================================================================================
 ; Prints frame.
 ;-----------------------------------------------------------------------------------------------------
 ; Enter:    None
@@ -261,6 +303,7 @@ PrintFrame  proc
 
 
             call PrintRegsName
+            call AddShadow
 
 			ret
 			endp
