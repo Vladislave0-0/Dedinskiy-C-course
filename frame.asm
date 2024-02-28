@@ -126,16 +126,15 @@ ParseDec        proc
                 mov dx, 1d          ; DX = 1
                 xor ax, ax          ; AX = 0
                 xor bx, bx          ; BX = 0
-                xor cx, cx          ; CX = 0
 
-@@ReadLen:      lodsb               ; todo call strlen
-                inc cl              ; CL++ 
-                cmp al, ' '         ; if AL == ' ' then ZF = 1 
-                jnz @@ReadLen
-
+                push dx             ; save DX
+                mov dl, ' '         ; DL = endL
+                call MyStrlen
                 dec cl              ; CL--  
-                push cx             ; save CX
+                pop dx              ; saved DX
 
+
+                push cx             ; save CX
 
                 add di, cx          ; DI += CX
                 dec di              ; DI--
@@ -181,15 +180,16 @@ ParseHex        proc
                 mov dx, 1d          ; DX = 1
                 xor ax, ax          ; AX = 0
                 xor bx, bx          ; BX = 0
-                xor cx, cx          ; CX = 0
 
-@@ReadLen:      lodsb
-                inc cl              ; CL++ 
-                cmp al, 'h'         ; if AL == 'h' then ZF = 1 
-                jnz @@ReadLen
+
+                push dx             ; save DX
+                mov dl, 'h'         ; DL = endL
+                call MyStrlen
                 dec cl              ; CL--  
-                push cx             ; save CX
+                pop dx              ; saved DX
 
+
+                push cx             ; save CX
 
                 add di, cx          ; DI += CX
                 dec di              ; DI--
@@ -303,9 +303,7 @@ PrintFrame  proc
             call PrintLine      ; prints last line
 
 
-            pop si              ; saved SI
-            pop dx              ; saved DX
-            pop bx              ; saved BX
+            pop si dx bx        ; saved registers
 
 
             ; USER MESSAGE PRINTOUT
@@ -334,18 +332,18 @@ PrintFrame  proc
 ;===============================================================================            
 PrintMsg    proc
 
-            push cx di dx si    ; save registers   
+            push cx di dx       ; save registers   
             xor cx, cx          ; CX = 0
             xor di, di          ; DX = 0
 
 
             ; COUNTING LENGTH OF USER MESSAGE
-@@CntLen:   lodsb               ; AL = DS:[SI++]
-            cmp al, '&'         ; if(AL == '&') {goto ExitLen}
-            jz @@ExitLen        ; else {goto CountLen}
-            inc cx
-            jmp @@CntLen
-@@ExitLen:  pop si              ; saved SI
+            push dx si          ; save registers
+            mov dl, '&'         ; DL = endL
+            call MyStrlen
+            dec cl              ; CL--  
+            pop si dx           ; saved registers
+
 
             ; CALCULATION OF MESSAGE OFFSET
             and cx, 0fffeh                      ; CX is even to access an even cell of video memory
@@ -438,6 +436,31 @@ PrintLine   proc
 
 		    ret
 			endp	
+
+
+
+;===============================================================================
+; Counts the length of the string.
+;-------------------------------------------------------------------------------
+; Enter:    DL = endL
+; Exit:     CX = strlen
+; Expects:  correct DS:[SI]
+; Destroys: CX
+;===============================================================================
+MyStrlen    proc
+
+            push ax             ; save AX
+            xor cx, cx          ; CX = 0
+
+@@Loop:     lodsb               ; AL = DS:[SI++]
+            inc cl              ; CL++ 
+            cmp al, dl          ; if AL == ' ' then ZF = 1 
+            jnz @@Loop
+
+            pop ax              ; saved AX
+
+		    ret
+			endp
 
 
 
