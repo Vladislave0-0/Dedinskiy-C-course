@@ -1,0 +1,30 @@
+digraph tree
+{
+	rankdir = TB;
+	splines = false;
+
+	node_0x55ab273ee3a0 [style = "filled", fillcolor = green, shape = Mrecord, label = "{{<f1> 0x55ab273ee3a0}| {type: FUNC | value = arctg} | {<f2>(nil) | <f3> 0x55ab273ee220}}"];
+	node_0x55ab273ee3a0:<f3>:s -> node_0x55ab273ee220:<f1>:n;
+	node_0x55ab273ee220 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273ee220}| {type: OP | value = +} | {<f2>0x55ab273ee130 | <f3> 0x55ab273ee2b0}}"];
+	node_0x55ab273ee220:<f2>:s -> node_0x55ab273ee130:<f1>:n;
+	node_0x55ab273ee220:<f3>:s -> node_0x55ab273ee2b0:<f1>:n;
+	node_0x55ab273ee130 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273ee130}| {type: OP | value = *} | {<f2>0x55ab273ee100 | <f3> 0x55ab273ee1f0}}"];
+	node_0x55ab273ee130:<f2>:s -> node_0x55ab273ee100:<f1>:n;
+	node_0x55ab273ee130:<f3>:s -> node_0x55ab273ee1f0:<f1>:n;
+	node_0x55ab273ee100 [style = "filled", fillcolor = red, shape = Mrecord, label = "{{<f1> 0x55ab273ee100}| {type: VAR | value = x} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273ee1f0 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273ee1f0}| {type: OP | value = ^} | {<f2>0x55ab273ee190 | <f3> 0x55ab273ee1c0}}"];
+	node_0x55ab273ee1f0:<f2>:s -> node_0x55ab273ee190:<f1>:n;
+	node_0x55ab273ee1f0:<f3>:s -> node_0x55ab273ee1c0:<f1>:n;
+	node_0x55ab273ee190 [style = "filled", fillcolor = red, shape = Mrecord, label = "{{<f1> 0x55ab273ee190}| {type: VAR | value = y} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273ee1c0 [style = "filled", fillcolor = skyblue, shape = Mrecord, label = "{{<f1> 0x55ab273ee1c0}| {type: NUM | value = 2.000000} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273ee2b0 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273ee2b0}| {type: OP | value = *} | {<f2>0x55ab273ee280 | <f3> 0x55ab273ee370}}"];
+	node_0x55ab273ee2b0:<f2>:s -> node_0x55ab273ee280:<f1>:n;
+	node_0x55ab273ee2b0:<f3>:s -> node_0x55ab273ee370:<f1>:n;
+	node_0x55ab273ee280 [style = "filled", fillcolor = red, shape = Mrecord, label = "{{<f1> 0x55ab273ee280}| {type: VAR | value = z} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273ee370 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273ee370}| {type: OP | value = ^} | {<f2>0x55ab273ee310 | <f3> 0x55ab273ee340}}"];
+	node_0x55ab273ee370:<f2>:s -> node_0x55ab273ee310:<f1>:n;
+	node_0x55ab273ee370:<f3>:s -> node_0x55ab273ee340:<f1>:n;
+	node_0x55ab273ee310 [style = "filled", fillcolor = red, shape = Mrecord, label = "{{<f1> 0x55ab273ee310}| {type: VAR | value = x} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273ee340 [style = "filled", fillcolor = skyblue, shape = Mrecord, label = "{{<f1> 0x55ab273ee340}| {type: NUM | value = 2.000000} | {<f2>(nil) | <f3> (nil)}}"];
+}
+

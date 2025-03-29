@@ -1,0 +1,64 @@
+digraph tree
+{
+	rankdir = TB;
+	splines = false;
+
+	node_0x55ab273f0110 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273f0110}| {type: OP | value = /} | {<f2>0x55ab273f0140 | <f3> 0x55ab273f00e0}}"];
+	node_0x55ab273f0110:<f2>:s -> node_0x55ab273f0140:<f1>:n;
+	node_0x55ab273f0110:<f3>:s -> node_0x55ab273f00e0:<f1>:n;
+	node_0x55ab273f0140 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273f0140}| {type: OP | value = +} | {<f2>0x55ab273f0890 | <f3> 0x55ab273f01a0}}"];
+	node_0x55ab273f0140:<f2>:s -> node_0x55ab273f0890:<f1>:n;
+	node_0x55ab273f0140:<f3>:s -> node_0x55ab273f01a0:<f1>:n;
+	node_0x55ab273f0890 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273f0890}| {type: OP | value = ^} | {<f2>0x55ab273f08c0 | <f3> 0x55ab273f08f0}}"];
+	node_0x55ab273f0890:<f2>:s -> node_0x55ab273f08c0:<f1>:n;
+	node_0x55ab273f0890:<f3>:s -> node_0x55ab273f08f0:<f1>:n;
+	node_0x55ab273f08c0 [style = "filled", fillcolor = red, shape = Mrecord, label = "{{<f1> 0x55ab273f08c0}| {type: VAR | value = y} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273f08f0 [style = "filled", fillcolor = skyblue, shape = Mrecord, label = "{{<f1> 0x55ab273f08f0}| {type: NUM | value = 2.000000} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273f01a0 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273f01a0}| {type: OP | value = *} | {<f2>0x55ab273f0440 | <f3> 0x55ab273f0170}}"];
+	node_0x55ab273f01a0:<f2>:s -> node_0x55ab273f0440:<f1>:n;
+	node_0x55ab273f01a0:<f3>:s -> node_0x55ab273f0170:<f1>:n;
+	node_0x55ab273f0440 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273f0440}| {type: OP | value = *} | {<f2>0x55ab273f0410 | <f3> 0x55ab273f0290}}"];
+	node_0x55ab273f0440:<f2>:s -> node_0x55ab273f0410:<f1>:n;
+	node_0x55ab273f0440:<f3>:s -> node_0x55ab273f0290:<f1>:n;
+	node_0x55ab273f0410 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273f0410}| {type: OP | value = ^} | {<f2>0x55ab273f03e0 | <f3> 0x55ab273f03b0}}"];
+	node_0x55ab273f0410:<f2>:s -> node_0x55ab273f03e0:<f1>:n;
+	node_0x55ab273f0410:<f3>:s -> node_0x55ab273f03b0:<f1>:n;
+	node_0x55ab273f03e0 [style = "filled", fillcolor = red, shape = Mrecord, label = "{{<f1> 0x55ab273f03e0}| {type: VAR | value = x} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273f03b0 [style = "filled", fillcolor = skyblue, shape = Mrecord, label = "{{<f1> 0x55ab273f03b0}| {type: NUM | value = 2.000000} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273f0290 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273f0290}| {type: OP | value = /} | {<f2>0x55ab273f0260 | <f3> 0x55ab273f01d0}}"];
+	node_0x55ab273f0290:<f2>:s -> node_0x55ab273f0260:<f1>:n;
+	node_0x55ab273f0290:<f3>:s -> node_0x55ab273f01d0:<f1>:n;
+	node_0x55ab273f0260 [style = "filled", fillcolor = skyblue, shape = Mrecord, label = "{{<f1> 0x55ab273f0260}| {type: NUM | value = 2.000000} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273f01d0 [style = "filled", fillcolor = red, shape = Mrecord, label = "{{<f1> 0x55ab273f01d0}| {type: VAR | value = x} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273f0170 [style = "filled", fillcolor = red, shape = Mrecord, label = "{{<f1> 0x55ab273f0170}| {type: VAR | value = z} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273f00e0 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273f00e0}| {type: OP | value = +} | {<f2>0x55ab273f00b0 | <f3> 0x55ab273f0080}}"];
+	node_0x55ab273f00e0:<f2>:s -> node_0x55ab273f00b0:<f1>:n;
+	node_0x55ab273f00e0:<f3>:s -> node_0x55ab273f0080:<f1>:n;
+	node_0x55ab273f00b0 [style = "filled", fillcolor = skyblue, shape = Mrecord, label = "{{<f1> 0x55ab273f00b0}| {type: NUM | value = 1.000000} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273f0080 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273f0080}| {type: OP | value = ^} | {<f2>0x55ab273ee610 | <f3> 0x55ab273ee700}}"];
+	node_0x55ab273f0080:<f2>:s -> node_0x55ab273ee610:<f1>:n;
+	node_0x55ab273f0080:<f3>:s -> node_0x55ab273ee700:<f1>:n;
+	node_0x55ab273ee610 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273ee610}| {type: OP | value = +} | {<f2>0x55ab273ee760 | <f3> 0x55ab273eff90}}"];
+	node_0x55ab273ee610:<f2>:s -> node_0x55ab273ee760:<f1>:n;
+	node_0x55ab273ee610:<f3>:s -> node_0x55ab273eff90:<f1>:n;
+	node_0x55ab273ee760 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273ee760}| {type: OP | value = *} | {<f2>0x55ab273ee730 | <f3> 0x55ab273eff00}}"];
+	node_0x55ab273ee760:<f2>:s -> node_0x55ab273ee730:<f1>:n;
+	node_0x55ab273ee760:<f3>:s -> node_0x55ab273eff00:<f1>:n;
+	node_0x55ab273ee730 [style = "filled", fillcolor = red, shape = Mrecord, label = "{{<f1> 0x55ab273ee730}| {type: VAR | value = x} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273eff00 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273eff00}| {type: OP | value = ^} | {<f2>0x55ab273eff30 | <f3> 0x55ab273eff60}}"];
+	node_0x55ab273eff00:<f2>:s -> node_0x55ab273eff30:<f1>:n;
+	node_0x55ab273eff00:<f3>:s -> node_0x55ab273eff60:<f1>:n;
+	node_0x55ab273eff30 [style = "filled", fillcolor = red, shape = Mrecord, label = "{{<f1> 0x55ab273eff30}| {type: VAR | value = y} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273eff60 [style = "filled", fillcolor = skyblue, shape = Mrecord, label = "{{<f1> 0x55ab273eff60}| {type: NUM | value = 2.000000} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273eff90 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273eff90}| {type: OP | value = *} | {<f2>0x55ab273effc0 | <f3> 0x55ab273efff0}}"];
+	node_0x55ab273eff90:<f2>:s -> node_0x55ab273effc0:<f1>:n;
+	node_0x55ab273eff90:<f3>:s -> node_0x55ab273efff0:<f1>:n;
+	node_0x55ab273effc0 [style = "filled", fillcolor = red, shape = Mrecord, label = "{{<f1> 0x55ab273effc0}| {type: VAR | value = z} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273efff0 [style = "filled", fillcolor = yellow, shape = Mrecord, label = "{{<f1> 0x55ab273efff0}| {type: OP | value = ^} | {<f2>0x55ab273f0020 | <f3> 0x55ab273f0050}}"];
+	node_0x55ab273efff0:<f2>:s -> node_0x55ab273f0020:<f1>:n;
+	node_0x55ab273efff0:<f3>:s -> node_0x55ab273f0050:<f1>:n;
+	node_0x55ab273f0020 [style = "filled", fillcolor = red, shape = Mrecord, label = "{{<f1> 0x55ab273f0020}| {type: VAR | value = x} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273f0050 [style = "filled", fillcolor = skyblue, shape = Mrecord, label = "{{<f1> 0x55ab273f0050}| {type: NUM | value = 2.000000} | {<f2>(nil) | <f3> (nil)}}"];
+	node_0x55ab273ee700 [style = "filled", fillcolor = skyblue, shape = Mrecord, label = "{{<f1> 0x55ab273ee700}| {type: NUM | value = 2.000000} | {<f2>(nil) | <f3> (nil)}}"];
+}
+
