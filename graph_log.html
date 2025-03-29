@@ -1,0 +1,378 @@
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> list_ctor </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>-1</font>;
+	   tail_node = <font color = #5f8b00>-1</font>;
+	   free_node = <font color = #5f8b00>0</font>;
+
+	   size      = <font color = #5f8b00>0</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>1</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_0.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> push_after(node_index = 0, value = 10) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>0</font>;
+	   tail_node = <font color = #5f8b00>0</font>;
+	   free_node = <font color = #5f8b00>1</font>;
+
+	   size      = <font color = #5f8b00>1</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>1</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_1.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> push_after(node_index = 0, value = 20) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>0</font>;
+	   tail_node = <font color = #5f8b00>1</font>;
+	   free_node = <font color = #5f8b00>2</font>;
+
+	   size      = <font color = #5f8b00>2</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>1</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_2.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> push_after(node_index = 1, value = 30) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>0</font>;
+	   tail_node = <font color = #5f8b00>2</font>;
+	   free_node = <font color = #5f8b00>3</font>;
+
+	   size      = <font color = #5f8b00>3</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>1</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_3.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> push_after(node_index = 2, value = 40) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>0</font>;
+	   tail_node = <font color = #5f8b00>3</font>;
+	   free_node = <font color = #5f8b00>4</font>;
+
+	   size      = <font color = #5f8b00>4</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>1</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_4.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> push_after(node_index = 0, value = 50) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>0</font>;
+	   tail_node = <font color = #5f8b00>3</font>;
+	   free_node = <font color = #5f8b00>5</font>;
+
+	   size      = <font color = #5f8b00>5</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>0</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_5.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> node_remove(node_index = 0) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>4</font>;
+	   tail_node = <font color = #5f8b00>3</font>;
+	   free_node = <font color = #5f8b00>0</font>;
+
+	   size      = <font color = #5f8b00>4</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>0</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_6.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> node_remove(node_index = 4) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>1</font>;
+	   tail_node = <font color = #5f8b00>3</font>;
+	   free_node = <font color = #5f8b00>4</font>;
+
+	   size      = <font color = #5f8b00>3</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>0</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_7.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> node_remove(node_index = 1) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>2</font>;
+	   tail_node = <font color = #5f8b00>3</font>;
+	   free_node = <font color = #5f8b00>1</font>;
+
+	   size      = <font color = #5f8b00>2</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>0</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_8.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> list_linearize </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>0</font>;
+	   tail_node = <font color = #5f8b00>1</font>;
+	   free_node = <font color = #5f8b00>2</font>;
+
+	   size      = <font color = #5f8b00>2</font>;
+	   capacity  = <font color = #5f8b00>4</font>;
+
+	   is_linearized  = <font color = #5f8b00>1</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_9.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> list_resize </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>0</font>;
+	   tail_node = <font color = #5f8b00>1</font>;
+	   free_node = <font color = #5f8b00>2</font>;
+
+	   size      = <font color = #5f8b00>2</font>;
+	   capacity  = <font color = #5f8b00>4</font>;
+
+	   is_linearized  = <font color = #5f8b00>1</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_10.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> node_remove(node_index = 0) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>1</font>;
+	   tail_node = <font color = #5f8b00>1</font>;
+	   free_node = <font color = #5f8b00>0</font>;
+
+	   size      = <font color = #5f8b00>1</font>;
+	   capacity  = <font color = #5f8b00>4</font>;
+
+	   is_linearized  = <font color = #5f8b00>0</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_11.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> push_after(node_index = 1, value = 100) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>1</font>;
+	   tail_node = <font color = #5f8b00>0</font>;
+	   free_node = <font color = #5f8b00>2</font>;
+
+	   size      = <font color = #5f8b00>2</font>;
+	   capacity  = <font color = #5f8b00>4</font>;
+
+	   is_linearized  = <font color = #5f8b00>0</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_12.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> push_after(node_index = 1, value = 200) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>1</font>;
+	   tail_node = <font color = #5f8b00>0</font>;
+	   free_node = <font color = #5f8b00>3</font>;
+
+	   size      = <font color = #5f8b00>3</font>;
+	   capacity  = <font color = #5f8b00>4</font>;
+
+	   is_linearized  = <font color = #5f8b00>0</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_13.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> list_linearize </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>0</font>;
+	   tail_node = <font color = #5f8b00>2</font>;
+	   free_node = <font color = #5f8b00>3</font>;
+
+	   size      = <font color = #5f8b00>3</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>1</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_14.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> list_resize </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>0</font>;
+	   tail_node = <font color = #5f8b00>2</font>;
+	   free_node = <font color = #5f8b00>3</font>;
+
+	   size      = <font color = #5f8b00>3</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>1</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_15.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> push_after(node_index = 0, value = 300) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>0</font>;
+	   tail_node = <font color = #5f8b00>2</font>;
+	   free_node = <font color = #5f8b00>4</font>;
+
+	   size      = <font color = #5f8b00>4</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>0</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_16.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
+<pre>
+
+	<h2 style="color:#9a3131"><font style="font-size:42px"> node_remove(node_index = 1) </font></h2>
+	<h2>
+	<font color = #1f93ea>struct</font> <font color = #5fc200><u>List</u></font>
+	{
+	   head_node = <font color = #5f8b00>0</font>;
+	   tail_node = <font color = #5f8b00>2</font>;
+	   free_node = <font color = #5f8b00>1</font>;
+
+	   size      = <font color = #5f8b00>3</font>;
+	   capacity  = <font color = #5f8b00>8</font>;
+
+	   is_linearized  = <font color = #5f8b00>0</font>;
+	};
+	</h2>
+	<img src = "Images/graphviz_17.png">
+	<hr style="border-style: dotted">
+
+</pre>
+
