@@ -1,0 +1,42 @@
+in
+
+push 1
+push 1
+pop bx
+pop cx
+
+pop ax
+
+push ax
+push 0
+je :ZeroFactorial
+
+
+
+factorial:
+push bx
+push cx
+mul
+pop bx
+
+push cx
+push ax
+je :Answer
+
+push cx
+push 1
+add
+pop cx
+jmp :factorial
+
+
+
+ZeroFactorial:
+push 1
+out
+hlt
+
+Answer:
+push bx
+out
+hlt

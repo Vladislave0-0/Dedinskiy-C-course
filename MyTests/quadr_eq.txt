@@ -1,0 +1,91 @@
+in
+in
+in
+
+
+pop cx
+pop bx
+pop ax
+
+push 0
+push ax
+je :AXisZero
+
+
+push 0
+push bx
+push 2
+pow
+push 4
+push ax
+push cx
+mul
+mul
+sub
+pop dx
+push dx
+jg :NoRoots
+
+
+push 0
+push dx
+je :OneRoot
+
+
+push bx
+neg
+push dx
+sqrt
+add
+push 2
+push ax
+mul
+div
+out
+
+push bx
+neg
+push dx
+sqrt
+sub
+push 2
+push ax
+mul
+div
+out 
+hlt
+
+
+AXisZero:
+push cx
+neg
+push 0
+push bx
+je :NoRoots
+push bx
+div
+out
+hlt
+
+
+NoRoots:
+push 0
+push cx
+je :InfRoots
+hlt
+
+OneRoot:
+push bx
+neg
+push
+2
+push ax
+mul
+div
+out
+hlt
+
+InfRoots:
+push 123456789
+out 
+hlt
