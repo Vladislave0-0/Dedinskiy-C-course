@@ -1,0 +1,58 @@
+Turbo Assembler	 Version 4.1	    02/08/24 10:12:05	    Page 1
+task1.asm
+
+
+
+      1	0000			     .model tiny			     ; the directive indicating	the size of the	valiable    +
+      2				     memory segment
+      3	0000			     .code				     ; the directive of	the beginning of the code segment
+      4				     .186				     ; the directive that defines which	processor version   +
+      5				     the code is instended for
+      6				     org 100h				     ; location	in the memory of the first command
+      7
+      8	0100			     Start:
+      9	0100  B4 02			     mov ah, 02h		     ; AH = 09,	AL remains the same
+     10	0102  BA 010Cr			     mov dx, offset MeowStr	     ; DX = $MeowStr
+     11	0105  CD 21			     int 21h			     ; interraption, 09h function of int 21h displays a	    +
+     12				     string
+     13	0107  B8 4C13			     mov ax, 4c13h		     ; DOS func	4ch (Exit), exitcode 13h (19d)
+     14	010A  CD 21			     int 21h			     ; interraption
+     15
+     16	010C			     MeowStr:
+     17	010C  4D 65 6F 77 0D 0A	24	     db	"Meow",	0dh, 0ah, '$'	     ; CR ('\r', 0dh), LF ('\n', 0ah)
+     18
+     19				     end Start				     ; end - the directive indicating the end of assebly,   +
+     20				     Start - setting the initial label
+Turbo Assembler	 Version 4.1	    02/08/24 10:12:05	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/08/24"
+??FILENAME			  Text	 "task1	  "
+??TIME				  Text	 "10:12:05"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0103H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 TASK1
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+MEOWSTR				  Near	 DGROUP:010C
+START				  Near	 DGROUP:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  0113 Word	  Public  CODE
+

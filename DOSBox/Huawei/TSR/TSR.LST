@@ -1,0 +1,552 @@
+Turbo Assembler	 Version 4.1	    02/29/24 21:10:17	    Page 1
+tsr.asm
+
+
+
+      1				     .286
+      2	0000			     .model tiny
+      3	0000			     .code
+      4				     org 100h
+      5				     LOCALS @@
+      6
+      7				     ;===============================================================================================
+      8				     ======
+      9
+     10	      =000C		     FHEIGHT	  equ 12d
+     11	      =000D		     FWIDTH	  equ 13d
+     12	      =00A0		     SCREEN_WIDTH equ 160d
+     13	      =B800		     VMEM_SEGMENT equ 0b800h
+     14	      =004C		     ATTR	  equ 4ch
+     15	      =00A0		     H_OFFSET	  equ SCREEN_WIDTH*1
+     16	      =0087		     SHADOW	  equ 10000111b
+     17
+     18				     ;===============================================================================================
+     19				     ======
+     20
+     21	0100			     Start:
+     22	0100  9C				 pushf			     ; save IF
+     23	0101  FA				 cli			     ; IF = 0 (interrupts disabled)
+     24
+     25	0102  B8 3509				 mov ax, 3509h		     ; 35 func of 21 int: give the interrupt vector.
+     26									     ; ES:[BX] = the address of	the interrupt handler
+     27	0105  CD 21				 int 21h		     ; AH = 035h, AL = 09h (keyboard)
+     28	0107  89 1E 0179r			 mov Old09Ofs, bx	     ; old offset of the interrupt handler
+     29	010B  8C C3				 mov bx, es
+     30	010D  89 1E 017Br			 mov Old09Seg, bx	     ; old segment of the interrupt handler
+     31
+     32	0111  6A 00				 push 0			     ; ES = 0000
+     33	0113  07				 pop es
+     34
+     35	0114  BB 0024				 mov bx, 4*09h		     ; BX = 0024 (address if of	int 09h	in interrupt table)
+     36	0117  26: C7 07	014Cr			 mov es:[bx], offset New09   ; ES:[BX] = &New09
+     37	011C  26: 8C 4F	02			 mov es:[bx+2],	cs	     ; New09 in	data segment. But now ES = 0000	and CS =    +
+     38				     old_ES
+     39
+     40
+     41	0120  B8 3508				 mov ax, 3508h		     ; 35 func of 21 int: give the interrupt vector.
+     42									     ; ES:[BX] = the address of	the interrupt handler
+     43	0123  CD 21				 int 21h		     ; AH = 035h, AL = 08h (timer)
+     44	0125  89 1E 01A7r			 mov Old08Ofs, bx	     ; old offset of the interrupt handler
+     45	0129  8C C3				 mov bx, es
+     46	012B  89 1E 01A9r			 mov Old08Seg, bx	     ; old segment of the interrupt handler
+     47
+     48	012F  6A 00				 push 0			     ; ES = 0000
+     49	0131  07				 pop es
+     50	0132  BB 0020				 mov bx, 4*08h		     ; BX = 0020 (address if of	int 09h	in interrupt table)
+     51	0135  26: C7 07	017Dr			 mov es:[bx], offset New08   ; ES:[BX] = &New08
+     52	013A  26: 8C 4F	02			 mov es:[bx+2],	cs	     ; New08 in	data segment. But now ES = 0000	and CS =    +
+     53				     old_ES
+     54	013E  FB				 sti			     ; IF = 1 (interrupts enabled)
+     55	013F  9D				 popf			     ; saved IF
+     56
+     57
+Turbo Assembler	 Version 4.1	    02/29/24 21:10:17	    Page 2
+tsr.asm
+
+
+
+     58	0140  B8 3100				 mov ax, 3100h		     ; 31 func of 21 int: we make the program resident with
+     59									     ; memory allocation not for the entire segment,
+     60									     ; but only	for the	size of	the program code.
+     61	0143  BA 02BCr				 mov dx, offset	EOP	     ; end of programm address
+     62	0146  C1 EA 04				 shr dx, 4		     ; DX /= 16. Because to 31 function	of 21 int needs
+     63									     ; to be sent the number of	paragraphs
+     64	0149  42				 inc dx			     ; in order	not to accidentally lose the last
+     65									     ; paragraph of the	program
+     66	014A  CD 21				 int 21h
+     67
+     68
+     69
+     70				     ;===============================================================================================
+     71				     ======
+     72				     ; Intercepting a keyboard interrupt. Changes the state of the variable depending on the pressed+
+     73				     key.
+     74				     ;-----------------------------------------------------------------------------------------------
+     75				     ------
+     76				     ; Enter:	 The address 19A4:00C1 of the interrupt	handler	has been changed to offset New8
+     77				     ; Exit:	 None
+     78				     ; Expects:	 None
+     79				     ; Destroys: None
+     80				     ;===============================================================================================
+     81				     ======
+     82	014C			     New09	 proc
+     83
+     84	014C  50 53 51 52 56 57	55+		 push ax bx cx dx si di	bp sp ds es
+     85	      54 1E 06
+     86
+     87	0156  0E				 push cs			 ; DS in data segment
+     88	0157  1F				 pop ds
+     89
+     90	0158  BB 02BBr				 mov bx, offset	regs_mode	 ; in show_regs_mode we	save (01h if mode "on")	or  +
+     91				     (00h if mode "off")
+     92
+     93	015B  E4 60				 in al,	60h			 ; reading from	port 60h to AL
+     94
+     95	015D  3C 2A				 cmp al, 2Ah			 ; 2Ah = lShift
+     96	015F  74 0A				 je @@FrameOn
+     97
+     98	0161  3C 36				 cmp al, 36h			 ; 36h = rShift
+     99	0163  75 09				 jne @@ExitInt
+    100
+    101	0165  C6 07 00				 mov byte ptr [bx], 00h		 ; mode	"frame off"
+    102	0168  EB 04 90				 jmp @@ExitInt
+    103
+    104	016B  C6 07 01		     @@FrameOn:	 mov byte ptr [bx], 01h
+    105
+    106	016E  07 1F 5C 5D 5F 5E	5A+  @@ExitInt:	 pop es	ds sp bp di si dx cx bx	ax
+    107	      59 5B 58
+    108
+    109	0178  EA				 db	     0EAh    ; far jmp Old09Seg:Old09Ofs
+    110	0179  0000				 Old09Ofs    dw	0    ; offset of old 09h interruption
+    111	017B  0000				 Old09Seg    dw	0    ; segment of old 09h inrerruption
+    112
+    113	017D					 endp
+    114
+Turbo Assembler	 Version 4.1	    02/29/24 21:10:17	    Page 3
+tsr.asm
+
+
+
+    115
+    116
+    117				     ;===============================================================================================
+    118				     ======
+    119				     ; Intercepting a timer interrupt. Prints the frame	if the rShift has not been pressed.
+    120				     ;-----------------------------------------------------------------------------------------------
+    121				     ------
+    122				     ; Enter:	 The address 19A4:00C1 of the interrupt	handler	has been changed to offset New8
+    123				     ; Exit:	 None
+    124				     ; Expects:	 None
+    125				     ; Destroys: None
+    126				     ;===============================================================================================
+    127				     ======
+    128	017D			     New08	 proc
+    129
+    130	017D  06 1E 54 55 57 56	52+		 push es ds sp bp di si	dx cx bx ax  ; save regs
+    131	      51 53 50
+    132
+    133	0187  68 B800				 push VMEM_SEGMENT		     ; ES in VMEM segment
+    134	018A  07				 pop es
+    135	018B  0E				 push cs			     ; DS in data segment
+    136	018C  1F				 pop ds
+    137
+    138
+    139	018D  BB 02BBr				     mov bx, offset regs_mode		 ; BX =	&regs_mode
+    140	0190  8A 07				     mov byte ptr al, [bx]		 ; AL =	*BX
+    141	0192  3C 01				 cmp al, 01h			     ; check if	AL == 1d (1d ==	enabled	frame)
+    142	0194  75 06				 jne @@ExitInt
+    143
+    144
+    145	0196  E8 00A2				 call PrintFrame
+    146	0199  E8 000F				 call PrintRegVal
+    147
+    148
+    149	019C  58 5B 59 5A 5E 5F	5D+  @@ExitInt:	 pop ax	bx cx dx si di bp sp ds	es   ; saved regs
+    150	      5C 1F 07
+    151
+    152	01A6  EA				 db	     0EAh    ; far jmp Old08Seg:Old08Ofs
+    153	01A7  0000				 Old08Ofs    dw	0    ; offset of old 08h interruption
+    154	01A9  0000				 Old08Seg    dw	0    ; segment of old 08h inrerruption
+    155
+    156	01AB					 endp
+    157
+    158
+    159
+    160				     ;===============================================================================================
+    161				     ======
+    162				     ; Prints registers	values on the screen.
+    163				     ;-----------------------------------------------------------------------------------------------
+    164				     ------
+    165				     ; Enter:	 all registers are on the stack	in order right order from AX to	ES
+    166				     ; Exit:	 None
+    167				     ; Expects:	 ES = 0b800h
+    168				     ; Destroys: AX, BX, CX
+    169				     ;===============================================================================================
+    170				     ======
+    171	01AB			     PrintRegVal     proc
+Turbo Assembler	 Version 4.1	    02/29/24 21:10:17	    Page 4
+tsr.asm
+
+
+
+    172
+    173	01AB  55				     push bp							     ; begin stack  +
+    174				     frame
+    175	01AC  8B EC						 mov bp, sp
+    176
+    177	01AE  BB 018E				     mov bx, H_OFFSET +	SCREEN_WIDTH + SCREEN_WIDTH/2 -	2d   ; start position of    +
+    178				     printout
+    179
+    180
+    181	01B1  52 55				     push dx bp		     ; save regs
+    182	01B3  BA 000A				     mov dx, 10d	     ; registers number	for printout
+    183	01B6  83 C5 04				     add bp, 4d		     ; BP += 4
+    184
+    185
+    186	01B9  8B 46 00		     @@Loop:	     mov ax, [bp]	     ; to ax mov ax (= bp + 4),	bx (= bp + 6), cx...
+    187	01BC  E8 0015				     call HexToAscii
+    188	01BF  4A				     dec dx		     ; DX--
+    189	01C0  83 FA 00				     cmp dx, 0		     ; check if	DX == 0	(we have printed out all the	    +
+    190				     registers)
+    191	01C3  74 09				     je	@@Exit
+    192	01C5  81 C3 00A0			     add bx, SCREEN_WIDTH    ; BX += 180d (moving to the next line)
+    193	01C9  83 C5 02				     add bp, 2d		     ; BP += 2
+    194	01CC  EB EB				     jmp @@Loop
+    195
+    196
+    197	01CE  5D 5A		     @@Exit:	     pop bp dx		     ; saved regs
+    198
+    199	01D0  8B E5						 mov sp, bp		 ; end stack frame
+    200	01D2  5D						 pop bp
+    201
+    202	01D3  C3				     ret
+    203	01D4					     endp
+    204
+    205
+    206
+    207				     ;===============================================================================================
+    208				     ======
+    209				     ; Gets ASCII from hexagonical number. For example:	from 5h	gets '5' or from 0Ch gets 'C'.
+    210				     ;-----------------------------------------------------------------------------------------------
+    211				     ------
+    212				     ; Enter:	 AX - required number
+    213				     ; Exit:	 None
+    214				     ; Expects:	 None
+    215				     ; Destroys: None
+    216				     ;===============================================================================================
+    217				     ======
+    218	01D4			     HexToAscii	 proc
+    219
+    220	01D4  53 51 52 56 57			 push bx cx dx si di		 ; save	registers
+    221
+    222	01D9  B9 0010				 mov cx, 16d			 ; CX =	16 (counter of bits offset)
+    223	01DC  33 F6				 xor si, si			 ; SI =	0
+    224	01DE  BF F000				 mov di, 0f000h			 ; DI =	0F000h.	This is	counter	that cuts off a	    +
+    225				     specific
+    226										 ; digit of a hex. Then	it will	be 0F00h, 0F0h,	0Fh
+    227
+    228
+Turbo Assembler	 Version 4.1	    02/29/24 21:10:17	    Page 5
+tsr.asm
+
+
+
+    229	01E1  8B D0		     @@Loop:	 mov dx, ax			 ; DX =	required number
+    230	01E3  23 D7				 and dx, di			 ; select the desired digit of the number
+    231	01E5  83 E9 04				 sub cx, 4			 ; CX -= 4
+    232	01E8  D3 EA				 shr dx, cl			 ; DX /= CX^2
+    233	01EA  83 FA 0A				 cmp dx, 0ah			 ; if DX < 0Ah --> goto	decimal
+    234	01ED  72 06				 jb @@Decimal			 ; else	--> goto hex
+    235
+    236	01EF  83 C2 37				 add dx, 37h			 ; offset of hex
+    237	01F2  EB 04 90				 jmp @@Print
+    238	01F5  83 C2 30		     @@Decimal:	 add dx, 30h			 ; offset of dec
+    239	01F8  26: 88 17		     @@Print:	 mov byte ptr es:[bx], dl	 ; print specific digit
+    240
+    241	01FB  46				 inc si				 ; SI++
+    242	01FC  83 FE 04				 cmp si, 4			 ; checking how	many digits have already been read
+    243	01FF  74 08				 je @@Exit
+    244	0201  C1 EF 04				 shr di, 4			 ; DI /= 4^2
+    245	0204  83 C3 02				 add bx, 2			 ; BX += 2
+    246	0207  EB D8				 jmp @@Loop
+    247
+    248	0209  5F 5E 5A 59 5B	     @@Exit:	 pop di	si dx cx bx		 ; saved registers
+    249
+    250	020E  C3				 ret
+    251	020F					 endp
+    252
+    253
+    254
+    255				     ;===============================================================================================
+    256				     ======
+    257				     ; Creates a shadow	effect from the	frame.
+    258				     ;-----------------------------------------------------------------------------------------------
+    259				     ------
+    260				     ; Enter:	 None
+    261				     ; Exit:	 None
+    262				     ; Expects:	 None
+    263				     ; Destroys: None
+    264				     ;===============================================================================================
+    265				     ======
+    266	020F			     AddShadow	 proc
+    267
+    268	020F  53 51				 push bx cx				     ; save registers
+    269
+    270	0211  BB 019D				 mov bx, H_OFFSET + SCREEN_WIDTH*3/2 + 13d   ; start position of vertical printout
+    271	0214  B9 000C				 mov cx, FHEIGHT			     ; counter for printout
+    272
+    273	0217  26: 80 27	87	     @@Loop1:	 and byte ptr es:[bx], SHADOW		     ; the bits	responsible for	the	    +
+    274				     background
+    275											     ; color and text intensity	= 0
+    276	021B  81 C3 00A0			 add bx, SCREEN_WIDTH			     ; BX += 180d
+    277	021F  49				 dec cx					     ; CX--
+    278	0220  83 F9 00				 cmp cx, 0				     ; if CX ==	0 goto horizontal
+    279	0223  75 F2				 jne @@Loop1
+    280
+    281
+    282	0225  BB 0865				 mov bx, H_OFFSET + SCREEN_WIDTH*FHEIGHT + SCREEN_WIDTH/2 - 11d	; start	position of +
+    283				     vertical printout
+    284	0228  B9 000C				 mov cx, FWIDTH	- 1d						; counter for	    +
+    285				     printout
+Turbo Assembler	 Version 4.1	    02/29/24 21:10:17	    Page 6
+tsr.asm
+
+
+
+    286
+    287	022B  26: 80 27	87	     @@Loop2:	 and byte ptr es:[bx], SHADOW	     ; the bits	responsible for	the background
+    288										     ; color and text intensity	= 0
+    289	022F  83 C3 02				 add bx, 2			     ; BX += 2
+    290	0232  49				 dec cx				     ; CX--
+    291	0233  83 F9 00				 cmp cx, 0			     ; if CX ==	0 goto pop
+    292	0236  75 F3				 jne @@Loop2
+    293
+    294
+    295	0238  59 5B				 pop cx	bx			     ; saved registers
+    296
+    297	023A  C3				 ret
+    298	023B					 endp
+    299
+    300
+    301
+    302				     ;===============================================================================================
+    303				     ======
+    304				     ; Prints frame.
+    305				     ;-----------------------------------------------------------------------------------------------
+    306				     ------
+    307				     ; Enter:	 None
+    308				     ; Exit:	 None
+    309				     ; Expects:	 ES = 0b800h
+    310				     ; Destroys: AX, DX, DI, CX
+    311				     ;===============================================================================================
+    312				     ======
+    313	023B			     PrintFrame	 proc
+    314
+    315	023B  56				 push si						 ; save	SI
+    316	023C  33 C0				 xor ax, ax						 ; AX =	0
+    317	023E  B4 4C				 mov ah, ATTR						 ; frame attribute
+    318	0240  FC				 cld							 ; DF =	0 => DI++
+    319	0241  BE 029Er				 mov si, offset	pattern					 ; pattern for printout
+    320	0244  BA 000B				 mov dx, FWIDTH	- 2					 ; it will be CX counter in +
+    321				     PrintLine
+    322	0247  BF 00E2				 mov di, SCREEN_WIDTH/2	- (FWIDTH/2)*2 + H_OFFSET - 2	 ; start position of printout
+    323
+    324
+    325						 ; PRINTS FIRST	LINE
+    326	024A  E8 003F				 call PrintLine
+    327
+    328						 ; PRINTS MIDDLE LINES
+    329	024D  B9 0014					     mov cx, FHEIGHT*2 - 4d		 ; CX =	height - 2
+    330	0250  E8 0039		     @@Next:	     call PrintLine
+    331	0253  49					     dec cx						     ; CX--
+    332	0254  83 EE 03				 sub si, 3			 ; SI -= 3 for looping pattern
+    333	0257  E2 F7					     loop @@Next
+    334	0259  83 C6 03				 add si, 3			 ; for 3 last chrs in pattern
+    335
+    336						 ; PRINTS LAST LINE
+    337	025C  E8 002D				 call PrintLine
+    338	025F  5E				 pop si				 ; saved SI
+    339
+    340
+    341	0260  E8 0004				 call PrintRegsName
+    342	0263  E8 FFA9				 call AddShadow
+Turbo Assembler	 Version 4.1	    02/29/24 21:10:17	    Page 7
+tsr.asm
+
+
+
+    343
+    344	0266  C3					     ret
+    345	0267						     endp
+    346
+    347
+    348
+    349				     ;===============================================================================================
+    350				     ======
+    351				     ; Prints a	column of registers name.
+    352				     ;-----------------------------------------------------------------------------------------------
+    353				     ------
+    354				     ; Enter:	 DX - counter for middle elements
+    355				     ;		 DI - vmem position on screen
+    356				     ;		 SI - source of	frame element
+    357				     ; Exit:	 None
+    358				     ; Expects:	 ES = 0b800h
+    359				     ; Destroys: None
+    360				     ;===============================================================================================
+    361				     ======
+    362	0267			     PrintRegsName   proc
+    363
+    364	0267  50 57 56 51			     push ax di	si cx	 ; save	regs
+    365
+    366	026B  B9 000A				     mov cx, 10d	 ; there are 10	registers
+    367
+    368	026E  BE 02A7r				     mov si, offset regs_name
+    369	0271  BF 0188				     mov di, H_OFFSET +	SCREEN_WIDTH + SCREEN_WIDTH/2 -	8d   ; gets position of	    +
+    370				     printout
+    371	0274  B4 4C				     mov ah, ATTR
+    372
+    373	0276  AC		     @@NextChar:     lodsb		     ; AL = DS:[SI++]
+    374	0277  AB				     stosw		     ; ES:[DI] = AX, DI	+= 2
+    375	0278  AC				     lodsb		     ; AL = DS:[SI++]
+    376	0279  AB				     stosw		     ; ES:[DI] = AX, DI	+= 2
+    377	027A  83 EF 04				     sub di, 4		     ; DI -= 4
+    378	027D  81 C7 00A0			     add di, SCREEN_WIDTH    ; DI += 180d
+    379	0281  49				     dec cx		     ; CX--
+    380	0282  83 F9 00				     cmp cx, 0		     ; check if	CX == 0
+    381	0285  75 EF				     jne @@NextChar
+    382
+    383
+    384	0287  59 5E 5F 58			     pop cx si di ax	     ; saved regs
+    385
+    386	028B  C3				     ret
+    387	028C					     endp
+    388
+    389
+    390
+    391				     ;===============================================================================================
+    392				     ======
+    393				     ; Draws one line of the frame.
+    394				     ;-----------------------------------------------------------------------------------------------
+    395				     ------
+    396				     ; Enter:	 DX - counter for middle elements
+    397				     ;		 DI - vmem position on screen
+    398				     ;		 SI - source of	frame element
+    399				     ; Exit:	 None
+Turbo Assembler	 Version 4.1	    02/29/24 21:10:17	    Page 8
+tsr.asm
+
+
+
+    400				     ; Expects:	 ES = 0b800h
+    401				     ; Destroys: AX
+    402				     ;===============================================================================================
+    403				     ======
+    404	028C			     PrintLine	 proc
+    405
+    406	028C  57 51					 push di cx		 ; save	regs
+    407	028E  8B CA				 mov cx, dx
+    408
+    409						 ; LEFT	CHARACTER
+    410	0290  AC				 lodsb			 ; AL =	DS:[SI++]
+    411	0291  AB				 stosw			 ; ES:[DI] = AX, DI += 2
+    412
+    413						 ; MIDDLE CHARACTERS
+    414	0292  AC				 lodsb			 ; AL =	DS:[SI++]
+    415	0293  F3> AB				 rep stosw		 ; while(CX--) {ES:[DI]	= AX; DI += 2}
+    416
+    417						 ; RIGHT CHARACTER
+    418	0295  AC				 lodsb			 ; AL =	DS:[SI++]
+    419	0296  AB				 stosw			 ; ES:[DI] = AX, DI += 2
+    420
+    421	0297  59 5F				 pop cx	di		 ; saved regs
+    422	0299  81 C7 00A0			 add di, SCREEN_WIDTH	 ; DI += 160 for next line
+    423
+    424	029D  C3					 ret
+    425	029E						     endp
+    426
+    427
+    428
+    429				     ;===============================================================================================
+    430				     ======
+    431
+    432	029E  C9 CD BB BA 20 BA	C8+  pattern	 db 201d, 205d,	187d, 186d, ' ', 186d, 200d, 205d, 188d
+    433	      CD BC
+    434	02A7  61 78 62 78 63 78	64+  regs_name	 db 'ax', 'bx',	'cx', 'dx', 'si', 'di',	'bp', 'sp', 'ds', 'es'
+    435	      78 73 69 64 69 62	70+
+    436	      73 70 64 73 65 73
+    437	02BB  00		     regs_mode	 db 00h
+    438	02BC			     EOP:
+    439				     end Start
+Turbo Assembler	 Version 4.1	    02/29/24 21:10:17	    Page 9
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/29/24"
+??FILENAME			  Text	 "tsr	  "
+??TIME				  Text	 "21:10:17"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@@DECIMAL			  Near	 DGROUP:01F5
+@@EXIT				  Near	 DGROUP:01CE
+@@EXIT				  Near	 DGROUP:0209
+@@EXITINT			  Near	 DGROUP:016E
+@@EXITINT			  Near	 DGROUP:019C
+@@FRAMEON			  Near	 DGROUP:016B
+@@LOOP				  Near	 DGROUP:01B9
+@@LOOP				  Near	 DGROUP:01E1
+@@LOOP1				  Near	 DGROUP:0217
+@@LOOP2				  Near	 DGROUP:022B
+@@NEXT				  Near	 DGROUP:0250
+@@NEXTCHAR			  Near	 DGROUP:0276
+@@PRINT				  Near	 DGROUP:01F8
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0707H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 TSR
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+ADDSHADOW			  Near	 DGROUP:020F
+ATTR				  Number 004C
+EOP				  Near	 DGROUP:02BC
+FHEIGHT				  Number 000C
+FWIDTH				  Number 000D
+HEXTOASCII			  Near	 DGROUP:01D4
+H_OFFSET			  Number 00A0
+NEW08				  Near	 DGROUP:017D
+NEW09				  Near	 DGROUP:014C
+OLD08OFS			  Word	 DGROUP:01A7
+OLD08SEG			  Word	 DGROUP:01A9
+OLD09OFS			  Word	 DGROUP:0179
+OLD09SEG			  Word	 DGROUP:017B
+PATTERN				  Byte	 DGROUP:029E
+PRINTFRAME			  Near	 DGROUP:023B
+PRINTLINE			  Near	 DGROUP:028C
+PRINTREGSNAME			  Near	 DGROUP:0267
+PRINTREGVAL			  Near	 DGROUP:01AB
+REGS_MODE			  Byte	 DGROUP:02BB
+REGS_NAME			  Byte	 DGROUP:02A7
+SCREEN_WIDTH			  Number 00A0
+SHADOW				  Number 0087
+START				  Near	 DGROUP:0100
+VMEM_SEGMENT			  Number B800
+Turbo Assembler	 Version 4.1	    02/29/24 21:10:17	    Page 10
+Symbol Table
+
+
+
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  02BC Word	  Public  CODE
+

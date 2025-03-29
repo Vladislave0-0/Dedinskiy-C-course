@@ -1,0 +1,55 @@
+Turbo Assembler	 Version 4.1	    02/09/24 01:22:39	    Page 1
+prnt_ch.asm
+
+
+
+      1	0000			     .model tiny
+      2				     .286
+      3	0000			     .code
+      4				     org 100h
+      5
+      6	0100			     Start:
+      7	0100  BB B800			     mov bx, 0b800h		     ; setting the offset of the vmem segment
+      8	0103  8E C3			     mov es, bx			     ; setting the offset to the es register
+      9	0105  BB 05F0			     mov bx, (80*9 + 80/2)*2	     ; the place of the	future printing	of the synbol
+     10
+     11	0108  26: C6 07	41		     mov byte ptr es:[bx], 'A'	     ; printing	char 'A' with segment in es and	offset in bx
+     12	010C  26: C6 47	01 2C		     mov byte ptr es:[bx+1], 2ch     ; setting sttributes to char 'A': 2ch = 01001100b.	    +
+     13				     Means that	color of 'A' is	intensity red with green background
+     14
+     15	0111  B8 4C00			     mov ax, 4c00h		     ; DOS func	4ch (Exit), exit code 00h
+     16	0114  CD 21			     int 21h			     ; interraption
+     17
+     18				     end     Start
+Turbo Assembler	 Version 4.1	    02/09/24 01:22:39	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/09/24"
+??FILENAME			  Text	 "prnt_ch "
+??TIME				  Text	 "01:22:39"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0707H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 PRNT_CH
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+START				  Near	 DGROUP:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  0116 Word	  Public  CODE
+

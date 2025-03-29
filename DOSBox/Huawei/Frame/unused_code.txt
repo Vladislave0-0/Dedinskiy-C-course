@@ -1,0 +1,43 @@
+; ТУПАЯ РЕАЛИЗАЦИЯ СЧЕТЧИКА ЧИСЛА НА ДВА РАЗРЯДА
+;                push bx
+;                push si
+;                mov dx, si
+;                xor bx, bx
+;                xor ax, ax
+;
+;                                    ; COUNTING LEN OF NUMBER
+;@@ReadLen:      lodsb
+;                inc cl              ; CL++ 
+;                cmp al, ' '         ; if AL == ' ' then ZF = 1 
+;                jnz @@ReadLen
+;                dec cl              ; CL--
+;
+;                xor ax, ax
+;                mov si, dx
+;                mov dx, 10d
+;
+;
+;               cmp cl, 1           ; if len == 1
+;               jz @@Len_1
+;
+;                cmp cl, 2
+;                jz @@Len_2
+;
+;@@Len_1:        lodsb
+;                sub al, 30h
+;                jmp @@FuncExit
+;
+;@@Len_2:        lodsb
+;                sub al, 30h
+;                mul dx
+;                add bx, ax
+;                xor ax, ax
+;                lodsb 
+;                sub al, 30h
+;                add bx, ax
+;                jmp @@FuncExit
+;
+;
+;@@FuncExit:
+;                pop si
+;                pop bx

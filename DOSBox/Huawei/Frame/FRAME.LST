@@ -1,0 +1,609 @@
+Turbo Assembler	 Version 4.1	    02/29/24 21:09:52	    Page 1
+frame.asm
+
+
+
+      1	0000			     .model tiny			     ; the directive indicating	the size of the	valiable    +
+      2				     memory segment
+      3	0000			     .code				     ; the directive of	the beginning of the code segment
+      4				     .186				     ; the directive that defines which	processor version   +
+      5				     the code is instended for
+      6				     org 100h				     ; location	in the memory of the first command
+      7				     LOCALS @@		     ; directive for local labels
+      8
+      9				     ;===============================================================================================
+     10				     =========================
+     11
+     12	      =00A0		     SCREEN_WIDTH  equ 160d
+     13	      =0019		     SCREEN_HEIGHT equ 25d
+     14	      =B800		     VMEM_SEGMENT  equ 0b800h
+     15	      =0320		     H_OFFSET	   equ SCREEN_WIDTH*5
+     16
+     17
+     18				     EXIT    macro
+     19						     nop
+     20						     mov ax, 4c00h
+     21						     int 21h
+     22						     nop
+     23						     endm
+     24
+     25				     ;===============================================================================================
+     26				     ========================
+     27				     ; string example for running the code: frame.com	a	b	 c	     d	       e    +
+     28				     &
+     29				     ;					    ^		^	^	 ^	     ^	       ^    +
+     30				     ^
+     31				     ;					    prog_name	width	height	 attribute   pattern	    +
+     32				     message   endL
+     33				     ;===============================================================================================
+     34				     ========================
+     35
+     36	0100			     Start:
+     37	0100  BB B800			     mov bx, VMEM_SEGMENT
+     38	0103  8E C3			     mov es, bx
+     39	0105  33 DB			     xor bx, bx
+     40
+     41	0107  E8 0010			     call ParseString
+     42	010A  E8 00CC			     call PrintFrame
+     43
+     44	010D  33 C0			     xor ax, ax		     ; waits for the key to be pressed
+     45	010F  B4 08			     mov ah, 08h
+     46	0111  CD 21			     int 21h
+     47
+     48					     EXIT
+1    49	0113  90				     nop
+1    50	0114  B8 4C00				     mov ax, 4c00h
+1    51	0117  CD 21				     int 21h
+1    52	0119  90				     nop
+     53
+     54
+     55
+     56				     ;===============================================================================
+     57				     ; Parses the entered string.
+Turbo Assembler	 Version 4.1	    02/29/24 21:09:52	    Page 2
+frame.asm
+
+
+
+     58				     ;-------------------------------------------------------------------------------
+     59				     ; Enter:	 None
+     60				     ; Exit:	 None
+     61				     ; Expects:	 ES = 0b800h
+     62				     ; Destroys: None
+     63				     ;===============================================================================
+     64	011A			     ParseString     proc
+     65
+     66	011A  68 0082				     push 0082h		    ; command line start adress
+     67	011D  5E				     pop si
+     68
+     69
+     70	011E  E8 0032				     call ParseDec	    ; parsing width
+     71	0121  50				     push ax
+     72	0122  E8 00AD				     call SkipSpaces
+     73
+     74	0125  E8 002B				     call ParseDec	    ; parsing height
+     75	0128  50				     push ax
+     76	0129  E8 00A6				     call SkipSpaces
+     77
+     78	012C  E8 005F				     call ParseHex	    ; parsing attribute
+     79	012F  50				     push ax
+     80	0130  46				     inc si		    ; skip 'h' in end of hex num
+     81	0131  E8 009E				     call SkipSpaces
+     82
+     83	0134  E8 000E				     call ParsePattern	    ; parsing pattern
+     84
+     85
+     86	0137  33 D2				     xor dx, dx		    ; save pattern type	in DH
+     87	0139  8A F0				     mov dh, al
+     88
+     89	013B  58				     pop ax		    ; save attribute in	DL
+     90	013C  8A D0				     mov dl, al
+     91
+     92	013E  58				     pop ax		    ; save height in BH
+     93	013F  8A F8				     mov bh, al
+     94
+     95	0141  58				     pop ax		    ; save width in BL
+     96	0142  8A D8				     mov bl, al
+     97
+     98	0144  C3						 ret
+     99	0145							 endp
+    100
+    101
+    102
+    103				     ;===============================================================================
+    104				     ; Parses the type of pattern (programm or user-defined).
+    105				     ;-------------------------------------------------------------------------------
+    106				     ; Enter:	 SI - pointer to pattern part of cmd line adress
+    107				     ; Exit:	 AX - type of pattern
+    108				     ; Expects:	 None
+    109				     ; Destroys: None
+    110				     ;===============================================================================
+    111	0145			     ParsePattern    proc
+    112
+    113	0145  AC				     lodsb
+    114	0146  3C 2A				     cmp al, '*'	 ; if(AL == '*') {goto UserPattern}
+Turbo Assembler	 Version 4.1	    02/29/24 21:09:52	    Page 3
+frame.asm
+
+
+
+    115	0148  74 05				     jz	@@UserPattern	 ; else	{use programm pattern}
+    116	014A  2C 31				     sub al, '1'
+    117	014C  EB 04 90				     jmp @@PatternExit
+    118
+    119	014F  B8 0004		     @@UserPattern:  mov ax, 4d
+    120
+    121	0152  C3		     @@PatternExit:  ret
+    122	0153							 endp
+    123
+    124
+    125
+    126				     ;===============================================================================
+    127				     ; Parses the entered decimal number from ASCII.
+    128				     ;-------------------------------------------------------------------------------
+    129				     ; Enter:	 SI - pointer to part with dec of cmd line adress
+    130				     ; Exit:	 AX - number
+    131				     ; Expects:	 None
+    132				     ; Destroys: AX, BX, CX, DX
+    133				     ;===============================================================================
+    134	0153			     ParseDec	     proc
+    135
+    136	0153  56 57				     push si di		 ; save	registers
+    137	0155  8B FE				     mov di, si		 ; DI =	SI
+    138	0157  BA 0001				     mov dx, 1d		 ; DX =	1
+    139	015A  33 C0				     xor ax, ax		 ; AX =	0
+    140	015C  33 DB				     xor bx, bx		 ; BX =	0
+    141
+    142	015E  52				     push dx		 ; save	DX
+    143	015F  B2 20				     mov dl, ' '	 ; DL =	endL
+    144	0161  E8 012F				     call MyStrlen
+    145	0164  FE C9				     dec cl		 ; CL--
+    146	0166  5A				     pop dx		 ; saved DX
+    147
+    148
+    149	0167  51				     push cx		 ; save	CX
+    150
+    151	0168  03 F9				     add di, cx		 ; DI += CX
+    152	016A  4F				     dec di		 ; DI--
+    153	016B  B9 000A				     mov cx, 10d	 ; CX =	10
+    154
+    155
+    156	016E  8B F7		     @@NextDigit:    mov si, di		 ; pointer to the end of number
+    157	0170  AC				     lodsb
+    158	0171  3C 20				     cmp al, ' '	 ; if AL == ' '	then ZF	= 1
+    159	0173  74 11				     jz	@@EndNum
+    160	0175  2C 30				     sub al, '0'	 ; from	ASCII to number
+    161	0177  52				     push dx		 ; save	DX
+    162	0178  F7 E2				     mul dx		 ; AX *= 10^(digit-1)
+    163	017A  5A				     pop dx		 ; saved DX
+    164	017B  03 D8				     add bx, ax		 ; BX += AX
+    165	017D  8B C2				     mov ax, dx		 ; DX *= 10
+    166	017F  F7 E1				     mul cx		 ; AX *= CX
+    167	0181  8B D0				     mov dx, ax		 ; DX =	AX
+    168	0183  4F				     dec di		 ; DI--
+    169	0184  EB E8				     jmp @@NextDigit
+    170
+    171	0186  59 5F 5E		     @@EndNum:	     pop cx di si	 ; saved registers
+Turbo Assembler	 Version 4.1	    02/29/24 21:09:52	    Page 4
+frame.asm
+
+
+
+    172	0189  03 F1				     add si, cx		 ; SI += len of	number
+    173	018B  8B C3				     mov ax, bx		 ; AX =	BX
+    174
+    175	018D  C3						 ret
+    176	018E							 endp
+    177
+    178
+    179
+    180				     ;===============================================================================
+    181				     ; Parses the entered hexagonal number.
+    182				     ;-------------------------------------------------------------------------------
+    183				     ; Enter:	 SI - pointer to part with hex of cmd line adress
+    184				     ; Exit:	 AX - number
+    185				     ; Expects:	 None
+    186				     ; Destroys: AX, BX, CX, DX
+    187				     ;===============================================================================
+    188	018E			     ParseHex	     proc
+    189
+    190	018E  56 57				     push si di		 ; saved registers
+    191	0190  8B FE				     mov di, si		 ; DI =	SI
+    192	0192  BA 0001				     mov dx, 1d		 ; DX =	1
+    193	0195  33 C0				     xor ax, ax		 ; AX =	0
+    194	0197  33 DB				     xor bx, bx		 ; BX =	0
+    195
+    196
+    197	0199  52				     push dx		 ; save	DX
+    198	019A  B2 68				     mov dl, 'h'	 ; DL =	endL
+    199	019C  E8 00F4				     call MyStrlen
+    200	019F  FE C9				     dec cl		 ; CL--
+    201	01A1  5A				     pop dx		 ; saved DX
+    202
+    203
+    204	01A2  51				     push cx		 ; save	CX
+    205
+    206	01A3  03 F9				     add di, cx		 ; DI += CX
+    207	01A5  4F				     dec di		 ; DI--
+    208	01A6  B9 0010				     mov cx, 16d	 ; CX =	16
+    209
+    210
+    211	01A9  8B F7		     @@NextDigit:    mov si, di		 ; pointer to the end of number
+    212	01AB  AC				     lodsb
+    213	01AC  3C 20				     cmp al, ' '	 ; if AL == ' '	then ZF	= 1
+    214	01AE  74 1A				     jz	@@EndNum
+    215
+    216	01B0  3C 3A				     cmp al, ':'	 ; check if it is number or letter
+    217	01B2  72 05				     jb	@@IsNumber
+    218	01B4  2C 57				     sub al, 'a' - 0Ah	 ; from	ASCII to hex
+    219	01B6  EB 03 90				     jmp @@IsLetter
+    220
+    221
+    222	01B9  2C 30		     @@IsNumber:     sub al, '0'	 ; from	ASCII to hex
+    223	01BB  52		     @@IsLetter:     push dx		 ; save	DX
+    224	01BC  F7 E2				     mul dx		 ; AX *= 16^(digit-1)
+    225	01BE  5A				     pop dx		 ; saved DX
+    226	01BF  03 D8				     add bx, ax		 ; BX += AX
+    227	01C1  8B C2				     mov ax, dx		 ; DX *= 16
+    228	01C3  F7 E1				     mul cx		 ; AX *= CX
+Turbo Assembler	 Version 4.1	    02/29/24 21:09:52	    Page 5
+frame.asm
+
+
+
+    229	01C5  8B D0				     mov dx, ax		 ; DX =	AX
+    230	01C7  4F				     dec di		 ; DI--
+    231	01C8  EB DF				     jmp @@NextDigit
+    232
+    233
+    234	01CA  59 5F 5E		     @@EndNum:	     pop cx di si	 ; saved registers
+    235	01CD  03 F1				     add si, cx		 ; SI += len of	number
+    236	01CF  8B C3				     mov ax, bx		 ; AX =	BX
+    237
+    238	01D1  C3						 ret
+    239	01D2							 endp
+    240
+    241
+    242
+    243				     ;===============================================================================
+    244				     ; Skips all spaces.
+    245				     ;-------------------------------------------------------------------------------
+    246				     ; Enter:	 SI - pointer to part of cmd line adress
+    247				     ; Exit:	 new SI	with skipped spaces
+    248				     ; Expects:	 None
+    249				     ; Destroys: None
+    250				     ;===============================================================================
+    251	01D2			     SkipSpaces	     proc
+    252
+    253	01D2  AC		     @@Next:	     lodsb		 ; AL =	DS:[SI++]
+    254	01D3  3C 20				     cmp al, ' '	 ; if AL == ' '	then ZF	= 1
+    255	01D5  74 FB				     jz	@@Next
+    256
+    257	01D7  4E				     dec si		 ; SI--
+    258
+    259	01D8  C3						 ret
+    260	01D9							 endp
+    261
+    262
+    263
+    264				     ;===============================================================================
+    265				     ; Prints frame.
+    266				     ;-------------------------------------------------------------------------------
+    267				     ; Enter:	 BL - width, BH	- height
+    268				     ;		 DL - attribute, DH - pattern
+    269				     ; Exit:	 None
+    270				     ; Expects:	 ES = 0b800h
+    271				     ; Destroys: AX, DI
+    272				     ;===============================================================================
+    273	01D9			     PrintFrame	 proc
+    274
+    275	01D9  53 52 56				 push bx dx si	     ; save registers
+    276	01DC  8A E2				 mov ah, dl	     ; AH = attribute
+    277	01DE  FC				 cld		     ; DF = 0 => DI++
+    278
+    279
+    280						 ; PATTERN SELECTION
+    281	01DF  80 FE 04				 cmp dh, 4	     ; if(pattern is wrong (type > 1 or	type < 0))
+    282	01E2  77 4F				 ja @@ErrPtrn	     ; {goto ErrorPattern}
+    283	01E4  80 FE 00				 cmp dh, 0
+    284	01E7  72 4A				 jb @@ErrPtrn
+    285	01E9  80 FE 04				 cmp dh, 4	     ; if the pattern is custom
+Turbo Assembler	 Version 4.1	    02/29/24 21:09:52	    Page 6
+frame.asm
+
+
+
+    286	01EC  74 06				 jz @@UserPtrn	     ; if program pattern
+    287	01EE  EB 01 90				 jmp @@ProgPtrn
+    288
+    289	01F1  E8 007B		     @@ProgPtrn: call ProgPattern
+    290	01F4  33 D2		     @@UserPtrn: xor dx, dx	     ; DX = 0
+    291	01F6  8A D3				 mov dl, bl	     ; for (CX - counter)
+    292
+    293
+    294	01F8  BF 036E				 mov di, SCREEN_WIDTH/2	+ H_OFFSET - 2d	 ; start position of printout
+    295	01FB  50				 push ax				 ; save	AX
+    296	01FC  33 C0				 xor ax, ax				 ; AX =	0
+    297	01FE  8A C3				 mov al, bl				 ; AL =	Bl
+    298	0200  2B F8				 sub di, ax				 ; DI -= Ax
+    299	0202  58				 pop ax					 ; saved Ax
+    300
+    301
+    302						 ; FRAME PRINTOUT
+    303	0203  E8 007B				 call PrintLine	     ; prints first line
+    304
+    305	0206  33 C9				 xor cx, cx	     ; prints middle lines
+    306	0208  8A CF				 mov cl, bh	     ; CX = height*2 - 4
+    307	020A  D1 E1				 shl cx, 1	     ; CX *= 2
+    308	020C  83 E9 04				 sub cx, 4d	     ; CX -= 4
+    309	020F  E8 006F		     @@GetChrs:	 call PrintLine
+    310	0212  49					     dec cx		     ; CX--
+    311	0213  83 EE 03				 sub si, 3	     ; SI -= 3 for looping pattern
+    312	0216  E2 F7					     loop @@GetChrs
+    313	0218  83 C6 03				 add si, 3	     ; for 3 last chrs in pattern
+    314
+    315	021B  E8 0063				 call PrintLine	     ; prints last line
+    316
+    317
+    318	021E  5E 5A 5B				 pop si	dx bx	     ; saved registers
+    319
+    320
+    321						 ; USER	MESSAGE	PRINTOUT
+    322	0221  80 FE 04				 cmp dh, 4		     ; if(DH ==	4) {skip 9 symbols}
+    323	0224  74 04				 jz @@PrntMsg1		     ; else {skip 1 symbol}
+    324	0226  46				 inc si			     ; SI++
+    325	0227  EB 04 90				 jmp @@PrntMsg2
+    326
+    327	022A  83 C6 09		     @@PrntMsg1: add si, 9		     ; if pattern from user, then skip all pattern
+    328	022D  E8 FFA2		     @@PrntMsg2: call SkipSpaces
+    329	0230  E8 0001				 call PrintMsg
+    330
+    331	0233  C3		     @@ErrPtrn:	 ret
+    332	0234						     endp
+    333
+    334
+    335
+    336				     ;===============================================================================
+    337				     ; Prints user's message in	the middle of the frame.
+    338				     ;-------------------------------------------------------------------------------
+    339				     ; Enter:	 BL - width, BH	- height
+    340				     ;		 DL - attribute, DH - pattern
+    341				     ; Exit:	 None
+    342				     ; Expects:	 SI - pointer to user message
+Turbo Assembler	 Version 4.1	    02/29/24 21:09:52	    Page 7
+frame.asm
+
+
+
+    343				     ; Destroys: AX, BX
+    344				     ;===============================================================================
+    345	0234			     PrintMsg	 proc
+    346
+    347	0234  51 57 52				 push cx di dx	     ; save registers
+    348	0237  33 C9				 xor cx, cx	     ; CX = 0
+    349	0239  33 FF				 xor di, di	     ; DX = 0
+    350
+    351
+    352						 ; COUNTING LENGTH OF USER MESSAGE
+    353	023B  52 56				 push dx si	     ; save registers
+    354	023D  B2 26				 mov dl, '&'	     ; DL = endL
+    355	023F  E8 0051				 call MyStrlen
+    356	0242  FE C9				 dec cl		     ; CL--
+    357	0244  5E 5A				 pop si	dx	     ; saved registers
+    358
+    359
+    360						 ; CALCULATION OF MESSAGE OFFSET
+    361	0246  83 E1 FE				 and cx, 0fffeh			     ; CX is even to access an even cell of video   +
+    362				     memory
+    363	0249  2B F9				 sub di, cx			     ; DI -= CX
+    364	024B  81 C7 0370			 add di, H_OFFSET + SCREEN_WIDTH/2   ; DI += offset from the top
+    365	024F  33 C9				 xor cx, cx			     ; CX = 0
+    366	0251  81 E3 FEFF			 and bx, 0feffh			     ; lower bit of BH = 0
+    367	0255  8A CF				 mov cl, bh			     ; CL = BH
+    368	0257  B8 0050				 mov ax, SCREEN_WIDTH/2		     ; AX = 80d
+    369	025A  F7 E1				 mul cx				     ; AX *= CX
+    370	025C  03 F8				 add di, ax			     ; DI += AX
+    371	025E  83 E7 FE				 and di, 0fffeh			     ; make DI even
+    372
+    373	0261  5A				 pop dx				     ; save DX
+    374	0262  8A E2				 mov ah, dl			     ; AH = DL
+    375
+    376
+    377						 ; PRINTOUT OF MESSAGE
+    378	0264  AC		     @@Next:	 lodsb		 ; AL =	DS:[SI++]
+    379	0265  3C 26				 cmp al, '&'	 ; if(AL == '&') {goto Exit}
+    380	0267  74 03				 jz @@Exit	 ; else	{print symbol; loop}
+    381	0269  AB				 stosw		 ; ES:[DI] = AX, DI += 2
+    382	026A  EB F8				 jmp @@Next
+    383
+    384
+    385	026C  5F 59		     @@Exit:	     pop di cx	     ; save DI,	CX
+    386
+    387	026E  C3				 ret
+    388	026F						     endp
+    389
+    390
+    391
+    392				     ;===============================================================================
+    393				     ; Sets the	desired	offset to print	the desired pattern.
+    394				     ;-------------------------------------------------------------------------------
+    395				     ; Enter:	 DH - type number of the programm pattern
+    396				     ; Exit:	 SI - offset of	control	string
+    397				     ; Expects:	 DH - type of pattern
+    398				     ; Destroys: None
+    399				     ;===============================================================================
+Turbo Assembler	 Version 4.1	    02/29/24 21:09:52	    Page 8
+frame.asm
+
+
+
+    400	026F			     ProgPattern proc
+    401
+    402	026F  50				 push ax			 ; save	AX
+    403	0270  33 C0				 xor ax, ax			 ; AX =	0
+    404
+    405	0272  8A C6				 mov al, dh			 ; AL =	DH
+    406	0274  52				 push dx			 ; save	DX
+    407	0275  B6 09				 mov dh, 9d			 ; DH =	9
+    408	0277  F6 E6				 mul dh				 ; AX *= 9
+    409	0279  5A				 pop dx				 ; saved DX
+    410	027A  BE 029Fr				 mov si, offset	control_string
+    411	027D  03 F0				 add si, ax			 ; SI += AX
+    412
+    413	027F  58				 pop ax				 ; saved AX
+    414
+    415	0280  C3					     ret
+    416	0281						     endp
+    417
+    418
+    419
+    420				     ;===============================================================================
+    421				     ; Draws one line of the frame.
+    422				     ;-------------------------------------------------------------------------------
+    423				     ; Enter:	 DX - counter for middle elements
+    424				     ;		 DI - vmem position on screen
+    425				     ;		 SI - source of	frame element
+    426				     ; Exit:	 None
+    427				     ; Expects:	 ES = 0b800h
+    428				     ; Destroys: AX
+    429				     ;===============================================================================
+    430	0281			     PrintLine	 proc
+    431
+    432	0281  57 51					 push di cx		 ; save	registers
+    433	0283  8B CA				 mov cx, dx		 ; CX =	DX
+    434
+    435						 ; LEFT	CHARACTER
+    436	0285  AC				 lodsb			 ; AL =	DS:[SI++]
+    437	0286  AB				 stosw			 ; ES:[DI] = AX, DI += 2
+    438
+    439						 ; MIDDLE CHARACTERS
+    440	0287  AC				 lodsb			 ; AL =	DS:[SI++]
+    441	0288  F3> AB				 rep stosw		 ; while(CX--) {ES:[DI]	= AX; DI += 2;}
+    442
+    443						 ; RIGHT CHARACTER
+    444	028A  AC				 lodsb			 ; AL =	DS:[SI++]
+    445	028B  AB				 stosw			 ; ES:[DI] = AX, DI += 2
+    446
+    447	028C  59 5F				 pop cx	di		 ; saved registers
+    448	028E  81 C7 00A0			 add di, SCREEN_WIDTH	 ; DI += 160 for next line
+    449
+    450	0292  C3					 ret
+    451	0293						     endp
+    452
+    453
+    454
+    455				     ;===============================================================================
+    456				     ; Counts the length of the	string.
+Turbo Assembler	 Version 4.1	    02/29/24 21:09:52	    Page 9
+frame.asm
+
+
+
+    457				     ;-------------------------------------------------------------------------------
+    458				     ; Enter:	 DL = endL
+    459				     ; Exit:	 CX = strlen
+    460				     ; Expects:	 correct DS:[SI]
+    461				     ; Destroys: CX
+    462				     ;===============================================================================
+    463	0293			     MyStrlen	 proc
+    464
+    465	0293  50				 push ax	     ; save AX
+    466	0294  33 C9				 xor cx, cx	     ; CX = 0
+    467
+    468	0296  AC		     @@Loop:	 lodsb		     ; AL = DS:[SI++]
+    469	0297  FE C1				 inc cl		     ; CL++
+    470	0299  3A C2				 cmp al, dl	     ; if AL ==	' ' then ZF = 1
+    471	029B  75 F9				 jnz @@Loop
+    472
+    473	029D  58				 pop ax		     ; saved AX
+    474
+    475	029E  C3					 ret
+    476	029F						     endp
+    477
+    478
+    479
+    480				     ;===============================================================================
+    481	029F  DA C4 BF B3 20 B3	C0+  control_string  db	218d, 196d, 191d, 179d,	' ', 179d, 192d, 196d, 217d
+    482	      C4 D9
+    483	02A8  C9 CD BB BA 20 BA	C8+		     db	201d, 205d, 187d, 186d,	' ', 186d, 200d, 205d, 188d
+    484	      CD BC
+    485	02B1  2B C4 2B B3 20 B3	2B+		     db	 '+', 196d,  '+', 179d,	' ', 179d,  '+', 196d,	'+'
+    486	      C4 2B
+    487	02BA  03 03 03 03 20 03	03+		     db	  3d,	3d,   3d,   3d,	' ',   3d,   3d,   3d,	 3d
+    488	      03 03
+    489
+    490				     end Start
+Turbo Assembler	 Version 4.1	    02/29/24 21:09:52	    Page 10
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/29/24"
+??FILENAME			  Text	 "frame	  "
+??TIME				  Text	 "21:09:51"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@@ENDNUM			  Near	 DGROUP:0186
+@@ENDNUM			  Near	 DGROUP:01CA
+@@ERRPTRN			  Near	 DGROUP:0233
+@@EXIT				  Near	 DGROUP:026C
+@@GETCHRS			  Near	 DGROUP:020F
+@@ISLETTER			  Near	 DGROUP:01BB
+@@ISNUMBER			  Near	 DGROUP:01B9
+@@LOOP				  Near	 DGROUP:0296
+@@NEXT				  Near	 DGROUP:01D2
+@@NEXT				  Near	 DGROUP:0264
+@@NEXTDIGIT			  Near	 DGROUP:016E
+@@NEXTDIGIT			  Near	 DGROUP:01A9
+@@PATTERNEXIT			  Near	 DGROUP:0152
+@@PRNTMSG1			  Near	 DGROUP:022A
+@@PRNTMSG2			  Near	 DGROUP:022D
+@@PROGPTRN			  Near	 DGROUP:01F1
+@@USERPATTERN			  Near	 DGROUP:014F
+@@USERPTRN			  Near	 DGROUP:01F4
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0103H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 FRAME
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+CONTROL_STRING			  Byte	 DGROUP:029F
+H_OFFSET			  Number 0320
+MYSTRLEN			  Near	 DGROUP:0293
+PARSEDEC			  Near	 DGROUP:0153
+PARSEHEX			  Near	 DGROUP:018E
+PARSEPATTERN			  Near	 DGROUP:0145
+PARSESTRING			  Near	 DGROUP:011A
+PRINTFRAME			  Near	 DGROUP:01D9
+PRINTLINE			  Near	 DGROUP:0281
+PRINTMSG			  Near	 DGROUP:0234
+PROGPATTERN			  Near	 DGROUP:026F
+SCREEN_HEIGHT			  Number 0019
+SCREEN_WIDTH			  Number 00A0
+SKIPSPACES			  Near	 DGROUP:01D2
+START				  Near	 DGROUP:0100
+VMEM_SEGMENT			  Number B800
+Turbo Assembler	 Version 4.1	    02/29/24 21:09:52	    Page 11
+Symbol Table
+
+
+
+
+Macro Name
+
+EXIT
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  02C3 Word	  Public  CODE
+
